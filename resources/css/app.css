@@ -1,0 +1,32 @@
+.login-wrapper{
+    background-image: linear-gradient(to right, rgba(255, 249, 196, 1), rgba(255, 224, 178, 1), rgba(255, 204, 188, 1));
+}
+
+.login-card {
+    padding: 7%;
+}
+
+.login-form{
+    margin: auto;
+}
+
+.login-container {
+    width: 50%;
+    height: 50%;
+    display: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation-name: scaleUp;
+    animation-duration: 1s;
+}
+.company-logo{
+    position: absolute;
+}
+
+@keyframes scaleUp {
+    from { transform: translate(0px,-50px); }
+    to {transform: translate(0px,0px); }
+}

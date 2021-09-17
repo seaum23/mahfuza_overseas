@@ -11,4 +11,9 @@ class LoginController extends Controller
     {
         return view('templates.login');
     }
+
+    public function login(Request $request)
+    {
+        // $au
+    }
 }

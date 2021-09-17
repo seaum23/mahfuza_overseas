@@ -14,7 +14,8 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
-Route::get('/', [LoginController::class, 'index']);
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
 
 // Route::get('/', function () {
 //     return view('templates.login');

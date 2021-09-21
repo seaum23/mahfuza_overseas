@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDesignationTable extends Migration
+class AddDesignationIdToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateDesignationTable extends Migration
      */
     public function up()
     {
-        Schema::create('designation', function (Blueprint $table) {
-            $table->id();
-            $table->string('designation');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('designation_id');
         });
     }
 
@@ -27,6 +25,8 @@ class CreateDesignationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('designation');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('designation_id');
+        });
     }
 }

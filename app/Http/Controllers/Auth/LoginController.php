@@ -16,7 +16,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         // dd($request->only('employee_id', 'password'));
-        if(!auth()->attempt($request->only('employee_id', 'password'))){
+        if(!auth()->attempt($request->only('employee_id', 'password'), $request->remember)){
             return back()->with('status', 'Invalid login information!');
         }
 

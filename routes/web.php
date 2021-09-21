@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
+use App\Http\Controllers\HumanResource\EmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +17,39 @@ use App\Http\Controllers\Layouts\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['middleware' => 'guest'], function () {    
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::post('/dashboard', [DashboardController::class, 'login']);
+});
+
+Route::group(['middleware' => 'auth'], function () {    
+    // Route::resources([
+    //     'employee' => EmployeeController::class,
+    // ]);
+    Route::get('/employee', [EmployeeController::class, 'index'])->name('employee');
+    Route::post('/employee', [EmployeeController::class, 'store']);
+    Route::post('/employee-update-fetch/{user}', [EmployeeController::class, 'update_fetch']);
+    Route::post('/employee-update/{user}', [EmployeeController::class, 'update']);
+    
+    Route::get('/employee-show', [EmployeeController::class, 'show'])->name('employee-show');
+    Route::post('/change-password', [EmployeeController::class, 'change_password'])->name('change-password');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard', [DashboardController::class, 'login']);
+
+    Route::get('/delegate', [DelegateController::class, 'index'])->name('delegate');
+    Route::post('/delegate', [DelegateController::class, 'store']);
+    Route::get('/delegate-show', [DelegateController::class, 'show'])->name('delegate-show');
+
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+});
+
+
+// Route::get('profile', function () {
+//     // Only authenticated users may enter...
+// })->middleware('auth');
 
 // Route::get('/', function () {
 //     return view('templates.login');

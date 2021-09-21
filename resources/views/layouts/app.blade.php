@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahfuza Overseas</title>
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}">
+    <title>@yield('title') - Mahfuza Overseas</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/template.css') }}">
+    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
+    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.css" rel="stylesheet">
+
 
 </head>
 <body>
@@ -42,7 +49,8 @@
                             </span>
                         </button>
                     </span>
-                </div>    <div class="app-header__content">
+                </div>
+                <div class="app-header__content">
                     <div class="app-header-left">
                         <div class="search-wrapper">
                             <div class="input-holder">
@@ -70,7 +78,8 @@
                                     Settings
                                 </a>
                             </li>
-                        </ul>        </div>
+                        </ul>
+                    </div>
                     <div class="app-header-right">
                         <div class="header-btn-lg pr-0">
                             <div class="widget-content p-0">
@@ -87,16 +96,19 @@
                                                 <h6 tabindex="-1" class="dropdown-header">Header</h6>
                                                 <button type="button" tabindex="0" class="dropdown-item">Actions</button>
                                                 <div tabindex="-1" class="dropdown-divider"></div>
-                                                <button type="button" tabindex="0" class="dropdown-item">Dividers</button>
+                                                <form action="{{ route('logout') }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" tabindex="0" class="btn-transition btn btn-outline-danger dropdown-item">Logout</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="widget-content-left  ml-3 header-user-info">
                                         <div class="widget-heading">
-                                            Alina Mclourd
+                                            {{ auth()->user()->name; }}
                                         </div>
                                         <div class="widget-subheading">
-                                            VP People Manager
+                                            Developer
                                         </div>
                                     </div>
                                     <div class="widget-content-right header-user-info ml-3">
@@ -106,7 +118,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="ui-theme-settings">
@@ -419,12 +432,13 @@
                             </span>
                         </button>
                     </span>
-                </div>    <div class="scrollbar-sidebar">
+                </div>
+                <div class="scrollbar-sidebar">
                     <div class="app-sidebar__inner">
                         <ul class="vertical-nav-menu">
                             <li class="app-sidebar__heading">Dashboards</li>
                             <li>
-                                <a href="index.html" class="mm-active">
+                                <a href="index.html" class="">
                                     <i class="metismenu-icon pe-7s-rocket"></i>
                                     Dashboard
                                 </a>
@@ -563,7 +577,7 @@
                                     Report
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ (request()->is('employee*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-users"></i>
                                     HRM
@@ -571,12 +585,12 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="{{ route('employee') }}" class="{{ (request()->is('employee')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Add New Employee
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="employee-show" class="{{ (request()->is('employee-show')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Employee List
                                         </a>
                                     </li>
@@ -599,7 +613,7 @@
                                 </a>
                             </li>
                             <li class="app-sidebar__heading">Foreign Affair</li>
-                            <li>
+                            <li class="{{ (request()->is('delegate*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-id"></i>
                                     Delegate
@@ -607,12 +621,12 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="{{ route('delegate') }}" class="{{ (request()->is('delegate')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Add New Delegate
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="{{ route('delegate-show') }}" class="{{ (request()->is('delegate-show')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Delegates List
                                         </a>
                                     </li>
@@ -701,15 +715,25 @@
                     </div>
                 </div>
             </div>
-            @yield('content')
+            <div class="app-main__outer">
+                <div class="app-main__inner">
+                    @yield('content')
+                </div>
+            </div>
             <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
         </div>
+        @yield('modals')
     @endauth
     @guest
         @yield('login')
     @endguest
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> --}}
-    <script type="text/javascript" src="{{ asset('scripts/template.js') }}"></script></body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js" integrity="sha512-i8ERcP8p05PTFQr/s0AZJEtUwLBl18SKlTOZTH0yK5jVU0qL8AIQYbbG5LU+68bdmEqJ6ltBRtCxnmybTbIYpw==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> --}}
+    <script type="text/javascript" src="{{ asset('js/template.js') }}"></script></body>
+    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
 </body>
 </html>

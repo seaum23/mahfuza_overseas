@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'phone',
         'address',
-        'designation',
+        'designation_id',
         'password',
     ];
 
@@ -44,4 +44,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relationship
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class);
+    }
 }

@@ -19,14 +19,20 @@
                     @csrf
                     <?php if(isset($_SESSION['failed_login'])){ ?><p class="text-danger">Incorrect Credentials</p> <?php } ?>
                     <div class="form-group" >
-                        <input type="text" class="form-control" id="employee_id" aria-describedby="employee_id" placeholder="Email/Employee ID" name="employee_id">
+                        <input type="text" class="form-control" id="employee_id" aria-describedby="employee_id" placeholder="Email / Employee ID" name="employee_id">
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control" id="password" aria-describedby="password" placeholder="Password" name="password">
                     </div>
+                    <div class="form-group form-check">
+                        <label for="remember" class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                            Remember Me!
+                        </label>
+                    </div>
                     <div class="form-group">
                         <input class="form-control btn-info" type="submit" value="Login">
-                    </div>
+                    </div>                    
                 </form>
             </div>
         </div>

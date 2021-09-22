@@ -41,7 +41,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/delegate', [DelegateController::class, 'index'])->name('delegate');
     Route::post('/delegate', [DelegateController::class, 'store']);
+    Route::post('/delegate/{delegate}/update', [DelegateController::class, 'update']);
     Route::get('/delegate-show', [DelegateController::class, 'show'])->name('delegate-show');
+    Route::post('/delegate/office/add/{delegate}', [DelegateController::class, 'store_new_office'])->name('delegate.office');
+    Route::post('/delegate/office/destroy/{delegate_office}', [DelegateController::class, 'destroy_office']);
+    Route::post('/delegate/office/update/{delegate_office}', [DelegateController::class, 'update_office']);
+    
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });

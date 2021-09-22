@@ -110,3 +110,20 @@ function success_alert(title, content){
       content: content
   });
 }
+
+function danger_alert(title, content){
+  new jBox('Notice', {
+      attributes: {
+          x: 'right',
+          y: 'bottom'
+      },
+      stack: false,
+      animation: {
+          open: 'tada',
+          close: 'zoomIn'
+      },
+      color: 'red',
+      title: title,
+      content: content
+  });
+}

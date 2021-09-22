@@ -12,6 +12,7 @@ class DelegateOffice extends Model
     protected $fillable = [
         'name',
         'license_number',
+        'updated_by'
     ];
 
 }

@@ -52,4 +52,13 @@ class SponsorController extends Controller
         $request->session()->flash('alert_type', 'success');
         return back();
     }
+
+    public function list()
+    {
+        return view('templates.sponsor.sponsor_list');
+        $sponsors = Sponsor::get();
+        return view('templates.sponsor.sponsor_list', [
+            'sponsors' => $sponsors
+        ]);
+    }
 }

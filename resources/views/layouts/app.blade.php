@@ -13,8 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.css" rel="stylesheet">
-
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css">
 </head>
 <body {{ Session::has('alert') ? 'data-alert' : '' }} data-alert-type='{{ Session::get('alert_type') }}' data-alert-message='{{ Session::get('message') }}'>
     @auth
@@ -626,7 +625,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('delegate-show') }}" class="{{ (request()->is('delegate-show')) ? 'mm-active' : '' }}">
+                                        <a href="{{ route('delegate-show') }}" class="{{ (request()->is('delegate/list')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Delegates List
                                         </a>
                                     </li>
@@ -650,7 +649,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="{{ route('sponsor-list') }}" class="{{ (request()->is('sponsor/list')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Sponsor List
                                         </a>
                                     </li>
@@ -720,7 +719,6 @@
                     @yield('content')
                 </div>
             </div>
-            <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
         </div>
         @yield('modals')
     @endauth
@@ -733,6 +731,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> --}}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.8/r-2.2.7/datatables.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/template.js') }}"></script></body>
     <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
 </body>

@@ -291,6 +291,25 @@ function selectDelegateOffice(delegate_id){
     });
 }
 
+var sponsor_list_datatable = $('#sponsor_list_datatable').DataTable({
+    "paging": true,
+    "lengthChange": true,
+    "searching": true,
+    "order": [[0, "desc"]],
+    "info": true,
+    "ScrollX": true,
+    "processing": true,
+    "serverSide": true,
+    "lengthMenu": [
+        [10, 25, 50, 100, 500],
+        [10, 25, 50, 100, 500]
+    ],
+    ajax: {
+        url: "/sponsor/list/datatable",
+        data: {test: 'yes'}
+    },                        
+});
+
 /**
  * End Sponsor & Sponsor VISA CRUD
  */
@@ -308,12 +327,9 @@ function selectDelegateOffice(delegate_id){
 
 let trigget_alert = () => {
     if ( typeof document.body.dataset.alert === undefined){
-        console.log(document.body.dataset.alert);
-        console.log('return');
         return false;
     }
 
-    console.log('body');
     if(document.body.dataset.alertType == 'success'){
         success_alert('Success', document.body.dataset.alertMessage);
     }

@@ -132,7 +132,7 @@ class DelegateController extends Controller
         return;
     }
 
-    public function show()
+    public function list()
     {
         $delegates = Delegate::with('delegate_offices')->paginate(10);
         return view('templates.delegate.delegate_list', [

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 use App\Http\Controllers\Sponsor\SponsorController;
 use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
@@ -43,7 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/delegate', [DelegateController::class, 'index'])->name('delegate');
     Route::post('/delegate', [DelegateController::class, 'store']);
     Route::post('/delegate/{delegate}/update', [DelegateController::class, 'update']);
-    Route::get('/delegate-show', [DelegateController::class, 'show'])->name('delegate-show');
+    Route::get('/delegate/list', [DelegateController::class, 'list'])->name('delegate-show');
     Route::post('/delegate/office/add/{delegate}', [DelegateController::class, 'store_new_office'])->name('delegate.office');
     Route::post('/delegate/office/destroy/{delegate_office}', [DelegateController::class, 'destroy_office']);
     Route::post('/delegate/office/update/{delegate_office}', [DelegateController::class, 'update_office']);
@@ -51,8 +52,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sponsor', [SponsorController::class, 'index'])->name('sponsor');
     Route::post('/sponsor', [SponsorController::class, 'store']);
     Route::post('/sponsor/{delegate}/fetch_delegate_office', [SponsorController::class, 'fetch_delegate_office']);
+    Route::get('/sponsor/list', [SponsorController::class, 'list'])->name('sponsor-list');
+    Route::get('/sponsor/list/datatable', [SponsorController::class, 'list'])->name('sponsor-list');
+    
 
-    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::post('/logout', [SponsorDatatableContorller::class, 'logout'])->name('logout');
 });
 
 

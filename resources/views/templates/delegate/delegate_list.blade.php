@@ -7,7 +7,7 @@ Delegate List
 <div class="row justify-content-center">
     <div class="col-md-12 mt-1">
         <div class="main-card mt-3 card">
-            <div class="card-body"><h5 class="card-title">New Delegate</h5>
+            <div class="card-body"><h5 class="card-title">All Delegates</h5>
                 <div class="table-responsive">
                     <table class="mb-0 table table-hover">
                         <thead>

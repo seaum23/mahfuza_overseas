@@ -16,7 +16,7 @@
 
 
 </head>
-<body>
+<body {{ Session::has('alert') ? 'data-alert' : '' }} data-alert-type='{{ Session::get('alert_type') }}' data-alert-message='{{ Session::get('message') }}'>
     @auth
         <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
             <div class="app-header header-shadow">
@@ -613,7 +613,7 @@
                                 </a>
                             </li>
                             <li class="app-sidebar__heading">Foreign Affair</li>
-                            <li class="{{ (request()->is('delegate*')) ? 'mm-active' : '' }}">
+                            <li class="{{ (request()->is('delegate*')) ? 'mm-active' : '' }}" >
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-id"></i>
                                     Delegate
@@ -621,7 +621,7 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="{{ route('delegate') }}" class="{{ (request()->is('delegate')) ? 'mm-active' : '' }}">
+                                        <a href="{{ route('delegate') }}" class="{{ (request()->is('delegate')) ? 'mm-active' : '' }}" >
                                             <i class="metismenu-icon"></i>Add New Delegate
                                         </a>
                                     </li>
@@ -637,7 +637,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li class="{{ (request()->is('sponsor*')) ? 'mm-active' : '' }}" >
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-notebook"></i>
                                     Sponsor
@@ -645,7 +645,7 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="{{ route('sponsor') }}" class="{{ (request()->is('sponsor')) ? 'mm-active' : '' }}" >
                                             <i class="metismenu-icon"></i>Add New Sponsor
                                         </a>
                                     </li>

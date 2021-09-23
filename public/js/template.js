@@ -94,6 +94,7 @@ $.ajaxSetup({
   }
 });
 
+
 function success_alert(title, content){
   new jBox('Notice', {
       attributes: {

@@ -70,6 +70,9 @@ let edit_employee = (id) => {
     });
 }
 
+/**
+ * Delegate & Delegate office CRUD
+ */
 
 $('#add_office').click(function(){
     // create row
@@ -257,3 +260,63 @@ $('#update_delegate').on('submit', function(){
         }
     });
 });
+
+/**
+ * End Delegate & Delegate Office CRUD
+*/
+
+/**
+ * Start Sponsor & Sponsor VISA CRUD
+ */
+
+function selectDelegateOffice(delegate_id){
+    let selected_office = $('#delegateOfficeId').data('selected_office');
+    $.ajax({
+        type: 'post',
+        enctype: 'multipart/form-data',
+        url: '/sponsor/' + delegate_id + '/fetch_delegate_office',
+        data: {delegate_id},
+        success: function (response){
+            $('#delegateOfficeId').find('option').remove();
+            let info = JSON.parse(response);
+            $('#delegateOfficeId').append(`<option value="">Select Delegate Office</option>`);
+            info.forEach(element => {
+                if(selected_office == element.id){
+                    $('#delegateOfficeId').append(`<option value="${element.id}" selected>${element.name}</option>`);
+                }else{
+                    $('#delegateOfficeId').append(`<option value="${element.id}">${element.name}</option>`);
+                }
+            });
+        }
+    });
+}
+
+/**
+ * End Sponsor & Sponsor VISA CRUD
+ */
+
+
+/**
+ * Trigger change of selet 2
+ */
+
+ $('.select2').trigger('change');
+
+ /**
+  * Trigger alert for those that are coming from Controller
+  */
+
+let trigget_alert = () => {
+    if ( typeof document.body.dataset.alert === undefined){
+        console.log(document.body.dataset.alert);
+        console.log('return');
+        return false;
+    }
+
+    console.log('body');
+    if(document.body.dataset.alertType == 'success'){
+        success_alert('Success', document.body.dataset.alertMessage);
+    }
+}
+
+window.onload = trigget_alert();

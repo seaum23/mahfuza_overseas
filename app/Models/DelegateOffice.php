@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Sponsor;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DelegateOffice extends Model
 {
@@ -14,5 +15,10 @@ class DelegateOffice extends Model
         'license_number',
         'updated_by'
     ];
+
+    public function sponsor()
+    {
+        return $this->hasMany(Sponsor::class);
+    }
 
 }

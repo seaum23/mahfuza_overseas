@@ -291,23 +291,40 @@ function selectDelegateOffice(delegate_id){
     });
 }
 
-var sponsor_list_datatable = $('#sponsor_list_datatable').DataTable({
-    "paging": true,
-    "lengthChange": true,
-    "searching": true,
-    "order": [[0, "desc"]],
-    "info": true,
-    "ScrollX": true,
-    "processing": true,
-    "serverSide": true,
-    "lengthMenu": [
-        [10, 25, 50, 100, 500],
-        [10, 25, 50, 100, 500]
-    ],
-    ajax: {
-        url: "/sponsor/list/datatable",
-        data: {test: 'yes'}
-    },                        
+// var sponsor_list_datatable = $('#sponsor_list_datatable').DataTable({
+//     "paging": true,
+//     "lengthChange": true,
+//     "searching": true,
+//     "order": [[0, "desc"]],
+//     "info": true,
+//     "ScrollX": true,
+//     "processing": true,
+//     "serverSide": true,
+//     "lengthMenu": [
+//         [10, 25, 50, 100, 500],
+//         [10, 25, 50, 100, 500]
+//     ],
+//     ajax: {
+//         url: "/sponsor/list/datatable",
+//         data: {test: 'yes'}
+//     },                        
+// });
+
+$(function() {
+    $('#sponsor_list_datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '/sponsor/datatable/ajax',
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'sponsor_NID', name: 'sponsor_NID' },
+            { data: 'sponsor_name', name: 'sponsor_name' },
+            { data: 'sponsor_phone', name: 'sponsor_phone' },
+            { data: 'sponsor_phone', name: 'sponsor_phone' },
+            { data: 'sponsor_phone', name: 'sponsor_phone' },
+            { data: 'comment', name: 'comment' }
+        ]
+    });
 });
 
 /**

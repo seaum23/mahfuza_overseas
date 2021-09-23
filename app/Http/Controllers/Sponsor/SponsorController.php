@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DelegateOffice;
 use App\Models\Sponsor;
 use Illuminate\Validation\ValidationException;
+use Yajra\Datatables\Datatables;
 
 class SponsorController extends Controller
 {
@@ -60,5 +61,25 @@ class SponsorController extends Controller
         return view('templates.sponsor.sponsor_list', [
             'sponsors' => $sponsors
         ]);
+    }
+
+    /**
+     * Displays datatables front end view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function getIndex()
+    {
+        return view('templates.sponsor.sponsor_list');
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        return Datatables::of(Sponsor::query())->make(true);
     }
 }

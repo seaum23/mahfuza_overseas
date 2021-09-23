@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Test\TestController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 use App\Http\Controllers\Sponsor\SponsorController;
 use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
 use App\Http\Controllers\HumanResource\EmployeeController;
+use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +54,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/sponsor', [SponsorController::class, 'store']);
     Route::post('/sponsor/{delegate}/fetch_delegate_office', [SponsorController::class, 'fetch_delegate_office']);
     Route::get('/sponsor/list', [SponsorController::class, 'list'])->name('sponsor-list');
-    Route::get('/sponsor/list/datatable', [SponsorController::class, 'list'])->name('sponsor-list');
+    Route::get('/sponsor/list/datatable', [SponsorController::class, 'getIndex'])->name('sponsor-list');
+    Route::get('/sponsor/datatable/ajax', [SponsorController::class, 'anyData']);
+    
+    Route::get('/users', [TestController::class, 'index'])->name('users.index');
     
 
     Route::post('/logout', [SponsorDatatableContorller::class, 'logout'])->name('logout');

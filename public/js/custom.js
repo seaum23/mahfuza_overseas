@@ -308,6 +308,7 @@ $(function() {
 });
 
 let edit_sponsor = (id, delegate_office, delegate, name, nid, phone, comment) => {
+    $('#update_sponsor').trigger('reset');
     $.ajax({
         type: 'post',
         enctype: 'multipart/form-data',
@@ -362,18 +363,20 @@ $('#update_sponsor').on('submit', function(){
 /**
  * End Sponsor & Sponsor VISA CRUD
  */
+ jobs_datatable
+
 
 
 /**
  * Trigger change of selet 2
  */
-
  $('.select2').trigger('change');
 
- /**
+
+ 
+/**
   * Trigger alert for those that are coming from Controller
   */
-
 let trigget_alert = () => {
     if ( typeof document.body.dataset.alert === undefined){
         return false;

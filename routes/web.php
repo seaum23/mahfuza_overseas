@@ -9,6 +9,7 @@ use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
 use App\Http\Controllers\HumanResource\EmployeeController;
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
+use App\Http\Controllers\JobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sponsor/datatable/ajax', [SponsorController::class, 'table_data']);
     Route::post('/sponsor/edit.sponsor.data', [SponsorController::class, 'edit_sponsor_data']);
     
+    Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
     
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

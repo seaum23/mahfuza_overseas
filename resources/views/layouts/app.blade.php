@@ -655,7 +655,7 @@
                                     </li>
                                     <li>
                                         <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Add Sponsor's List
+                                            <i class="metismenu-icon"></i>Add Sponsor's VISA
                                         </a>
                                     </li>
                                     <li>
@@ -704,10 +704,9 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{{ route('jobs') }}">
                                     <i class="metismenu-icon pe-7s-box1"></i>
                                     Jobs
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
                             </li>
                         </ul>

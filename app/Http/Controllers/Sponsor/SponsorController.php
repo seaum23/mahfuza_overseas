@@ -99,7 +99,7 @@ class SponsorController extends Controller
                 return $request->delegate_office->delegate->name . ' - ' . $request->delegate_office->name;
             })
             ->addColumn('action', function ($query) {
-                return '<button data-toggle="modal" data-target="#update_sponsor_modal" class="btn btn-sm btn-primary" onclick="edit_sponsor('.$query->id.', '.$query->delegate_office->id.', '.$query->delegate_office->delegate->id.', \''.$query->sponsor_name.'\', \''.$query->sponsor_NID.'\', \''.$query->sponsor_phone.'\', \''.$query->comment.'\')"><i class="fas fa-edit"></i> Edit</button>';
+                return '<button data-toggle="modal" data-target="#update_sponsor_modal" class="btn btn-sm btn-primary" onclick="edit_sponsor('.$query->id.', '.$query->delegate_office->id.', '.$query->delegate_office->delegate->id.', \''.$query->sponsor_name.'\', \''.$query->sponsor_NID.'\', \''.$query->sponsor_phone.'\', \''.addslashes($query->comment).'\')"><i class="fas fa-edit"></i> Edit</button>';
             })
             ->make(true);
         }
@@ -107,7 +107,7 @@ class SponsorController extends Controller
 
     public function update(Sponsor $sponsor, Request $request)
     {
-        if($sponsor_id->sponsor_NID != $request->sponsorNid AND Sponsor::where('sponsor_NID', $request->sponsorNid)->first()){
+        if($sponsor->sponsor_NID != $request->sponsorNid AND Sponsor::where('sponsor_NID', $request->sponsorNid)->first()){
             echo json_encode(array('sponsorNid' => 'Sponsor already exists!', 'error' => true));
             return;
         }

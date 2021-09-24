@@ -19,7 +19,7 @@ class CreateSponsorsTable extends Migration
             $table->string('sponsor_NID', 100)->unique();
             $table->string('sponsor_name', 100);
             $table->string('sponsor_phone', 50);
-            $table->string('comment', 100);
+            $table->string('comment', 255);
             $table->foreignIdFor(DelegateOffice::class);
             $table->unsignedBigInteger('updated_by');
             $table->foreign('updated_by')->references('id')->on('users');

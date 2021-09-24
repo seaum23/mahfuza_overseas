@@ -649,7 +649,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('sponsor-list') }}" class="{{ (request()->is('sponsor/list')) ? 'mm-active' : '' }}">
+                                        <a href="{{ route('sponsor-list') }}" class="{{ (request()->is('sponsor/list*')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Sponsor List
                                         </a>
                                     </li>

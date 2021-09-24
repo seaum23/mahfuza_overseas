@@ -52,15 +52,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sponsor', [SponsorController::class, 'index'])->name('sponsor');
     Route::post('/sponsor', [SponsorController::class, 'store']);
+    Route::post('/sponsor/{sponsor}/update', [SponsorController::class, 'update']);
     Route::post('/sponsor/{delegate}/fetch_delegate_office', [SponsorController::class, 'fetch_delegate_office']);
-    Route::get('/sponsor/list', [SponsorController::class, 'list'])->name('sponsor-list');
-    Route::get('/sponsor/list/datatable', [SponsorController::class, 'getIndex'])->name('sponsor-list');
-    Route::get('/sponsor/datatable/ajax', [SponsorController::class, 'anyData']);
+    Route::get('/sponsor/list/datatable', [SponsorController::class, 'list'])->name('sponsor-list');
+    Route::get('/sponsor/datatable/ajax', [SponsorController::class, 'table_data']);
+    Route::post('/sponsor/edit.sponsor.data', [SponsorController::class, 'edit_sponsor_data']);
     
-    Route::get('/users', [TestController::class, 'index'])->name('users.index');
     
 
-    Route::post('/logout', [SponsorDatatableContorller::class, 'logout'])->name('logout');
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
 
 

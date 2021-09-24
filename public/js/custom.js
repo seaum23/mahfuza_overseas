@@ -233,7 +233,6 @@ $('#update_delegate').on('submit', function(){
     event.preventDefault();
     let id = $('#delegate_id_update').val();
     $('#update_delegate').removeClass('needs-validation');
-    console.log('test');
     
     var form = $('#update_delegate')[0];
     var data = new FormData(form);
@@ -291,39 +290,72 @@ function selectDelegateOffice(delegate_id){
     });
 }
 
-// var sponsor_list_datatable = $('#sponsor_list_datatable').DataTable({
-//     "paging": true,
-//     "lengthChange": true,
-//     "searching": true,
-//     "order": [[0, "desc"]],
-//     "info": true,
-//     "ScrollX": true,
-//     "processing": true,
-//     "serverSide": true,
-//     "lengthMenu": [
-//         [10, 25, 50, 100, 500],
-//         [10, 25, 50, 100, 500]
-//     ],
-//     ajax: {
-//         url: "/sponsor/list/datatable",
-//         data: {test: 'yes'}
-//     },                        
-// });
-
 $(function() {
     $('#sponsor_list_datatable').DataTable({
         processing: true,
         serverSide: true,
         ajax: '/sponsor/datatable/ajax',
         columns: [
-            { data: 'id', name: 'id' },
+            { data: 'delegate_office.name', name: 'delegate_office.name' },
+            { data: 'sponsor_name', name: 'sponsor_name' },
             { data: 'sponsor_NID', name: 'sponsor_NID' },
             { data: 'sponsor_name', name: 'sponsor_name' },
             { data: 'sponsor_phone', name: 'sponsor_phone' },
-            { data: 'sponsor_phone', name: 'sponsor_phone' },
-            { data: 'sponsor_phone', name: 'sponsor_phone' },
-            { data: 'comment', name: 'comment' }
-        ]
+            { data: 'comment', name: 'comment' },
+            { data: 'action', name: 'action' },
+        ],
+    });
+});
+
+let edit_sponsor = (id, delegate_office, delegate, name, nid, phone, comment) => {
+    $.ajax({
+        type: 'post',
+        enctype: 'multipart/form-data',
+        url: '/sponsor/edit.sponsor.data',
+        data: {delegate_office, delegate},
+        success: function (response){
+            let info = JSON.parse(response);
+            $('#sponsorName').val(name);
+            $('#sponsorNid').val(nid);
+            $('#sponsorPhone').val(phone);
+            $('#comment').val(comment);
+            $('#delegateId').html(info.delegates);
+            $('#delegateOfficeId').html(info.delegate_offices);
+            $('#sponsor_id_update').val(id);
+        }
+    });
+}
+
+$('#update_sponsor').on('submit', function(){
+    event.preventDefault();
+    let id = $('#sponsor_id_update').val();
+    $('#update_sponsor').removeClass('needs-validation');
+    
+    var form = $('#update_sponsor')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'post',
+        enctype: 'multipart/form-data',
+        url: '/sponsor/' + id + '/update',
+        data: data,
+        processData: false,
+        contentType: false,
+		beforeSend:function(){
+            $("#update_button_sponsor").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#update_button_sponsor").prop('disabled', true);
+        },
+        success: function (response){
+            let info = JSON.parse(response);
+            if(info.error){
+                $('#update_sponsor').addClass('needs-validation');
+                $("#update_button_sponsor").html('Update');
+                $("#update_button_sponsor").prop('disabled', false);
+                $('#sponsorNid').addClass('is-invalid');
+                $("#sponsorNid_message").html('Sponsor NID already exists!');                
+            }else{
+                location.reload();
+            }
+        }
     });
 });
 

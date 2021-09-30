@@ -14,10 +14,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
+    <link href="{{ asset('css/bootstrap-datetimepicker.css?v2') }}" rel="stylesheet" />
 </head>
 <body {{ Session::has('alert') ? 'data-alert' : '' }} data-alert-type='{{ Session::get('alert_type') }}' data-alert-message='{{ Session::get('message') }}'>
     @auth
         <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+            <div class="loader-container"><div class="loader"><div class="loadingio-spinner-spinner-ptyf34t14na"><div class="ldio-4bfaoxawr8j"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div></div></div>
             <div class="app-header header-shadow">
                 <div class="app-header__logo">
                     <div class="logo-src"></div>
@@ -654,12 +657,12 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-notifications.html">
+                                        <a href="{{ url('/sponsor-visa/create') }}" class="{{ (request()->is('sponsor-visa/create')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Add Sponsor's VISA
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-notifications.html">
+                                        <a href="{{ url('/sponsor-visa.list') }}" class="{{ (request()->is('sponsor-visa.list')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Show VISA list
                                         </a>
                                     </li>
@@ -703,8 +706,8 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('jobs') }}">
+                            <li class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
+                                <a href="{{ url('jobs') }}" class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
                                     <i class="metismenu-icon pe-7s-box1"></i>
                                     Jobs
                                 </a>
@@ -727,11 +730,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js" integrity="sha512-i8ERcP8p05PTFQr/s0AZJEtUwLBl18SKlTOZTH0yK5jVU0qL8AIQYbbG5LU+68bdmEqJ6ltBRtCxnmybTbIYpw==" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> --}}
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.8/r-2.2.7/datatables.min.js"></script>
     <script type="text/javascript" src="{{ asset('js/template.js') }}"></script></body>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script> --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> --}}
+    <script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @yield('script')
     <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
 </body>
 </html>

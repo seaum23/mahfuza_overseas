@@ -1,15 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\Test\TestController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\FormTemplateController;
 use App\Http\Controllers\Sponsor\SponsorController;
 use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
+use App\Http\Controllers\Sponsor\SponsorVisaController;
 use App\Http\Controllers\HumanResource\EmployeeController;
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
-use App\Http\Controllers\JobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,8 @@ use App\Http\Controllers\JobController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [LoginController::class, 'index'])->name('login');
+
 Route::group(['middleware' => 'guest'], function () {    
 
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -59,10 +63,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sponsor/datatable/ajax', [SponsorController::class, 'table_data']);
     Route::post('/sponsor/edit.sponsor.data', [SponsorController::class, 'edit_sponsor_data']);
     
-    Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
-    
+    Route::resource('jobs', JobController::class);
+    Route::resource('sponsor-visa', SponsorVisaController::class);
+    Route::get('/sponsor-visa.list', [SponsorVisaController::class, 'show']);
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+    // For fetching templates
+    Route::get('sponsor-visa-template/{index}', [FormTemplateController::class, 'visa_form_template']);
+
 });
 
 

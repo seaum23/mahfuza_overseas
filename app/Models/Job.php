@@ -14,4 +14,9 @@ class Job extends Model
         'credit_type',
         'updated_by',
     ];
+
+    public function visa()
+    {
+        return $this->hasMany(SponsorVisa::class);
+    }
 }

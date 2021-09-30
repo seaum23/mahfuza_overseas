@@ -12,7 +12,7 @@
                         <div class="form-row justify-content-between">
                             <div class="form-group col-md-6" >
                                 <label>Delegate</label>
-                                <select class="form-control select2 @error('delegateId') is-invalid @enderror" name="delegateId" id="delegateId" onchange="selectDelegateOffice(this.value)" value="3">
+                                <select class="form-control select2 @error('delegateId') is-invalid @enderror" name="delegateId" id="delegateId">
                                     <option value=""> Select Delegate </option>
                                     @foreach ($delegates as $delegate)
                                         <option value="{{ $delegate->id }}" {{ (old("delegateId") == $delegate->id ? "selected":"") }} >{{ $delegate->name }}</option>

@@ -70,306 +70,69 @@ let edit_employee = (id) => {
     });
 }
 
-/**
- * Delegate & Delegate office CRUD
- */
 
-$('#add_office').click(function(){
-    // create row
-    var div = document.createElement("DIV");
-    div.setAttribute('class', 'form-group row');
-    // create first col-sm
-    var div_col_1 = document.createElement("DIV");
-    div_col_1.setAttribute('class', 'col-sm');
-    var label = document.createElement("LABEL");
-    var text = document.createTextNode("Office: ");
-    label.appendChild(text);
-    div_col_1.appendChild(label);
-    var input = document.createElement("INPUT");
-    input.setAttribute('type', 'text');
-    input.setAttribute('name', 'delegateOffice[]');
-    input.setAttribute('class', 'form-control');
-    input.setAttribute('placeholder', 'Office Name');
-    input.setAttribute('required','');
-    div_col_1.appendChild(input);
-    div.appendChild(div_col_1);
-    // second input
-    var div_col_1 = document.createElement("DIV");
-    div_col_1.setAttribute('class', 'col-sm');
-    var label = document.createElement("LABEL");
-    var text = document.createTextNode("License Number: ");
-    label.appendChild(text);
-    div_col_1.appendChild(label);
-    var input = document.createElement("INPUT");
-    input.setAttribute('type', 'text');
-    input.setAttribute('name', 'licenseNumber[]');
-    input.setAttribute('class', 'form-control');
-    input.setAttribute('placeholder', 'License Number');
-    input.setAttribute('required','');
-    div_col_1.appendChild(input);
-    div.appendChild(div_col_1);
-    $('#officeDiv').append(div);
+// $(".timePicker").timepicker();
+
+$('.datepicker').datepicker({
+    format: 'yyyy/mm/dd',
+    todayHighlight:'TRUE',
+    autoclose: true,
 });
 
+$(function () {
 
-$('#remove_office').click(function(){
-    $('#officeDiv').children().last().remove();
+    initHijrDatePicker();
+
+    initHijrDatePickerDefault();
+
+    $('.disable-date').hijriDatePicker({
+
+        minDate:"2020-01-01",
+        maxDate:"2021-01-01",
+        viewMode:"years",
+        hijri:true,
+        debug:true
+    });
+
 });
 
+function initHijrDatePicker() {
 
-$('#delete_delegate_office').on('submit', function(){
-    event.preventDefault();
-    let delegateOfficeId = $('#delegateOfficeIdModal').val();
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/delegate/office/destroy/' + delegateOfficeId,
-		beforeSend:function(){
-            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button").prop('disabled', true);
-            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#delete_button").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                danger_alert('Error', 'Something went wrong!');
-                $("#update_button").html('Update');
-                $("#update_button").prop('disabled', false); 
-                $("#delete_button").html('Delete');
-                $("#delete_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
-        }
-    });
-})
-
-$('#update_delegate_office').on('submit', function(){
-    event.preventDefault();
-    let delegateOfficeId = $('#delegateOfficeIdModal').val();
-    let office_name = $('#officeNameModal').val();
-    let license_number = $('#licenseNumModal').val();
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/delegate/office/update/' + delegateOfficeId,
-        data: {office_name, license_number},
-		beforeSend:function(){
-            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button").prop('disabled', true);
-            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#delete_button").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                danger_alert('Error', 'Something went wrong!');
-                $("#update_button").html('Update');
-                $("#update_button").prop('disabled', false);                
-                $("#delete_button").html('Delete');
-                $("#delete_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
-        }
-    });
-})
-
-$('#add_delegate_office_form').on('submit', function(){
-    event.preventDefault();
-    let id = $('#delegate_id_modal').val();
-    $('#add_delegate_office_form').removeClass('needs-validation');
-    $('#error_message').hide();
-    $('#error_message').html('');
-    
-    var form = $('#add_delegate_office_form')[0];
-    var data = new FormData(form);
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/delegate/office/add/' + id,        
-        data: data,
-        processData: false,
-        contentType: false,
-		beforeSend:function(){
-            $("#add_office_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#add_office_button").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                $('#add_delegate_office_form').addClass('needs-validation');
-                $('#error_message').show();
-                $('#error_message').html(info.message);
-                $("#add_office_button").html('Submit');
-                $("#add_office_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
-        }
-    });
-});
-
-let add_office_delegatge = (id) => {    
-    $('#delegate_id_modal').val(id);
-}
-
-function change_delegate_office(id, name, license){
-    $('#delegateOfficeIdModal').val(id);
-    $('#officeNameModal').val(name);
-    $('#licenseNumModal').val(license);
-}
-
-function update_delegate(id, name, country, state, comment){
-    $('#delegate_id_update').val(id);
-    $('#delegateName').val(name);
-    $('#delegateCountry').val(country);
-    $('#delegateState').val(state);
-    $('#comment').val(comment);    
-}
-
-$('#update_delegate').on('submit', function(){
-    event.preventDefault();
-    let id = $('#delegate_id_update').val();
-    $('#update_delegate').removeClass('needs-validation');
-    
-    var form = $('#update_delegate')[0];
-    var data = new FormData(form);
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/delegate/' + id + '/update',        
-        data: data,
-        processData: false,
-        contentType: false,
-		beforeSend:function(){
-            $("#update_button_delegate").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button_delegate").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                $('#update_delegate').addClass('needs-validation');
-                $("#update_button_delegate").html('Update');
-                $("#update_button_delegate").prop('disabled', false);
-            }else{
-                location.reload();
-            }
-        }
-    });
-});
-
-/**
- * End Delegate & Delegate Office CRUD
-*/
-
-/**
- * Start Sponsor & Sponsor VISA CRUD
- */
-
-function selectDelegateOffice(delegate_id){
-    let selected_office = $('#delegateOfficeId').data('selected_office');
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/sponsor/' + delegate_id + '/fetch_delegate_office',
-        data: {delegate_id},
-        success: function (response){
-            $('#delegateOfficeId').find('option').remove();
-            let info = JSON.parse(response);
-            $('#delegateOfficeId').append(`<option value="">Select Delegate Office</option>`);
-            info.forEach(element => {
-                if(selected_office == element.id){
-                    $('#delegateOfficeId').append(`<option value="${element.id}" selected>${element.name}</option>`);
-                }else{
-                    $('#delegateOfficeId').append(`<option value="${element.id}">${element.name}</option>`);
-                }
-            });
-        }
+    $(".hijri-date-input").hijriDatePicker({
+        locale: "ar-sa",
+        format: "DD-MM-YYYY",
+        hijriFormat:"iYYYY-iMM-iDD",
+        dayViewHeaderFormat: "MMMM YYYY",
+        hijriDayViewHeaderFormat: "iMMMM iYYYY",
+        showSwitcher: true,
+        allowInputToggle: true,
+        showTodayButton: false,
+        useCurrent: true,
+        isRTL: false,
+        viewMode:'months',
+        keepOpen: false,
+        hijri: false,
+        debug: true,
+        showClear: true,
+        showTodayButton: true,
+        showClose: true
     });
 }
 
-$(function() {
-    $('#sponsor_list_datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '/sponsor/datatable/ajax',
-        columns: [
-            { data: 'delegate_office.name', name: 'delegate_office.name' },
-            { data: 'sponsor_name', name: 'sponsor_name' },
-            { data: 'sponsor_NID', name: 'sponsor_NID' },
-            { data: 'sponsor_name', name: 'sponsor_name' },
-            { data: 'sponsor_phone', name: 'sponsor_phone' },
-            { data: 'comment', name: 'comment' },
-            { data: 'action', name: 'action' },
-        ],
-    });
-});
+function initHijrDatePickerDefault() {
 
-let edit_sponsor = (id, delegate_office, delegate, name, nid, phone, comment) => {
-    $('#update_sponsor').trigger('reset');
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/sponsor/edit.sponsor.data',
-        data: {delegate_office, delegate},
-        success: function (response){
-            let info = JSON.parse(response);
-            $('#sponsorName').val(name);
-            $('#sponsorNid').val(nid);
-            $('#sponsorPhone').val(phone);
-            $('#comment').val(comment);
-            $('#delegateId').html(info.delegates);
-            $('#delegateOfficeId').html(info.delegate_offices);
-            $('#sponsor_id_update').val(id);
-        }
-    });
+    $(".hijri-date-default").hijriDatePicker();
 }
-
-$('#update_sponsor').on('submit', function(){
-    event.preventDefault();
-    let id = $('#sponsor_id_update').val();
-    $('#update_sponsor').removeClass('needs-validation');
-    
-    var form = $('#update_sponsor')[0];
-    var data = new FormData(form);
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '/sponsor/' + id + '/update',
-        data: data,
-        processData: false,
-        contentType: false,
-		beforeSend:function(){
-            $("#update_button_sponsor").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button_sponsor").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                $('#update_sponsor').addClass('needs-validation');
-                $("#update_button_sponsor").html('Update');
-                $("#update_button_sponsor").prop('disabled', false);
-                $('#sponsorNid').addClass('is-invalid');
-                $("#sponsorNid_message").html('Sponsor NID already exists!');                
-            }else{
-                location.reload();
-            }
-        }
-    });
-});
-
-/**
- * End Sponsor & Sponsor VISA CRUD
- */
- jobs_datatable
 
 
 
 /**
  * Trigger change of selet 2
  */
+ $(document).ready(function() {
+    $('.select2').select2();
+ })
+ 
  $('.select2').trigger('change');
 
 

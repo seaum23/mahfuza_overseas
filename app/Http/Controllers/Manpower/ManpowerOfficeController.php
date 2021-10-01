@@ -16,7 +16,10 @@ class ManpowerOfficeController extends Controller
      */
     public function index()
     {
-        
+        $offices = ManpowerOffice::with('manpower_job.job')->paginate(10);
+        return view('templates.manpower.manpower_office_list', [
+            'offices' => $offices
+        ]);
     }
 
     /**
@@ -47,14 +50,16 @@ class ManpowerOfficeController extends Controller
             'comment' => $request->comment,
             'updated_by' => auth()->id(),
         ]);
-
         foreach($request->jobId as $idx=>$job){
-            $manpower_office->manpower_job()->create([
-                'job_id' => $job,
-                'processing_cost' => $request->processingCost[$idx],
+            $manpower_office->manpower_job()->updateOrCreate(
+                ['job_id' => $job],
+                ['processing_cost' => $request->processingCost[$idx]
             ]);
         }
-        
+        $request->session()->flash('alert', 'Yes');
+        $request->session()->flash('message', 'Task was successful!');
+        $request->session()->flash('alert_type', 'success');
+        return back();
     }
 
     /**
@@ -74,9 +79,9 @@ class ManpowerOfficeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ManpowerOffice $manpower_office)
     {
-        //
+        return json_encode($manpower_office);
     }
 
     /**
@@ -100,5 +105,31 @@ class ManpowerOfficeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * AJAX reuest data
+     */
+
+    public function fetch_form_element()
+    {
+        $html = '<div class="row jod-extra-body">
+                    <div class="col-sm">                        
+                        <label>Job</label>
+                        <select class="form-control select2" name="jobId[]" required>
+                        <option value="">Select Job</option>';
+        $jobs = Job::get();
+        foreach($jobs as $job){
+            $html .= '<option value="'.$job->id.'"> '.$job->name.' - '.$job->credit_type.' </option>';
+        }
+        $html .=    '</select>
+                    </div>
+                    <div class="col-sm">
+                        <label>Processing Cost</label>
+                        <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" required>
+                    </div>
+                </div>';
+        echo json_encode(array('html' => $html));
     }
 }

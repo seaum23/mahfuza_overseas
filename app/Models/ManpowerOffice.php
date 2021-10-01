@@ -22,9 +22,4 @@ class ManpowerOffice extends Model
     {
         return $this->hasMany(ManpowerJob::class);
     }
-
-    public function job()
-    {
-        return $this->hasManyThrough(Job::class, ManpowerJob::class);
-    }
 }

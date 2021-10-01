@@ -17,7 +17,7 @@ class CreateManpowerJobsTable extends Migration
     {
         Schema::create('manpower_jobs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('manpower_id');
+            $table->foreignId('manpower_office_id');
             $table->foreignId('job_id');
             $table->integer('processing_cost');
             $table->timestamps();

@@ -8,7 +8,7 @@ Manpower Office
     <div class="col-md-6 mt-5">
         <div class="main-card mt-3 card">
             <div class="card-body"><h5 class="card-title">New Manpower Office</h5>
-                <form action="{{ url('manpower-office') }}" method="post" enctype="multipart/form-data" class="@if ($errors->any()) needs-validation @endif">
+                <form action="{{ url('manpower-office') }}" id="manpower_office" method="post" enctype="multipart/form-data" class="@if ($errors->any()) needs-validation @endif">
                     @csrf                    
                     <div class="form-group">
                         <div class="row">
@@ -40,7 +40,7 @@ Manpower Office
                                     <select class="form-control select2" name="jobId[]" required>
                                     <option value="">Select Job</option>
                                     @foreach ($jobs as $job)
-                                        <option value="{{ $job->id }}">{{ $job->name }}</option>
+                                        <option value="{{ $job->id }}">{{ $job->name . ' - ' . $job->credit_type }}</option>
                                     @endforeach
                                     </select>
                                 </div>
@@ -79,10 +79,27 @@ Manpower Office
 @section('script')
 <script>
     $('#add_office').on('click',() => {
-        $('#extra-job-body').append('<div id="jod-extra-body">' + $('#job-body').html() + '</div>');
+        $.ajax({
+            type: 'get',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' +'/manpower-office.fetch.form-element',
+            beforeSend:function(){
+                $("#add_office").html('<i class="fas fa-spinner fa-pulse"></i>');
+                $("#add_office").prop('disabled', true);
+            },
+            success: function (response){
+                let info = JSON.parse(response);
+                $('#extra-job-body').append( info.html );
+                $("#add_office").html('<span class="fa fa-plus" aria-hidden="true"></span>');
+                $("#add_office").prop('disabled', false);
+                $('.select2').select2({
+                    width: '100%'
+                });
+            }
+        });
     });
     $('#remove_office').on('click',() => {
-        $('#jod-extra-body').last().remove();
+        $('.jod-extra-body').last().remove();
     });
     
 </script>

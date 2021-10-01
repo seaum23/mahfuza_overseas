@@ -67,10 +67,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('jobs', JobController::class);
 
     Route::resource('sponsor-visa', SponsorVisaController::class);
-    Route::get('/sponsor-visa.list', [SponsorVisaController::class, 'show']);
+    Route::get('/sponsor-visa.list', [SponsorVisaController::class, 'show']); // FORGOT TO USE INDEX METHOD. LAZY TO CHANGE NOW. WILL WORK ON IT LATER.
 
     Route::resource('manpower-office', ManpowerOfficeController::class);
-    Route::get('/manpower-office.list', [ManpowerOfficeController::class, 'show']); // FORGOT TO USE INDEX METHOD. LAZY TO CHANGE NOW. WILL WORK ON IT LATER.
+    /**
+     * Ajax call
+     * 
+     * @return JSON
+     */
+    Route::get('/manpower-office.fetch.form-element', [ManpowerOfficeController::class, 'fetch_form_element']); 
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 

@@ -681,7 +681,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="{{ url('manpower-office') }}" class="{{ (request()->is('manpower-office')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Office List
                                         </a>
                                     </li>

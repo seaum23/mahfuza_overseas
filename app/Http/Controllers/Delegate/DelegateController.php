@@ -139,6 +139,4 @@ class DelegateController extends Controller
             'delegates' => $delegates
         ]);
     }
-
-
 }

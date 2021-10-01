@@ -6,22 +6,25 @@ use App\Models\ManpowerJob;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Job extends Model
+class ManpowerOffice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'credit_type',
+        'license',
+        'address',
+        'comment',
         'updated_by',
     ];
 
-    public function visa()
-    {
-        return $this->hasMany(SponsorVisa::class);
-    }
     public function manpower_job()
     {
         return $this->hasMany(ManpowerJob::class);
+    }
+
+    public function job()
+    {
+        return $this->hasManyThrough(Job::class, ManpowerJob::class);
     }
 }

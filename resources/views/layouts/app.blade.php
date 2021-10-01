@@ -668,7 +668,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li class="{{ (request()->is('manpower-office*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-portfolio"></i>
                                     Manpower
@@ -676,12 +676,12 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="{{ url('manpower-office/create') }}" class="{{ (request()->is('manpower-office/create')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Add Office
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="components-tabs.html">
                                             <i class="metismenu-icon"></i>Office List
                                         </a>
                                     </li>

@@ -13,7 +13,7 @@ class AddParentIdToDesignationTable extends Migration
      */
     public function up()
     {
-        Schema::table('designation', function (Blueprint $table) {
+        Schema::table('designations', function (Blueprint $table) {
             $table->integer('parent_id');
         });
     }
@@ -25,7 +25,7 @@ class AddParentIdToDesignationTable extends Migration
      */
     public function down()
     {
-        Schema::table('designation', function (Blueprint $table) {
+        Schema::table('designations', function (Blueprint $table) {
             $table->dropColumn('parent_id');
         });
     }

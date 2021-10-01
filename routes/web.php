@@ -11,6 +11,7 @@ use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
 use App\Http\Controllers\Sponsor\SponsorVisaController;
 use App\Http\Controllers\HumanResource\EmployeeController;
+use App\Http\Controllers\Manpower\ManpowerOfficeController;
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 
 /*
@@ -64,8 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/sponsor/edit.sponsor.data', [SponsorController::class, 'edit_sponsor_data']);
     
     Route::resource('jobs', JobController::class);
+
     Route::resource('sponsor-visa', SponsorVisaController::class);
     Route::get('/sponsor-visa.list', [SponsorVisaController::class, 'show']);
+
+    Route::resource('manpower-office', ManpowerOfficeController::class);
+    Route::get('/manpower-office.list', [ManpowerOfficeController::class, 'show']); // FORGOT TO USE INDEX METHOD. LAZY TO CHANGE NOW. WILL WORK ON IT LATER.
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 

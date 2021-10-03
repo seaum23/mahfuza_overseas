@@ -46,9 +46,12 @@ class DelegateController extends Controller
             $delegate->delegate_offices()->create([
                 'name' => $office,
                 'license_number' => $licenseNumbers[$idx],
+                'updated_by' => auth()->id(),
             ]);
         }
 
+        alert($request, 'Success!', 'success');
+        return back();
     }
 
     public function update(Request $request, Delegate $delegate)

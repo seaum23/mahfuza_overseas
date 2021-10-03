@@ -13,6 +13,7 @@ use App\Http\Controllers\Sponsor\SponsorVisaController;
 use App\Http\Controllers\HumanResource\EmployeeController;
 use App\Http\Controllers\Manpower\ManpowerOfficeController;
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
+use App\Http\Controllers\Manpower\ManpowerJobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sponsor-visa.list', [SponsorVisaController::class, 'show']); // FORGOT TO USE INDEX METHOD. LAZY TO CHANGE NOW. WILL WORK ON IT LATER.
 
     Route::resource('manpower-office', ManpowerOfficeController::class);
+
+    Route::resource('manpower-job', ManpowerJobController::class);
     /**
      * Ajax call
      * 

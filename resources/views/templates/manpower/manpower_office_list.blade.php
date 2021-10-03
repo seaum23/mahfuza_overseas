@@ -29,17 +29,14 @@ Delegate List
                                         <p>No Job Assigned!</p>
                                     @else
                                         @foreach ($office->manpower_job as $idx => $manpower_job)
-                                            @if ($idx+1 == count($office->manpower_job))
-                                                <button class="btn btn-info btn-sm">{{ $manpower_job->job->name }}: {{$manpower_job->processing_cost}}</button>
-                                            @else    
-                                                <button class="btn btn-info btn-sm">{{ $manpower_job->job->name }}: {{$manpower_job->processing_cost}}</button>
-                                            @endif
+                                            <button onclick="edit_manpower_job({{ $manpower_job->id }})" class="btn btn-info btn-sm">{{ $manpower_job->job->name }}: {{$manpower_job->processing_cost}}</button>
                                         @endforeach
                                     @endif
                                 </td>
                                 <td>{{ $office->comment; }}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm" onclick="update_manpower_office({{ $office->id; }})">Update</button>
+                                    <button class="btn btn-info btn-sm" onclick="add_manpower_office({{ $office->id; }})"><i class="fas fa-plus"></i> Add Job</button>
+                                    <button class="btn btn-warning btn-sm" onclick="update_manpower_office({{ $office->id; }})"><i class="fas fa-edit"></i> Edit</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -54,49 +51,9 @@ Delegate List
 @endsection
 
 @section('modals')
-<!-- Add Office -->
-<div class="modal fade" id="add_office_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form action="" method="post" enctype="multipart/form-data" id="add_delegate_office_form">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Office</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="delegate_id" id="delegate_id_modal">
-                    <div class="form-row">
-                        <div class="form-group row">
-                            <div class="col-md-12 mb-3">  
-                                <p class="m-0 p-0" style="font-size: 18px; display: flex; align-items: center"><span class="pe-7s-help1 icon-gradient bg-ripe-malin"></span><span style="font-size: 15px" class="ml-2 page-title-subheading text-secondary">Separte each Office and License with `Comma`.</span></p>
-                            </div>
-                            <div class="col-md-6 mb-2">  
-                                <label for="sel1">Office: </label>
-                                <input class="form-control" type="text" name="delegateOffice" placeholder="Office name" required>
-                            </div>
-                            <div class="col-md-6">  
-                                <label for="sel1">License Number: </label>
-                                <input class="form-control" type="text" name="licenseNumber" placeholder="License Number" required>
-                            </div>
-                            <div class="col-md-12 mt-1">
-                                <p class="text-danger m-0 p-0" style="display: none" id="error_message"></p>
-                            </div>
-                        </div>
-                    </div>                    
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="add_office_button">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
-<!-- Edit Delete Office -->
-<div class="modal fade" id="changeDelegateOffice" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<!-- Edit Delete Job -->
+<div class="modal fade" id="manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,18 +64,25 @@ Delegate List
             </div>
             <div class="modal-body">
 
-                <input type="hidden" name="delegateOfficeId" id="delegateOfficeIdModal">
-                <label for="">Office Name</label>
-                <input class="form-control" type="text" name="officeName" id="officeNameModal">
-                <label for="">License Number</label>
-                <input class="form-control" type="text" name="licenseNum" id="licenseNumModal">
+                <input type="hidden" name="manpower_office_id" id="manpower_office_id">
+                <div class="row">
+                    <div class="col-sm">                        
+                        <p style="display: block">Job</p>
+                        <select style="width: 100%" class="form-control select2" name="jobId" id="jobId" required>
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        <label>Processing Cost</label>
+                        <input class="form-control" autocomplete="off" type="number" name="processingCost" id="processingCost" placeholder="Cost" required>
+                    </div>
+                </div>
                 
             </div>
             <div class="modal-footer">
-                <form action="" method="post" enctype="multipart/form-data" id="delete_delegate_office">
+                <form action="" method="post" enctype="multipart/form-data" id="delete_manpower_job">
                     <button type="submit" name="delete" class="btn btn-danger" id="delete_button">Delete</button>
                 </form>
-                <form action="" method="post" enctype="multipart/form-data" id="update_delegate_office">
+                <form action="" method="post" enctype="multipart/form-data" id="update_manpower_job">
                     <button type="submit" class="btn btn-primary" id="update_button">Update</button>
                 </form>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -127,44 +91,83 @@ Delegate List
     </div>
 </div>
 
-<!-- Update Delegate -->
-<div class="modal fade" id="update_delegate_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<!-- Add New Job -->
+<div class="modal fade" id="add_manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="" id="add_manpower_job_form">
+                <div class="modal-header">
+                    <h5 class="modal-title">Office Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="add_to_manpower_office_id" id="add_to_manpower_office_id">
+                    <p class="m-0 p-0 text-danger" id="error_message_new_job"></p>
+                    <div id="job-body">
+
+                    </div>
+                    <div id="extra-job-body"></div>
+                    <div class="row mt-3">
+                        <div class="col-sm">                        
+                            <div id="officeDiv"></div>                
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <button class="btn btn-sm btn-primary" type="button" id="add_office" ><span class="fa fa-plus" aria-hidden="true"></span></button>
+                                    <button class="btn btn-sm btn-danger" type="button" id="remove_office"><span class="fas fa-minus" aria-hidden="true"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="add_manpower_job"> Add </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Manpower Office -->
+<div class="modal fade" id="update_manpower_office_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delegate Information</h5>
+                <h5 class="modal-title">Manpower Office Information</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="" method="post" enctype="multipart/form-data" id="update_delegate">
+            <form action="" method="post" enctype="multipart/form-data" id="update_manpower_office_form">
+                <input type="hidden" id="manpower_id">
                 <div class="modal-body">
                     <div class="row">
-                        <input type="hidden" id="delegate_id_update">
-                        <div class="form-group col-md-6" >
-                            <label>Delegate Name</label>
-                            <input class="form-control @error('delegateName') is-invalid @enderror" type="text" name="delegateName" id="delegateName" placeholder="Enter Name" value="{{ old('delegateName') }}">
-                            <div class="invalid-feedback"> @error('delegateName') {{ $message }} @enderror </div>
-                        </div>                
                         <div class="form-group col-md-6">
-                            <label for="sel1">Country:</label>
-                            <input class="form-control @error('delegateCountry') is-invalid @enderror" type="text" name="delegateCountry" id="delegateCountry" placeholder="Country" value="{{ old('delegateCountry') }}" >
-                            <div class="invalid-feedback"> @error('delegateCountry') {{ $message }} @enderror </div>
+                            <label>Office Name</label>
+                            <input class="form-control @error('officeName') is-invalid @enderror" autocomplete="off" type="text" name="officeName" id="officeName" placeholder="Enter Name" required>
+                            <div class="invalid-feedback"> @error('officeName') {{ $message }} @enderror </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="sel1">State:</label>
-                            <input class="form-control @error('delegateState') is-invalid @enderror" type="text" name="delegateState" id="delegateState" placeholder="State" value="{{ old('delegateState') }}" >
-                            <div class="invalid-feedback"> @error('delegateState') {{ $message }} @enderror </div>
-                        </div>               
+                            <label>License Number</label> <span class="text-danger" id=""></span>
+                            <input class="form-control @error('licenseNumber') is-invalid @enderror" autocomplete="off" type="text" name="licenseNumber" id="licenseNumber" placeholder="Enter License Number" required>
+                            <div id="error_message" class="invalid-feedback">  </div>
+                        </div>                
                         <div class="form-group col-md-6">
-                            <label for="sel1">Any Remarks:</label>
-                            <input class="form-control @error('comment') is-invalid @enderror" type="text" name="comment" id="comment" placeholder="comment" value="{{ old('comment') }}" >
+                            <label>Office Address</label>
+                            <input class="form-control @error('officeAddress') is-invalid @enderror" autocomplete="off" type="text" name="officeAddress" id="officeAddress" placeholder="Enter Office Address" required>
+                            <div class="invalid-feedback"> @error('officeAddress') {{ $message }} @enderror </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Comment</label>
+                            <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment">
                             <div class="invalid-feedback"> @error('comment') {{ $message }} @enderror </div>
                         </div>
                     </div>                
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="update_button_delegate">Update</button>
+                    <button type="submit" class="btn btn-primary" id="update_button_manpower">Update</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -175,210 +178,197 @@ Delegate List
 
 @section('script')
 <script>
+let idx_of_jobs_div = 0;
+
 let update_manpower_office = (id) => {
     $.ajax({
         type: 'get',
         enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' +'/manpower-office/' + id + '/edit',
+        url: '{{ url('/') }}' +'/manpower-office/' + id + '/edit',        
 		beforeSend:function(){
-            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button").prop('disabled', true);
-            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#delete_button").prop('disabled', true);
+            $('.loader-container').show();
         },
         success: function (response){
             let info = JSON.parse(response);
-            if(info.error){
-                danger_alert('Error', 'Something went wrong!');
-                $("#update_button").html('Update');
-                $("#update_button").prop('disabled', false); 
-                $("#delete_button").html('Delete');
-                $("#delete_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
+            $('#officeName').val(info.name);
+            $('#licenseNumber').val(info.license);
+            $('#officeAddress').val(info.address);
+            $('#comment').val(info.comment);
+            $('#manpower_id').val(info.id);            
+            $('#update_manpower_office_modal').modal('toggle');
+            $('.loader-container').hide();
         }
     });
 }
 
-$('#add_office').click(function(){
-    // create row
-    var div = document.createElement("DIV");
-    div.setAttribute('class', 'form-group row');
-    // create first col-sm
-    var div_col_1 = document.createElement("DIV");
-    div_col_1.setAttribute('class', 'col-sm');
-    var label = document.createElement("LABEL");
-    var text = document.createTextNode("Office: ");
-    label.appendChild(text);
-    div_col_1.appendChild(label);
-    var input = document.createElement("INPUT");
-    input.setAttribute('type', 'text');
-    input.setAttribute('name', 'delegateOffice[]');
-    input.setAttribute('class', 'form-control');
-    input.setAttribute('placeholder', 'Office Name');
-    input.setAttribute('required','');
-    div_col_1.appendChild(input);
-    div.appendChild(div_col_1);
-    // second input
-    var div_col_1 = document.createElement("DIV");
-    div_col_1.setAttribute('class', 'col-sm');
-    var label = document.createElement("LABEL");
-    var text = document.createTextNode("License Number: ");
-    label.appendChild(text);
-    div_col_1.appendChild(label);
-    var input = document.createElement("INPUT");
-    input.setAttribute('type', 'text');
-    input.setAttribute('name', 'licenseNumber[]');
-    input.setAttribute('class', 'form-control');
-    input.setAttribute('placeholder', 'License Number');
-    input.setAttribute('required','');
-    div_col_1.appendChild(input);
-    div.appendChild(div_col_1);
-    $('#officeDiv').append(div);
-});
-
-
-$('#remove_office').click(function(){
-    $('#officeDiv').children().last().remove();
-});
-
-$('#delete_delegate_office').on('submit', function(){
+$('#update_manpower_office_form').on('submit', function(){
     event.preventDefault();
-    let delegateOfficeId = $('#delegateOfficeIdModal').val();
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' +'/delegate/office/destroy/' + delegateOfficeId,
-		beforeSend:function(){
-            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button").prop('disabled', true);
-            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#delete_button").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                danger_alert('Error', 'Something went wrong!');
-                $("#update_button").html('Update');
-                $("#update_button").prop('disabled', false); 
-                $("#delete_button").html('Delete');
-                $("#delete_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
-        }
-    });
-})
-
-$('#update_delegate_office').on('submit', function(){
-    event.preventDefault();
-    let delegateOfficeId = $('#delegateOfficeIdModal').val();
-    let office_name = $('#officeNameModal').val();
-    let license_number = $('#licenseNumModal').val();
-    $.ajax({
-        type: 'post',
-        enctype: 'multipart/form-data',
-        url: '{{ url('/') . '/delegate/office/update/'}}' + delegateOfficeId,
-        data: {office_name, license_number},
-		beforeSend:function(){
-            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button").prop('disabled', true);
-            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#delete_button").prop('disabled', true);
-        },
-        success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                danger_alert('Error', 'Something went wrong!');
-                $("#update_button").html('Update');
-                $("#update_button").prop('disabled', false);                
-                $("#delete_button").html('Delete');
-                $("#delete_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
-        }
-    });
-})
-
-$('#add_delegate_office_form').on('submit', function(){
-    event.preventDefault();
-    let id = $('#delegate_id_modal').val();
-    $('#add_delegate_office_form').removeClass('needs-validation');
-    $('#error_message').hide();
+    let id = $('#manpower_id').val();
+    $('#update_manpower_office_form').removeClass('needs-validation');
     $('#error_message').html('');
     
-    var form = $('#add_delegate_office_form')[0];
+    var form = $('#update_manpower_office_form')[0];
     var data = new FormData(form);
     $.ajax({
-        type: 'post',
+        type: 'PUT',
         enctype: 'multipart/form-data',
-        url: '{{ url('/') . '/delegate/office/add/' }}' + id,        
-        data: data,
-        processData: false,
-        contentType: false,
+        url: '{{ url('/') }}' + '/manpower-office/' + id,
+        data: $( this ).serialize(),
 		beforeSend:function(){
-            $("#add_office_button").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#add_office_button").prop('disabled', true);
+            $("#update_button_manpower").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#update_button_manpower").prop('disabled', true);
         },
         success: function (response){
-            let info = JSON.parse(response);
-            if(info.error){
-                $('#add_delegate_office_form').addClass('needs-validation');
-                $('#error_message').show();
-                $('#error_message').html(info.message);
-                $("#add_office_button").html('Submit');
-                $("#add_office_button").prop('disabled', false);
-            }else{
-                location.reload();
-            }
+            location.reload();
         }
     });
 });
 
-let add_office_delegatge = (id) => {    
-    $('#delegate_id_modal').val(id);
+let edit_manpower_job= (id) => {
+    $.ajax({
+        type: 'get',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' +'/manpower-job/' + id + '/edit',        
+		beforeSend:function(){
+            $('.loader-container').show();
+        },
+        success: function (response){
+            let info = JSON.parse(response);
+            $('#manpower_office_id').val(id);
+            $('#jobId').html(info.jobs_option);
+            $('#processingCost').val(info.processing_cost);
+            $('#manpower_job_modal').modal('toggle');
+            $('.loader-container').hide();
+        }
+    });
 }
 
-function change_delegate_office(id, name, license){
-    $('#delegateOfficeIdModal').val(id);
-    $('#officeNameModal').val(name);
-    $('#licenseNumModal').val(license);
-}
-
-function update_delegate(id, name, country, state, comment){
-    $('#delegate_id_update').val(id);
-    $('#delegateName').val(name);
-    $('#delegateCountry').val(country);
-    $('#delegateState').val(state);
-    $('#comment').val(comment);    
-}
-
-$('#update_delegate').on('submit', function(){
+$('#update_manpower_job').on('submit', () => {
     event.preventDefault();
-    let id = $('#delegate_id_update').val();
-    $('#update_delegate').removeClass('needs-validation');
-    
-    var form = $('#update_delegate')[0];
-    var data = new FormData(form);
+    let id = $('#manpower_office_id').val();
+    let jobId = $('#jobId').val();
+    let processingCost = $('#processingCost').val();
     $.ajax({
-        type: 'post',
+        type: 'PUT',
         enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' + '/delegate/' + id + '/update',        
-        data: data,
-        processData: false,
-        contentType: false,
+        url: '{{ url('/') }}' + '/manpower-job/' + id,
+        data: {jobId, processingCost},
 		beforeSend:function(){
-            $("#update_button_delegate").html('<i class="fas fa-spinner fa-pulse"></i>');
-            $("#update_button_delegate").prop('disabled', true);
+            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#update_button").prop('disabled', true);
+            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#delete_button").prop('disabled', true);
         },
         success: function (response){
             let info = JSON.parse(response);
             if(info.error){
-                $('#update_delegate').addClass('needs-validation');
-                $("#update_button_delegate").html('Update');
-                $("#update_button_delegate").prop('disabled', false);
+                $("#update_button").html('Update');
+                $("#update_button").prop('disabled', false);
+                $("#delete_button").html('Delete');
+                $("#delete_button").prop('disabled', false);
+                danger_alert('Error', 'Something went worng! Please try again!');
+            }else{
+                location.reload();
+            }
+        }
+    });
+})
+
+$('#delete_manpower_job').on('submit', () => {
+    event.preventDefault();
+    let id = $('#manpower_office_id').val();
+    $.ajax({
+        type: 'DELETE',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/manpower-job/' + id,
+		beforeSend:function(){
+            $("#update_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#update_button").prop('disabled', true);
+            $("#delete_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#delete_button").prop('disabled', true);
+        },
+        success: function (response){
+            let info = JSON.parse(response);
+            if(info.error){
+                $("#update_button").html('Update');
+                $("#update_button").prop('disabled', false);
+                $("#delete_button").html('Delete');
+                $("#delete_button").prop('disabled', false);
+                danger_alert('Error', 'Something went worng! Please try again!');
+            }else{
+                location.reload();
+            }
+        }
+    });
+})
+
+let add_manpower_office = (id) => {
+    $('.loader').show();
+    $('#add_to_manpower_office_id').val(id);
+    let promise = fetch_data();
+    promise.then((response) => {
+        idx_of_jobs_div++;
+        let info = JSON.parse(response);
+        $('#job-body').html(info.html);
+        $('.select2').select2({
+            width: '100%'
+        });
+    });
+    $('#add_manpower_job_modal').modal('toggle');
+    $('.jod-extra-body').attr('id', 'form_body_number_' + 0);
+    console.log('form_body_number_' + 0);
+    $('.loader').show();
+}
+
+$('#add_office').on('click',() => {
+    let promise = fetch_data();
+    promise.then((response) => {
+        idx_of_jobs_div++;
+        let info = JSON.parse(response);
+        $('#extra-job-body').append( info.html );
+        $('.select2').select2({
+            width: '100%'
+        });
+    });
+});
+$('#remove_office').on('click',() => {
+    $('.jod-extra-body').last().remove();
+    idx_of_jobs_div--;
+});
+
+let fetch_data = () => {
+    return $.ajax({
+        type: 'get',
+        enctype: 'multipart/form-data',
+        data: {number_of_jobs : idx_of_jobs_div},
+        url: '{{ url('/') }}' +'/manpower-office.fetch.form-element',
+    });
+}
+
+$('#add_manpower_job_form').on('submit', function(){
+    event.preventDefault();
+    
+    var form = $('#add_manpower_job_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/manpower-job',
+        data: data,
+        processData: false,
+        contentType: false,
+		beforeSend:function(){
+            $("#add_manpower_job").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#add_manpower_job").prop('disabled', true);
+        },
+        success: function (response){
+            let info = JSON.parse(response);
+            if(info.error){
+                $('#add_manpower_job_form').addClass('needs-validation');
+                $('#jobId_div_' + info.error_number).addClass('is-invalid');
+                $('#error_message_new_job').html('Job already assigned!');
+                $("#add_manpower_job").html(' Add ');
+                $("#add_manpower_job").prop('disabled', false);
             }else{
                 location.reload();
             }
@@ -386,8 +376,5 @@ $('#update_delegate').on('submit', function(){
     });
 });
 
-/**
- * End Delegate & Delegate Office CRUD
-*/
 </script>
 @endsection

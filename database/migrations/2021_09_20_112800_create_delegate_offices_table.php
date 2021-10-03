@@ -18,7 +18,7 @@ class CreateDelegateOfficesTable extends Migration
             $table->string('name');
             $table->string('license_number');
             $table->foreignId('delegate_id')->constrained()->onDelete('cascade');
-            $table->bigInteger('updated_by');
+            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
         });
     }

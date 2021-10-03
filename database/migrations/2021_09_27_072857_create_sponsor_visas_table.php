@@ -21,7 +21,7 @@ class CreateSponsorVisasTable extends Migration
             $table->string('visa_gender_type', 10);
             $table->foreignId('job_id');
             $table->foreignId('sponsor_id');
-            $table->string('comment');
+            $table->string('comment')->default('');
             $table->double('visa_rate');
             $table->integer('updated_by');
             $table->timestamps();

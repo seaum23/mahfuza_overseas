@@ -12,7 +12,7 @@
                         <div class="form-row justify-content-between">
                             <div class="form-group col-md-6" >
                                 <label>Delegate</label>
-                                <select class="form-control select2 @error('delegateId') is-invalid @enderror" name="delegateId" id="delegateId">
+                                <select class="form-control select2 @error('delegateId') is-invalid @enderror" name="delegateId" id="delegateId" onchange="selectDelegateOffice(this.value)">
                                     <option value=""> Select Delegate </option>
                                     @foreach ($delegates as $delegate)
                                         <option value="{{ $delegate->id }}" {{ (old("delegateId") == $delegate->id ? "selected":"") }} >{{ $delegate->name }}</option>
@@ -58,4 +58,30 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    function selectDelegateOffice(delegate_id){
+        let selected_office = $('#delegateOfficeId').data('selected_office');
+        $.ajax({
+            type: 'post',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/sponsor/' + delegate_id + '/fetch_delegate_office',
+            data: {delegate_id},
+            success: function (response){
+                $('#delegateOfficeId').find('option').remove();
+                let info = JSON.parse(response);
+                $('#delegateOfficeId').append(`<option value="">Select Delegate Office</option>`);
+                info.forEach(element => {
+                    if(selected_office == element.id){
+                        $('#delegateOfficeId').append(`<option value="${element.id}" selected>${element.name}</option>`);
+                    }else{
+                        $('#delegateOfficeId').append(`<option value="${element.id}">${element.name}</option>`);
+                    }
+                });
+            }
+        });
+    }
+</script>
 @endsection

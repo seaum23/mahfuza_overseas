@@ -16,9 +16,9 @@ class CreateManpowerOfficesTable extends Migration
         Schema::create('manpower_offices', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('license');
+            $table->string('license')->unique();
             $table->string('address');
-            $table->string('comment');
+            $table->string('comment')->default('');
             $table->bigInteger('updated_by');
             $table->timestamps();
         });

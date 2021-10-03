@@ -93,7 +93,16 @@ class ManpowerOfficeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $manpower_office = ManpowerOffice::find($id);
+        
+        $manpower_office->name = $request->officeName;
+        $manpower_office->license = $request->licenseNumber;
+        $manpower_office->address = $request->officeAddress;
+        $manpower_office->comment = $request->comment;
+        $manpower_office->updated_by = auth()->id();
+        $manpower_office->save();
+
+        alert($request, 'Success!', 'success');
     }
 
     /**
@@ -112,18 +121,25 @@ class ManpowerOfficeController extends Controller
      * AJAX reuest data
      */
 
-    public function fetch_form_element()
-    {
+    public function fetch_form_element(Request $request)
+    {        
         $html = '<div class="row jod-extra-body">
                     <div class="col-sm">                        
-                        <label>Job</label>
-                        <select class="form-control select2" name="jobId[]" required>
-                        <option value="">Select Job</option>';
+                        <label>Job</label>';
+                        
+        if(isset($request->number_of_jobs)){
+            $html .= '<div id="jobId_div_'.$request->number_of_jobs.'">';
+        }else{
+            $html .= '<div>';
+        }                        
+        $html .= '<select class="form-control select2" name="jobId[]" required>
+                    <option value="">Select Job</option>';
         $jobs = Job::get();
         foreach($jobs as $job){
             $html .= '<option value="'.$job->id.'"> '.$job->name.' - '.$job->credit_type.' </option>';
         }
         $html .=    '</select>
+        </div>
                     </div>
                     <div class="col-sm">
                         <label>Processing Cost</label>

@@ -100,7 +100,6 @@ Manpower Office
     });
     $('#remove_office').on('click',() => {
         $('.jod-extra-body').last().remove();
-    });
-    
+    });    
 </script>
 @endsection

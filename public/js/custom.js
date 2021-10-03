@@ -73,11 +73,11 @@ let edit_employee = (id) => {
 
 // $(".timePicker").timepicker();
 
-$('.datepicker').datepicker({
-    format: 'yyyy/mm/dd',
-    todayHighlight:'TRUE',
-    autoclose: true,
-});
+// $('.datepicker').datepicker({
+//     format: 'yyyy/mm/dd',
+//     todayHighlight:'TRUE',
+//     autoclose: true,
+// });
 
 $(function () {
 
@@ -120,7 +120,6 @@ function initHijrDatePicker() {
 }
 
 function initHijrDatePickerDefault() {
-
     $(".hijri-date-default").hijriDatePicker();
 }
 
@@ -138,7 +137,7 @@ function initHijrDatePickerDefault() {
 
  
 /**
-  * Trigger alert for those that are coming from Controller
+  * Trigger alert when redirecting from Controller
   */
 let trigget_alert = () => {
     if ( typeof document.body.dataset.alert === undefined){

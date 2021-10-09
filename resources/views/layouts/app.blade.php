@@ -16,6 +16,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
     <link href="{{ asset('css/bootstrap-datetimepicker.css?v2') }}" rel="stylesheet" />
+    <!-- Filepond stylesheet -->
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
 </head>
 <body {{ Session::has('alert') ? 'data-alert' : '' }} data-alert-type='{{ Session::get('alert_type') }}' data-alert-message='{{ Session::get('message') }}'>
     @auth
@@ -543,7 +547,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li class="{{ (request()->is('agent*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-car"></i>
                                     Agent
@@ -551,7 +555,7 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="{{ url('agent/create') }}" class="{{ (request()->is('agent')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Add New Agent
                                         </a>
                                     </li>
@@ -728,6 +732,7 @@
         @yield('login')
     @endguest
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
     {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js" integrity="sha512-i8ERcP8p05PTFQr/s0AZJEtUwLBl18SKlTOZTH0yK5jVU0qL8AIQYbbG5LU+68bdmEqJ6ltBRtCxnmybTbIYpw==" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
@@ -742,7 +747,16 @@
     {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> --}}
     <script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- include FilePond library -->
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
+    <!-- include FilePond plugins -->
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+
+    <!-- include FilePond jQuery adapter -->
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
     @yield('script')
     <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
+    @yield('script-file-pond')
 </body>
 </html>

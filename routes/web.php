@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Agent\AgentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\Test\TestController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\HumanResource\EmployeeController;
 use App\Http\Controllers\Manpower\ManpowerOfficeController;
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 use App\Http\Controllers\Manpower\ManpowerJobController;
+use App\Http\Controllers\UploadController;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +76,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('manpower-office', ManpowerOfficeController::class);
 
     Route::resource('manpower-job', ManpowerJobController::class);
+
+    Route::resource('agent', AgentController::class);
+
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+    Route::post('/upload/agent-photo', [UploadController::class, 'agent_photo']);
+    Route::post('/upload/agent-passport', [UploadController::class, 'agent_passport']);
+    Route::post('/upload/agent-police', [UploadController::class, 'agent_police']);
+    Route::delete('/revert', [UploadController::class, 'delete']);
+
     /**
      * Ajax call
      * 
@@ -80,9 +93,9 @@ Route::group(['middleware' => 'auth'], function () {
      */
     Route::get('/manpower-office.fetch.form-element', [ManpowerOfficeController::class, 'fetch_form_element']); 
 
-    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-
-    // For fetching templates
+    /**
+     * For fetching templates
+     */
     Route::get('sponsor-visa-template/{index}', [FormTemplateController::class, 'visa_form_template']);
 
 });

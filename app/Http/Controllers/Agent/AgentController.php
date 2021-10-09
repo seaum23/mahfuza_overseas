@@ -66,7 +66,7 @@ class AgentController extends Controller
     
             $agent->save();
 
-            return back();
+            return redirect('test');
         }else{
             if($request->agentEmail == $validate_existing_agent[0]->email){
                 $error = \Illuminate\Validation\ValidationException::withMessages([

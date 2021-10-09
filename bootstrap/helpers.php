@@ -17,5 +17,9 @@ function move(String $folder_name, String $storing_file_path, String $file_name)
     $file_ext = explode('.', $agent_passport_temporary_file->file_name);
     $file_actual_path = storage_path($storing_file_path . $file_name . '.' . $file_ext[1]);
     rename(storage_path('app/uploads/tmp/' . $agent_passport_temporary_file->folder . '/' . $agent_passport_temporary_file->file_name), $file_actual_path);
+
+    rmdir(storage_path('app/uploads/tmp/' . $agent_passport_temporary_file->folder));
+
+    $agent_passport_temporary_file->delete();
     return $file_actual_path;
 }

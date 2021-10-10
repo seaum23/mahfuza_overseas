@@ -555,12 +555,12 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="{{ url('agent/create') }}" class="{{ (request()->is('agent')) ? 'mm-active' : '' }}">
+                                        <a href="{{ url('agent/create') }}" class="{{ (request()->is('agent/create')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Add New Agent
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="{{ url('agent') }}" class="{{ (request()->is('agent')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Agent List
                                         </a>
                                     </li>

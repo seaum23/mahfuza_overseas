@@ -6,6 +6,9 @@ use App\Models\Agent;
 use Illuminate\Http\Request;
 use App\Models\TemporaryFile;
 use App\Http\Controllers\Controller;
+use Yajra\Datatables\Datatables;
+
+use function PHPUnit\Framework\isEmpty;
 
 class AgentController extends Controller
 {
@@ -16,6 +19,7 @@ class AgentController extends Controller
      */
     public function index()
     {
+        return view('templates.agent.agent_list');
     }
 
     /**
@@ -58,15 +62,15 @@ class AgentController extends Controller
                 'password' => $request->password,
             ]);    
     
-            $agent->photo = move($request->agentImage, 'app/uploads/agent/', 'agent_photo_' . $agent->id );
+            $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id );
     
-            $agent->passport = move($request->agentPassport, 'app/uploads/agent/', 'agent_passport_' . $agent->id );
+            $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id );
     
-            $agent->police_clearance = move($request->agentPolice, 'app/uploads/agent/', 'agent_police_verification_' . $agent->id );
+            $agent->police_clearance = move($request->agentPolice, 'agent', 'agent_police_verification_' . $agent->id );
     
             $agent->save();
 
-            return redirect('test');
+            return redirect(url('agent'));
         }else{
             if($request->agentEmail == $validate_existing_agent[0]->email){
                 $error = \Illuminate\Validation\ValidationException::withMessages([
@@ -111,9 +115,33 @@ class AgentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Agent $agent)
     {
-        //
+        $validate = Agent::where('email', $request->agentEmail)
+            ->orWhere('phone', $request->agentPhone)
+            ->get();
+        if($validate->isEmpty() OR ( $request->agentEmail == $agent->email AND $request->agentPhone == $agent->phone )){
+            $agent->email = $request->agentEmail;
+            $agent->phone = $request->agentPhone;
+            $agent->full_name = $request->agentName;
+            $agent->comment = $request->comment;
+
+            $agent->save();
+
+            alert($request);
+
+        }else{
+            if($request->agentEmail == $validate[0]->email){
+                $error = \Illuminate\Validation\ValidationException::withMessages([
+                    'agentEmail' => ['Email already exists!'],
+                ]);
+            }else{
+                $error = \Illuminate\Validation\ValidationException::withMessages([
+                    'agentPhone' => ['Phone already exists!'],
+                ]);
+            }            
+            throw $error;
+        }
     }
 
     /**
@@ -125,5 +153,31 @@ class AgentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function datatable(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Agent::get();
+            
+            return Datatables::of($query)
+            ->editColumn('photo', function ($query)
+            {
+                return '<img class="table-photo" src="'.asset('storage/' . $query->photo).'">';
+            })
+            ->addColumn('document', function ($query) {
+                return '<a href="'.asset('storage/' . $query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset('storage/' . $query->police_clearance).'"> <button class="btn btn-warning btn-sm"> Clearance </button> </a>';
+            })            
+            ->addColumn('action', function ($query) {
+                return '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';
+            })
+            ->rawColumns(['document', 'photo', 'action'])
+            ->make(true);
+        }
     }
 }

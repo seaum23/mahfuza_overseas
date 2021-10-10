@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('manpower-job', ManpowerJobController::class);
 
+    Route::get('/agent.list',[AgentController::class, 'datatable']);
     Route::resource('agent', AgentController::class);
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');

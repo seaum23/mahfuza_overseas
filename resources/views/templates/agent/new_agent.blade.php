@@ -29,7 +29,7 @@ Delegate
                             <div class="form-group col-md-6">
                                 <label for="sel1">Any Remarks:</label>
                                 <input class="form-control" type="text" name="comment" id="comment" placeholder="Comment / Note">
-                            </div>                            
+                            </div>
                             <div class="form-group col-md-6">
                                 <label for="sel1">Password:</label>
                                 <input class="form-control" type="text" name="password" id="password" placeholder="Password" >

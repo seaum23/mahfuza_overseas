@@ -28,8 +28,8 @@ Delegate List
                                     @if ($office->manpower_job->isEmpty())
                                         <p>No Job Assigned!</p>
                                     @else
-                                        @foreach ($office->manpower_job as $idx => $manpower_job)
-                                            <button onclick="edit_manpower_job({{ $manpower_job->id }})" class="btn btn-info btn-sm">{{ $manpower_job->job->name }}: {{$manpower_job->processing_cost}}</button>
+                                        @foreach ($office->manpower_job as $manpower_job)
+                                            <button onclick="edit_manpower_job({{ $manpower_job->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }}: {{$manpower_job->pivot->processing_cost}}</button>
                                         @endforeach
                                     @endif
                                 </td>

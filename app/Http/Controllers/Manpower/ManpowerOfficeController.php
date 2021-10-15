@@ -16,7 +16,7 @@ class ManpowerOfficeController extends Controller
      */
     public function index()
     {
-        $offices = ManpowerOffice::with('manpower_job.job')->paginate(10);
+        $offices = ManpowerOffice::with('manpower_job')->paginate(10);
         return view('templates.manpower.manpower_office_list', [
             'offices' => $offices
         ]);

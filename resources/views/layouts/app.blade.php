@@ -8,6 +8,7 @@
     <link rel="icon" href="{{ asset('images/favicon.ico') }}">
     <title>@yield('title') - Mahfuza Overseas</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/template.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -450,7 +451,7 @@
                                 </a>
                             </li>
                             <li class="app-sidebar__heading">Local affair</li>
-                            <li>
+                            <li {{ request()->is('candidate*') ? 'mm-active' : '' }}>
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-user"></i>
                                     Candidate
@@ -458,7 +459,7 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ url('/candidate/create') }}" {{ request()->is('/candidate/create') ? 'mm-active' : '' }}>
                                             <i class="metismenu-icon"></i>New Candidate
                                         </a>
                                     </li>

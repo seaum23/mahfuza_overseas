@@ -15,11 +15,11 @@ function move(String $folder_name, String $storing_file_path, String $file_name)
 {
     $agent_passport_temporary_file = TemporaryFile::where('folder', substr($folder_name, 0, 27))->first();
     $file_ext = explode('.', $agent_passport_temporary_file->file_name);
-    $file_actual_path = storage_path('app/public/' . $storing_file_path . '/' . $file_name . '.' . $file_ext[1]);
+    $file_actual_path = storage_path('app/public/' . $storing_file_path . '/' . $file_name . '_' . time() . '.' . $file_ext[1]);
     rename(storage_path('app/uploads/tmp/' . $agent_passport_temporary_file->folder . '/' . $agent_passport_temporary_file->file_name), $file_actual_path);
 
     rmdir(storage_path('app/uploads/tmp/' . $agent_passport_temporary_file->folder));
 
     $agent_passport_temporary_file->delete();
-    return $storing_file_path. '/' . $file_name . '.' . $file_ext[1];
+    return $storing_file_path. '/' . $file_name . '_' . time() . '.' . $file_ext[1];
 }

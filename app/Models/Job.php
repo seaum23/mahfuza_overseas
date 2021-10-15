@@ -20,8 +20,14 @@ class Job extends Model
     {
         return $this->hasMany(SponsorVisa::class);
     }
-    public function manpower_job()
+
+    // public function manpower_job()
+    // {
+    //     return $this->hasMany(ManpowerJob::class);
+    // }
+
+    public function manpower_offices()
     {
-        return $this->hasMany(ManpowerJob::class);
+        return $this->belongsToMany(ManpowerOffice::class)->withPivot('processing_cost');
     }
 }

@@ -122,26 +122,6 @@ Delegate
         
         // const pond = FilePond.create( inputElement );
 
-        
-        // First register any plugins
-        $.fn.filepond.registerPlugin(FilePondPluginImagePreview);        
-    
-        // Turn input element into a pond
-        $('#agentImage').filepond({
-            credits: false,
-            'allowMultiple': false
-        });
-        // Turn input element into a pond
-        $('#agentPassport').filepond({
-            credits: false,
-            'allowMultiple': false
-        });
-        // Turn input element into a pond
-        $('#agentPolice').filepond({
-            credits: false,
-            'allowMultiple': false
-        });
-
         FilePond.setOptions({
             server: {
                 url: "{{ url('/') }}",

@@ -6,6 +6,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\Test\TestController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\FormTemplateController;
 use App\Http\Controllers\Sponsor\SponsorController;
 use App\Http\Controllers\Delegate\DelegateController;
@@ -80,6 +81,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/agent.list',[AgentController::class, 'datatable']);
     Route::resource('agent', AgentController::class);
 
+    Route::get('/candidate.list',[CandidateController::class, 'datatable']);
+    Route::resource('candidate', CandidateController::class);
+
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
     Route::post('/upload/agent-photo', [UploadController::class, 'agent_photo']);
@@ -98,6 +102,9 @@ Route::group(['middleware' => 'auth'], function () {
      * For fetching templates
      */
     Route::get('sponsor-visa-template/{index}', [FormTemplateController::class, 'visa_form_template']);
+    Route::get('candidate-experience-status/{status}', [FormTemplateController::class, 'candidate_experience_tempalte']);
+    Route::get('get-manpower-office/{id}', [FormTemplateController::class, 'get_manpower_office']);
+    
 
 });
 

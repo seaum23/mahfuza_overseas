@@ -100,7 +100,7 @@ Delegate
                 }
             }
         });
-    });   
+    });
     
     $(function(){
 

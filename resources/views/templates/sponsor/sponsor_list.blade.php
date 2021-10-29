@@ -121,13 +121,13 @@ $(function() {
         serverSide: true,
         ajax: '{{ url('/') }}' + '/sponsor/datatable/ajax',
         columns: [
-            { data: 'delegate_office.name', name: 'delegate_office.name' },
-            { data: 'sponsor_name', name: 'sponsor_name' },
-            { data: 'sponsor_NID', name: 'sponsor_NID' },
-            { data: 'sponsor_name', name: 'sponsor_name' },
-            { data: 'sponsor_phone', name: 'sponsor_phone' },
-            { data: 'comment', name: 'comment' },
-            { data: 'action', name: 'action' },
+            { data: 'delegate_office.name' },
+            { data: 'sponsor_name' },
+            { data: 'sponsor_NID' },
+            { data: 'sponsor_name' },
+            { data: 'sponsor_phone' },
+            { data: 'comment' },
+            { data: 'action'},
         ],
     });
 });

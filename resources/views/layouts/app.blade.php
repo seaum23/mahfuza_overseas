@@ -451,7 +451,7 @@
                                 </a>
                             </li>
                             <li class="app-sidebar__heading">Local affair</li>
-                            <li {{ request()->is('candidate*') ? 'mm-active' : '' }}>
+                            <li class="{{ request()->is('candidate*') ? 'mm-active' : '' }}" >
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-user"></i>
                                     Candidate
@@ -459,7 +459,7 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="{{ url('/candidate/create') }}" {{ request()->is('/candidate/create') ? 'mm-active' : '' }}>
+                                        <a href="{{ url('/candidate/create') }}" class="{{ request()->is('candidate/create') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>New Candidate
                                         </a>
                                     </li>

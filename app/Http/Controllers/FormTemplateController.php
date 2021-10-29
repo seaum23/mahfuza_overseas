@@ -25,7 +25,6 @@ class FormTemplateController extends Controller
 
     public function get_manpower_office(Job $job)
     {
-        dd($job->manpower_offices());
         $manpowers = $job->manpower_offices;
         return view('form_templates.manpower_office_selections', [
             'manpowers' => $manpowers

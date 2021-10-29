@@ -129,7 +129,9 @@ function initHijrDatePickerDefault() {
  * Trigger change of selet 2
  */
  $(document).ready(function() {
-    $('.select2').select2();
+    $('.select2').select2({
+        width: '100%',
+    });
  })
  
  $('.select2').trigger('change');

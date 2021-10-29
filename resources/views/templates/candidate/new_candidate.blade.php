@@ -43,7 +43,7 @@ Delegate
                                     <select class="form-control select2" name="jobType" id="jobType" onchange="get_manpower_office(this.value)"  required>
                                         <option value=""> Select Job </option>
                                         @foreach ($jobs as $job)
-                                            <option value="{{ $job->id }}">{{ $job->name }}</option>
+                                            <option value="{{ $job->id }}">{{ $job->name . ' - ' . $job->credit_type }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -115,12 +115,12 @@ Delegate
                         <div class="col-md-6">
                             <fieldset class="form-row form-group p-2" style="border: 1px solid gray; border-radius: 5px">
                                 <legend>Agent Information:</legend>
-                                <div class="row">
+                                <div class="row w-100">
                                     <div class="col-md-6">
                                         <label for="manpower"> Manpower Office <i class="fa fa-asterisk fa-xs fa-xxs text-danger" ></i></label>
-                                        <select class="form-control select2" id="manpower" name="manpower" required>
+                                        <select class="form-control select2" id="manpower" name="manpower" style="width: 100%" required>
                                             <option value=""> Select Job Type First </option>
-                                           
+                                            
                                         </select>
                                     </div>
                                     <div class="col-md-6" id="agentNotOffice">

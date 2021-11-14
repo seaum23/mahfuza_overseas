@@ -78,6 +78,15 @@ Sponsors List
 
 @section('script')
 <script>
+document.addEventListener('FilePond:processfilestart', (e) => {
+    $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+    $(".file-pond-submit").prop('disabled', true);        
+});
+document.addEventListener('FilePond:processfile', (e) => {
+    $(".file-pond-submit").html('Add');
+    $(".file-pond-submit").prop('disabled', false);
+});
+
 /**
  * Start Sponsor & Sponsor VISA CRUD
  */

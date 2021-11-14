@@ -52,26 +52,7 @@ class AgentController extends Controller
             ->orWhere('phone', $request->agentPhone)
             ->get();
         
-        if($validate_existing_agent->isEmpty()){
-            $agent = Agent::create([
-                'full_name' => $request->agentName,
-                'email' => $request->agentEmail,
-                'phone' => $request->agentPhone,
-                'comment' => $request->comment,
-                'updated_by' => auth()->id(),
-                'password' => $request->password,
-            ]);    
-    
-            $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id );
-    
-            $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id );
-    
-            $agent->police_clearance = move($request->agentPolice, 'agent', 'agent_police_verification_' . $agent->id );
-    
-            $agent->save();
-
-            return redirect(url('agent'));
-        }else{
+        if(!$validate_existing_agent->isEmpty()){
             if($request->agentEmail == $validate_existing_agent[0]->email){
                 $error = \Illuminate\Validation\ValidationException::withMessages([
                     'agentEmail' => ['Email already exists!'],
@@ -82,7 +63,25 @@ class AgentController extends Controller
                 ]);
             }            
             throw $error;
+            return;            
         }
+
+        $agent = Agent::create([
+            'full_name' => $request->agentName,
+            'email' => $request->agentEmail,
+            'phone' => $request->agentPhone,
+            'comment' => $request->comment,
+            'updated_by' => auth()->id(),
+            'password' => $request->password,
+        ]);    
+
+        $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id . '_' . time() );
+
+        $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
+
+        $agent->police_clearance = move($request->agentPolice, 'agent', 'agent_police_verification_' . $agent->id . '_' . time() );
+
+        $agent->save();
          
     }
 
@@ -168,10 +167,10 @@ class AgentController extends Controller
             return Datatables::of($query)
             ->editColumn('photo', function ($query)
             {
-                return '<img class="table-photo" src="'.asset('storage/' . $query->photo).'">';
+                return '<img class="table-photo" src="'.asset($query->photo).'">';
             })
             ->addColumn('document', function ($query) {
-                return '<a href="'.asset('storage/' . $query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset('storage/' . $query->police_clearance).'"> <button class="btn btn-warning btn-sm"> Clearance </button> </a>';
+                return '<a href="'.asset($query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset($query->police_clearance).'"> <button class="btn btn-warning btn-sm"> Clearance </button> </a>';
             })            
             ->addColumn('action', function ($query) {
                 return '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';

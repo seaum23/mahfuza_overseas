@@ -63,7 +63,15 @@ Delegate
 @endsection
 
 @section('script-file-pond')
-<script>
+<script>    
+    document.addEventListener('FilePond:processfilestart', (e) => {
+        $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+        $("#submit").prop('disabled', true);        
+    });
+    document.addEventListener('FilePond:processfile', (e) => {
+        $("#submit").html('Add');
+        $("#submit").prop('disabled', false);
+    });
     $('#agent_form').on('submit', (e) => {
         $('#agent_form').removeClass('needs-validation');
         $('.form-control').removeClass('is-invalid');
@@ -78,22 +86,24 @@ Delegate
             processData: false,
             contentType: false,
             beforeSend:function(){
-                $("#add_office").html('<i class="fas fa-spinner fa-pulse"></i>');
-                $("#add_office").prop('disabled', true);
+                $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                $("#submit").prop('disabled', true);
             },
             success: function (response){
-                $("#add_office").html('Add');
-                $("#add_office").prop('disabled', false);
-                let info = JSON.parse(response);
-                $('#extra-job-body').append( info.html );                
-                $('.select2').select2({
-                    width: '100%'
-                });
+                // $("#add_office").html('Add');
+                // $("#add_office").prop('disabled', false);
+                // let info = JSON.parse(response);
+                // $('#extra-job-body').append( info.html );                
+                // $('.select2').select2({
+                //     width: '100%'
+                // });
+                location.reload();
             },
             error: function (xhr, status, error){
+                $("#submit").html('Add');
+                $("#submit").prop('disabled', false);
                 $('#agent_form').addClass('needs-validation');
                 let errors = $.parseJSON(xhr.responseText);
-                console.log(errors);
                 for (const [key, value] of Object.entries(errors.errors)) {
                     $(`#${key}`).addClass('is-invalid');
                     $(`#${key}_invalid`).html(value);
@@ -103,25 +113,6 @@ Delegate
     });
     
     $(function(){
-
-        // FilePond.registerPlugin(
-        //     FilePondPluginImagePreview,
-        // );
-        
-        // FilePond.setOptions({
-        //     server: {
-        //         url: "{{ url('/') }}",
-        //         process: '/upload/agent-photo',
-        //         revert: '/revert',
-        //         headers: {
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //         }
-        //     },
-        // });
-        // const inputElement = document.querySelector('input[type="file"]');
-        
-        // const pond = FilePond.create( inputElement );
-
         FilePond.setOptions({
             server: {
                 url: "{{ url('/') }}",
@@ -132,12 +123,6 @@ Delegate
                 }
             },
         });
-    
-        // Listen for addfile event
-        // $('.my-pond').on('FilePond:addfile', function(e) {
-        //     console.log('file added event', e);
-        // });
-    
     });
 </script>
 @endsection

@@ -1,22 +1,26 @@
 <?php
 
-use App\Http\Controllers\Agent\AgentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\Test\TestController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\FormTemplateController;
+use App\Http\Controllers\CandidateUpdateController;
 use App\Http\Controllers\Sponsor\SponsorController;
 use App\Http\Controllers\Delegate\DelegateController;
 use App\Http\Controllers\Layouts\DashboardController;
 use App\Http\Controllers\Sponsor\SponsorVisaController;
+use App\Http\Controllers\Manpower\ManpowerJobController;
 use App\Http\Controllers\HumanResource\EmployeeController;
 use App\Http\Controllers\Manpower\ManpowerOfficeController;
+use App\Http\Controllers\WebController;
+
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
-use App\Http\Controllers\Manpower\ManpowerJobController;
-use App\Http\Controllers\UploadController;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 /*
@@ -29,6 +33,10 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/foo', function () {
+    Artisan::call('storage:link');
+});
+
 Route::get('/', [LoginController::class, 'index'])->name('login');
 
 Route::group(['middleware' => 'guest'], function () {    
@@ -71,8 +79,8 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource('jobs', JobController::class);
 
-    Route::resource('sponsor-visa', SponsorVisaController::class);
     Route::get('/sponsor-visa.list', [SponsorVisaController::class, 'show']); // FORGOT TO USE INDEX METHOD. LAZY TO CHANGE NOW. WILL WORK ON IT LATER.
+    Route::resource('sponsor-visa', SponsorVisaController::class);
 
     Route::resource('manpower-office', ManpowerOfficeController::class);
 
@@ -83,12 +91,21 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/candidate.list',[CandidateController::class, 'datatable']);
     Route::resource('candidate', CandidateController::class);
+    Route::post('/candidate/test.medical',[CandidateUpdateController::class, 'test_medical']);
+    Route::post('/candidate/final.medical',[CandidateUpdateController::class, 'final_medical']);
+    Route::post('/candidate/police.clearance',[CandidateUpdateController::class, 'police_clearance']);
+    
+
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
+    /**
+     * FilePond temporary file uplaod
+     * 
+     * @return String temporary file path
+     */
     Route::post('/upload/agent-photo', [UploadController::class, 'agent_photo']);
-    Route::post('/upload/agent-passport', [UploadController::class, 'agent_passport']);
-    Route::post('/upload/agent-police', [UploadController::class, 'agent_police']);
+    Route::post('/upload/candidate-photo', [UploadController::class, 'candidate_photo']);
     Route::delete('/revert', [UploadController::class, 'delete']);
 
     /**
@@ -116,3 +133,27 @@ Route::group(['middleware' => 'auth'], function () {
 // Route::get('/', function () {
 //     return view('templates.login');
 // });
+
+
+
+//website routes
+Route::get('website', [WebController::class, 'website_backend_all_content']);
+Route::post('logo-update-route', [WebController::class, 'logo_update_route']);
+Route::post('front_background_image_update/{id}', [WebController::class, 'front_background_image_update']);
+Route::post('brand_name_update/{id}', [WebController::class, 'brand_name_update']);
+Route::post('logo_update/{id}', [WebController::class, 'logo_update']);
+
+
+Route::post('add_new_package/{id}', [WebController::class, 'add_new_tourist_package']);
+
+Route::get('package_image_headline/{id}', [WebController::class, 'package_image_headline']);
+Route::post('PackageUpdate/{id}', [WebController::class, 'PackageUpdate']);
+Route::post('create_package_section', [WebController::class, 'create_package_section']);
+Route::get('package_section_and_all_its_packages_delete/{id}', [WebController::class, 'package_section_and_all_its_packages_delete']);
+
+
+
+
+
+
+

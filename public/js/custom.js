@@ -1,3 +1,41 @@
+
+
+
+
+function success_alert(title, content){
+    new jBox('Notice', {
+        attributes: {
+            x: 'right',
+            y: 'bottom'
+        },
+        stack: false,
+        animation: {
+            open: 'tada',
+            close: 'zoomIn'
+        },
+        color: 'green',
+        title: title,
+        content: content
+    });
+}
+
+function danger_alert(title, content){
+    new jBox('Notice', {
+        attributes: {
+            x: 'right',
+            y: 'bottom'
+        },
+        stack: false,
+        animation: {
+            open: 'tada',
+            close: 'zoomIn'
+        },
+        color: 'red',
+        title: title,
+        content: content
+    });
+}
+
 let random_password = () => {
     var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     var randomPassword = '';
@@ -173,4 +211,25 @@ $('.my-pond-multiple').filepond({
     credits: false,
     'allowMultiple': true
 });
+
+
+// Initiate datepicker
+
+$('.datepicker').datepicker({
+    format: 'yyyy/mm/dd',
+    todayHighlight:'TRUE',
+    autoclose: true,
+});
+
+
+    
+// document.addEventListener('FilePond:processfilestart', (e) => {
+//     $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+//     $(".file-pond-submit").prop('disabled', true);        
+// });
+// document.addEventListener('FilePond:processfile', (e) => {
+//     $(".file-pond-submit").html('Add');
+//     $(".file-pond-submit").prop('disabled', false);
+// });
+
 

@@ -10,3 +10,18 @@ legend {
 .hidden{
     display: none;
 }
+
+.btn-group-xs > .btn, .btn-xs {
+    padding: 3px 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.hidden{
+    display: none;
+}
+
+/* .app-main .app-main__inner{
+    padding: 0px 0px 0px !important;
+} */

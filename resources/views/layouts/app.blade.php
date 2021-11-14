@@ -1,763 +1,618 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="icon" href="{{ asset('images/favicon.ico') }}">
-    <title>@yield('title') - Mahfuza Overseas</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/template.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
-    <link href="{{ asset('css/bootstrap-datetimepicker.css?v2') }}" rel="stylesheet" />
-    <!-- Filepond stylesheet -->
-    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<!doctype html>
+<html class="no-js " lang="en">
 
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<meta name="description" content="Mahfuza Overseas & Travelling Agency">
+
+<title>@yield('title') - Mahfuza Overseas</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+
+<link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css')}}"/>
+<link rel="stylesheet" href="{{ asset('assets/plugins/charts-c3/plugin.css')}}"/>
+
+<link rel="stylesheet" href="{{ asset('assets/plugins/morrisjs/morris.min.css')}}" />
+<!-- Custom Css -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
+<link href="{{ asset('css/bootstrap-datetimepicker.css?v2') }}" rel="stylesheet" />
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+<link rel="stylesheet" href="{{ asset('assets/css/style.min.css')}}">
+
+
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
+
 </head>
-<body {{ Session::has('alert') ? 'data-alert' : '' }} data-alert-type='{{ Session::get('alert_type') }}' data-alert-message='{{ Session::get('message') }}'>
-    @auth
-        <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-            <div class="loader-container"><div class="loader"><div class="loadingio-spinner-spinner-ptyf34t14na"><div class="ldio-4bfaoxawr8j"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div></div></div>
-            <div class="app-header header-shadow">
-                <div class="app-header__logo">
-                    <div class="logo-src"></div>
-                    <div class="header__pane ml-auto">
-                        <div>
-                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
-                                <span class="hamburger-box">
-                                    <span class="hamburger-inner"></span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-header__mobile-menu">
-                    <div>
-                        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="app-header__menu">
-                    <span>
-                        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                            <span class="btn-icon-wrapper">
-                                <i class="fa fa-ellipsis-v fa-w-6"></i>
-                            </span>
-                        </button>
-                    </span>
-                </div>
-                <div class="app-header__content">
-                    <div class="app-header-left">
-                        <div class="search-wrapper">
-                            <div class="input-holder">
-                                <input type="text" class="search-input" placeholder="Type to search">
-                                <button class="search-icon"><span></span></button>
+
+<body class="theme-blush">
+@auth
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img class="zmdi-hc-spin" src="assets/images/loader.svg" width="48" height="48" alt="Aero"></div>
+        <p>Please wait...</p>
+    </div>
+</div>
+
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+
+<!-- Main Search -->
+<div id="search">
+    <button id="close" type="button" class="close btn btn-primary btn-icon btn-icon-mini btn-round">x</button>
+    <form>
+      <input type="search" value="" placeholder="Search..." />
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<!-- Right Icon menu Sidebar -->
+<div class="navbar-right">
+    <ul class="navbar-nav">
+        <li><a href="#search" class="main_search" title="Search..."><i class="zmdi zmdi-search"></i></a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" title="App" data-toggle="dropdown" role="button"><i class="zmdi zmdi-apps"></i></a>
+            <ul class="dropdown-menu slideUp2">
+                <li class="header">App Sortcute</li>
+                <li class="body">
+                    <ul class="menu app_sortcut list-unstyled">
+                        <li>
+                            <a href="image-gallery.html">
+                                <div class="icon-circle mb-2 bg-blue"><i class="zmdi zmdi-camera"></i></div>
+                                <p class="mb-0">Photos</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle mb-2 bg-amber"><i class="zmdi zmdi-translate"></i></div>
+                                <p class="mb-0">Translate</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="events.html">
+                                <div class="icon-circle mb-2 bg-green"><i class="zmdi zmdi-calendar"></i></div>
+                                <p class="mb-0">Calendar</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="contact.html">
+                                <div class="icon-circle mb-2 bg-purple"><i class="zmdi zmdi-account-calendar"></i></div>
+                                <p class="mb-0">Contacts</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle mb-2 bg-red"><i class="zmdi zmdi-tag"></i></div>
+                                <p class="mb-0">News</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle mb-2 bg-grey"><i class="zmdi zmdi-map"></i></div>
+                                <p class="mb-0">Maps</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" title="Notifications" data-toggle="dropdown" role="button"><i class="zmdi zmdi-notifications"></i>
+                <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+            </a>
+            <ul class="dropdown-menu slideUp2">
+                <li class="header">Notifications</li>
+                <li class="body">
+                    <ul class="menu list-unstyled">
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-blue"><i class="zmdi zmdi-account"></i></div>
+                                <div class="menu-info">
+                                    <h4>8 New Members joined</h4>
+                                    <p><i class="zmdi zmdi-time"></i> 14 mins ago </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-amber"><i class="zmdi zmdi-shopping-cart"></i></div>
+                                <div class="menu-info">
+                                    <h4>4 Sales made</h4>
+                                    <p><i class="zmdi zmdi-time"></i> 22 mins ago </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-red"><i class="zmdi zmdi-delete"></i></div>
+                                <div class="menu-info">
+                                    <h4><b>Nancy Doe</b> Deleted account</h4>
+                                    <p><i class="zmdi zmdi-time"></i> 3 hours ago </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-green"><i class="zmdi zmdi-edit"></i></div>
+                                <div class="menu-info">
+                                    <h4><b>Nancy</b> Changed name</h4>
+                                    <p><i class="zmdi zmdi-time"></i> 2 hours ago </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-grey"><i class="zmdi zmdi-comment-text"></i></div>
+                                <div class="menu-info">
+                                    <h4><b>John</b> Commented your post</h4>
+                                    <p><i class="zmdi zmdi-time"></i> 4 hours ago </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-purple"><i class="zmdi zmdi-refresh"></i></div>
+                                <div class="menu-info">
+                                    <h4><b>John</b> Updated status</h4>
+                                    <p><i class="zmdi zmdi-time"></i> 3 hours ago </p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <div class="icon-circle bg-light-blue"><i class="zmdi zmdi-settings"></i></div>
+                                <div class="menu-info">
+                                    <h4>Settings Updated</h4>
+                                    <p><i class="zmdi zmdi-time"></i> Yesterday </p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="footer"> <a href="javascript:void(0);">View All Notifications</a> </li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="zmdi zmdi-flag"></i>
+            <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+            </a>
+            <ul class="dropdown-menu slideUp2">
+                <li class="header">Tasks List <small class="float-right"><a href="javascript:void(0);">View All</a></small></li>
+                <li class="body">
+                    <ul class="menu tasks list-unstyled">
+                        <li>
+                            <div class="progress-container progress-primary">
+                                <span class="progress-badge">eCommerce Website</span>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width: 86%;">
+                                        <span class="progress-value">86%</span>
+                                    </div>
+                                </div>                        
+                                <ul class="list-unstyled team-info">
+                                    <li class="m-r-15"><small>Team</small></li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar2.jpg" alt="Avatar">
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar3.jpg" alt="Avatar">
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar4.jpg" alt="Avatar">
+                                    </li>                            
+                                </ul>
                             </div>
-                            <button class="close"></button>
-                        </div>
-                        <ul class="header-menu nav">
-                            <li class="nav-item">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-link-icon fa fa-database"> </i>
-                                    Statistics
-                                </a>
-                            </li>
-                            <li class="btn-group nav-item">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-link-icon fa fa-edit"></i>
-                                    Projects
-                                </a>
-                            </li>
-                            <li class="dropdown nav-item">
-                                <a href="javascript:void(0);" class="nav-link">
-                                    <i class="nav-link-icon fa fa-cog"></i>
-                                    Settings
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="app-header-right">
-                        <div class="header-btn-lg pr-0">
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left">
-                                        <div class="btn-group">
-                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                                <img width="42" class="rounded-circle" src="{{ asset('images/avatars/1.jpg')}}" alt="">
-                                                <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                            </a>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                                <button type="button" tabindex="0" class="dropdown-item">User Account</button>
-                                                <button type="button" tabindex="0" class="dropdown-item">Settings</button>
-                                                <h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                <button type="button" tabindex="0" class="dropdown-item">Actions</button>
-                                                <div tabindex="-1" class="dropdown-divider"></div>
-                                                <form action="{{ route('logout') }}" method="post">
-                                                    @csrf
-                                                    <button type="submit" tabindex="0" class="btn-transition btn btn-outline-danger dropdown-item">Logout</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left  ml-3 header-user-info">
-                                        <div class="widget-heading">
-                                            {{ auth()->user()->name; }}
-                                        </div>
-                                        <div class="widget-subheading">
-                                            Developer
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-right header-user-info ml-3">
-                                        <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
-                                            <i class="fa text-white fa-calendar pr-1 pl-1"></i>
-                                        </button>
+                        </li>
+                        <li>
+                            <div class="progress-container">
+                                <span class="progress-badge">iOS Game Dev</span>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%;">
+                                        <span class="progress-value">45%</span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui-theme-settings">
-                <button type="button" id="TooltipDemo" class="btn-open-options btn btn-warning">
-                    <i class="fa fa-cog fa-w-16 fa-spin fa-2x"></i>
-                </button>
-                <div class="theme-settings__inner">
-                    <div class="scrollbar-container">
-                        <div class="theme-settings__options-wrapper">
-                            <h3 class="themeoptions-heading">Layout Options
-                            </h3>
-                            <div class="p-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="switch has-switch switch-container-class" data-class="fixed-header">
-                                                        <div class="switch-animate switch-on">
-                                                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left">
-                                                    <div class="widget-heading">Fixed Header
-                                                    </div>
-                                                    <div class="widget-subheading">Makes the header top fixed, always visible!
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <ul class="list-unstyled team-info">
+                                    <li class="m-r-15"><small>Team</small></li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar10.jpg" alt="Avatar">
                                     </li>
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="switch has-switch switch-container-class" data-class="fixed-sidebar">
-                                                        <div class="switch-animate switch-on">
-                                                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="success">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left">
-                                                    <div class="widget-heading">Fixed Sidebar
-                                                    </div>
-                                                    <div class="widget-subheading">Makes the sidebar left fixed, always visible!
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <li>
+                                        <img src="assets/images/xs/avatar9.jpg" alt="Avatar">
                                     </li>
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="switch has-switch switch-container-class" data-class="fixed-footer">
-                                                        <div class="switch-animate switch-off">
-                                                            <input type="checkbox" data-toggle="toggle" data-onstyle="success">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left">
-                                                    <div class="widget-heading">Fixed Footer
-                                                    </div>
-                                                    <div class="widget-subheading">Makes the app footer bottom fixed, always visible!
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <li>
+                                        <img src="assets/images/xs/avatar8.jpg" alt="Avatar">
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar7.jpg" alt="Avatar">
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar6.jpg" alt="Avatar">
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="themeoptions-heading">
-                                <div>
-                                    Header Options
+                        </li>
+                        <li>
+                            <div class="progress-container progress-warning">
+                                <span class="progress-badge">Home Development</span>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="29" aria-valuemin="0" aria-valuemax="100" style="width: 29%;">
+                                        <span class="progress-value">29%</span>
+                                    </div>
                                 </div>
-                                <button type="button" class="btn-pill btn-shadow btn-wide ml-auto btn btn-focus btn-sm switch-header-cs-class" data-class="">
-                                    Restore Default
-                                </button>
-                            </h3>
-                            <div class="p-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <h5 class="pb-2">Choose Color Scheme
-                                        </h5>
-                                        <div class="theme-settings-swatches">
-                                            <div class="swatch-holder bg-primary switch-header-cs-class" data-class="bg-primary header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-secondary switch-header-cs-class" data-class="bg-secondary header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-success switch-header-cs-class" data-class="bg-success header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-info switch-header-cs-class" data-class="bg-info header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-warning switch-header-cs-class" data-class="bg-warning header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-danger switch-header-cs-class" data-class="bg-danger header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-light switch-header-cs-class" data-class="bg-light header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-dark switch-header-cs-class" data-class="bg-dark header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-focus switch-header-cs-class" data-class="bg-focus header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-alternate switch-header-cs-class" data-class="bg-alternate header-text-light">
-                                            </div>
-                                            <div class="divider">
-                                            </div>
-                                            <div class="swatch-holder bg-vicious-stance switch-header-cs-class" data-class="bg-vicious-stance header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-midnight-bloom switch-header-cs-class" data-class="bg-midnight-bloom header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-night-sky switch-header-cs-class" data-class="bg-night-sky header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-slick-carbon switch-header-cs-class" data-class="bg-slick-carbon header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-asteroid switch-header-cs-class" data-class="bg-asteroid header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-royal switch-header-cs-class" data-class="bg-royal header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-warm-flame switch-header-cs-class" data-class="bg-warm-flame header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-night-fade switch-header-cs-class" data-class="bg-night-fade header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-sunny-morning switch-header-cs-class" data-class="bg-sunny-morning header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-tempting-azure switch-header-cs-class" data-class="bg-tempting-azure header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-amy-crisp switch-header-cs-class" data-class="bg-amy-crisp header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-heavy-rain switch-header-cs-class" data-class="bg-heavy-rain header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-mean-fruit switch-header-cs-class" data-class="bg-mean-fruit header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-malibu-beach switch-header-cs-class" data-class="bg-malibu-beach header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-deep-blue switch-header-cs-class" data-class="bg-deep-blue header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-ripe-malin switch-header-cs-class" data-class="bg-ripe-malin header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-arielle-smile switch-header-cs-class" data-class="bg-arielle-smile header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-plum-plate switch-header-cs-class" data-class="bg-plum-plate header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-happy-fisher switch-header-cs-class" data-class="bg-happy-fisher header-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-happy-itmeo switch-header-cs-class" data-class="bg-happy-itmeo header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-mixed-hopes switch-header-cs-class" data-class="bg-mixed-hopes header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-strong-bliss switch-header-cs-class" data-class="bg-strong-bliss header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-grow-early switch-header-cs-class" data-class="bg-grow-early header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-love-kiss switch-header-cs-class" data-class="bg-love-kiss header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-premium-dark switch-header-cs-class" data-class="bg-premium-dark header-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-happy-green switch-header-cs-class" data-class="bg-happy-green header-text-light">
-                                            </div>
-                                        </div>
+                                <ul class="list-unstyled team-info">
+                                    <li class="m-r-15"><small>Team</small></li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar5.jpg" alt="Avatar">
                                     </li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar2.jpg" alt="Avatar">
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/xs/avatar7.jpg" alt="Avatar">
+                                    </li>                            
                                 </ul>
                             </div>
-                            <h3 class="themeoptions-heading">
-                                <div>Sidebar Options</div>
-                                <button type="button" class="btn-pill btn-shadow btn-wide ml-auto btn btn-focus btn-sm switch-sidebar-cs-class" data-class="">
-                                    Restore Default
-                                </button>
-                            </h3>
-                            <div class="p-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <h5 class="pb-2">Choose Color Scheme
-                                        </h5>
-                                        <div class="theme-settings-swatches">
-                                            <div class="swatch-holder bg-primary switch-sidebar-cs-class" data-class="bg-primary sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-secondary switch-sidebar-cs-class" data-class="bg-secondary sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-success switch-sidebar-cs-class" data-class="bg-success sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-info switch-sidebar-cs-class" data-class="bg-info sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-warning switch-sidebar-cs-class" data-class="bg-warning sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-danger switch-sidebar-cs-class" data-class="bg-danger sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-light switch-sidebar-cs-class" data-class="bg-light sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-dark switch-sidebar-cs-class" data-class="bg-dark sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-focus switch-sidebar-cs-class" data-class="bg-focus sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-alternate switch-sidebar-cs-class" data-class="bg-alternate sidebar-text-light">
-                                            </div>
-                                            <div class="divider">
-                                            </div>
-                                            <div class="swatch-holder bg-vicious-stance switch-sidebar-cs-class" data-class="bg-vicious-stance sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-midnight-bloom switch-sidebar-cs-class" data-class="bg-midnight-bloom sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-night-sky switch-sidebar-cs-class" data-class="bg-night-sky sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-slick-carbon switch-sidebar-cs-class" data-class="bg-slick-carbon sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-asteroid switch-sidebar-cs-class" data-class="bg-asteroid sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-royal switch-sidebar-cs-class" data-class="bg-royal sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-warm-flame switch-sidebar-cs-class" data-class="bg-warm-flame sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-night-fade switch-sidebar-cs-class" data-class="bg-night-fade sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-sunny-morning switch-sidebar-cs-class" data-class="bg-sunny-morning sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-tempting-azure switch-sidebar-cs-class" data-class="bg-tempting-azure sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-amy-crisp switch-sidebar-cs-class" data-class="bg-amy-crisp sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-heavy-rain switch-sidebar-cs-class" data-class="bg-heavy-rain sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-mean-fruit switch-sidebar-cs-class" data-class="bg-mean-fruit sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-malibu-beach switch-sidebar-cs-class" data-class="bg-malibu-beach sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-deep-blue switch-sidebar-cs-class" data-class="bg-deep-blue sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-ripe-malin switch-sidebar-cs-class" data-class="bg-ripe-malin sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-arielle-smile switch-sidebar-cs-class" data-class="bg-arielle-smile sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-plum-plate switch-sidebar-cs-class" data-class="bg-plum-plate sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-happy-fisher switch-sidebar-cs-class" data-class="bg-happy-fisher sidebar-text-dark">
-                                            </div>
-                                            <div class="swatch-holder bg-happy-itmeo switch-sidebar-cs-class" data-class="bg-happy-itmeo sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-mixed-hopes switch-sidebar-cs-class" data-class="bg-mixed-hopes sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-strong-bliss switch-sidebar-cs-class" data-class="bg-strong-bliss sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-grow-early switch-sidebar-cs-class" data-class="bg-grow-early sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-love-kiss switch-sidebar-cs-class" data-class="bg-love-kiss sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-premium-dark switch-sidebar-cs-class" data-class="bg-premium-dark sidebar-text-light">
-                                            </div>
-                                            <div class="swatch-holder bg-happy-green switch-sidebar-cs-class" data-class="bg-happy-green sidebar-text-light">
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3 class="themeoptions-heading">
-                                <div>Main Content Options</div>
-                                <button type="button" class="btn-pill btn-shadow btn-wide ml-auto active btn btn-focus btn-sm">Restore Default
-                                </button>
-                            </h3>
-                            <div class="p-3">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <h5 class="pb-2">Page Section Tabs
-                                        </h5>
-                                        <div class="theme-settings-swatches">
-                                            <div role="group" class="mt-2 btn-group">
-                                                <button type="button" class="btn-wide btn-shadow btn-primary btn btn-secondary switch-theme-class" data-class="body-tabs-line">
-                                                    Line
-                                                </button>
-                                                <button type="button" class="btn-wide btn-shadow btn-primary active btn btn-secondary switch-theme-class" data-class="body-tabs-shadow">
-                                                    Shadow
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="javascript:void(0);" class="app_calendar" title="Calendar"><i class="zmdi zmdi-calendar"></i></a></li>
+        <li><a href="javascript:void(0);" class="app_google_drive" title="Google Drive"><i class="zmdi zmdi-google-drive"></i></a></li>
+        <li><a href="javascript:void(0);" class="app_group_work" title="Group Work"><i class="zmdi zmdi-group-work"></i></a></li>
+        <li><a href="javascript:void(0);" class="js-right-sidebar" title="Setting"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a></li>
+        <li><a href="sign-in.html" class="mega-menu" title="Sign Out"><i class="zmdi zmdi-power"></i></a></li>
+    </ul>
+</div>
+
+<!-- Left Sidebar -->
+<aside id="leftsidebar" class="sidebar">
+    <div class="navbar-brand">
+        <button class="btn-menu ls-toggle-btn" type="button"><i class="zmdi zmdi-menu"></i></button>
+        <a href="index.html"><img src="{{ asset('images/company-logo.png') }}" width="25" alt="Aero"><span class="m-l-10">Mahfuza Overseas</span></a>
+    </div>
+    <div class="menu">
+        <ul class="list">
+            <li>
+                <div class="user-info">
+                    <a class="image" href="profile.html"><img src="assets/images/profile_av.jpg" alt="User"></a>
+                    <div class="detail">
+                        <h4>Michael</h4>
+                        <small>Super Admin</small>                        
                     </div>
                 </div>
-            </div>
-            <div class="app-main">
-            <div class="app-sidebar sidebar-shadow">
-                <div class="app-header__logo">
-                    <div class="logo-src"></div>
-                    <div class="header__pane ml-auto">
-                        <div>
-                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
-                                <span class="hamburger-box">
-                                    <span class="hamburger-inner"></span>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-header__mobile-menu">
-                    <div>
-                        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="app-header__menu">
-                    <span>
-                        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                            <span class="btn-icon-wrapper">
-                                <i class="fa fa-ellipsis-v fa-w-6"></i>
-                            </span>
-                        </button>
-                    </span>
-                </div>
-                <div class="scrollbar-sidebar">
-                    <div class="app-sidebar__inner">
-                        <ul class="vertical-nav-menu">
-                            <li class="app-sidebar__heading">Dashboards</li>
-                            <li>
-                                <a href="index.html" class="">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Local affair</li>
-                            <li class="{{ request()->is('candidate*') ? 'mm-active' : '' }}" >
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-user"></i>
-                                    Candidate
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ url('/candidate/create') }}" class="{{ request()->is('candidate/create') ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>New Candidate
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="metismenu-icon"></i>Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-icons.html">
-                                            <i class="metismenu-icon"></i>Pending Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-badges-labels.html">
-                                            <i class="metismenu-icon"></i>Completed Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-cards.html">
-                                            <i class="metismenu-icon"></i>Returned Candidate List
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-note2"></i>
-                                    VISA
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="components-tabs.html">
-                                            <i class="metismenu-icon"></i>Assign VISA
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-accordions.html">
-                                            <i class="metismenu-icon"></i>VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Pending VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Completed VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Returned VISA List
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-plane"></i>
-                                    Ticket
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="components-tabs.html">
-                                            <i class="metismenu-icon"></i>New Ticket
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-accordions.html">
-                                            <i class="metismenu-icon"></i>Candidate Ticket List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Outside Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Outside Candidate Ticket List
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="{{ (request()->is('agent*')) ? 'mm-active' : '' }}">
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-car"></i>
-                                    Agent
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ url('agent/create') }}" class="{{ (request()->is('agent/create')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Add New Agent
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('agent') }}" class="{{ (request()->is('agent')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Agent List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Add Agent Expense
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="tables-regular.html">
-                                    <i class="metismenu-icon pe-7s-credit"></i>
-                                    Pay Mode
-                                </a>
-                            </li>
-                            <li>
-                                <a href="tables-regular.html">
-                                    <i class="metismenu-icon pe-7s-display2"></i>
-                                    Report
-                                </a>
-                            </li>
-                            <li class="{{ (request()->is('employee*')) ? 'mm-active' : '' }}">
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-users"></i>
-                                    HRM
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ route('employee') }}" class="{{ (request()->is('employee')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Add New Employee
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="employee-show" class="{{ (request()->is('employee-show')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Employee List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Add Sections
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Send SMS
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>                            
-                            <li>
-                                <a href="tables-regular.html">
-                                    <i class="metismenu-icon pe-7s-phone"></i>
-                                    CRM
-                                </a>
-                            </li>
-                            <li class="app-sidebar__heading">Foreign Affair</li>
-                            <li class="{{ (request()->is('delegate*')) ? 'mm-active' : '' }}" >
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-id"></i>
-                                    Delegate
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ route('delegate') }}" class="{{ (request()->is('delegate')) ? 'mm-active' : '' }}" >
-                                            <i class="metismenu-icon"></i>Add New Delegate
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('delegate-show') }}" class="{{ (request()->is('delegate/list')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Delegates List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Mr. Maheer Bu Arish
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="{{ (request()->is('sponsor*')) ? 'mm-active' : '' }}" >
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-notebook"></i>
-                                    Sponsor
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ route('sponsor') }}" class="{{ (request()->is('sponsor')) ? 'mm-active' : '' }}" >
-                                            <i class="metismenu-icon"></i>Add New Sponsor
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('sponsor-list') }}" class="{{ (request()->is('sponsor/list*')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Sponsor List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/sponsor-visa/create') }}" class="{{ (request()->is('sponsor-visa/create')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Add Sponsor's VISA
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/sponsor-visa.list') }}" class="{{ (request()->is('sponsor-visa.list')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Show VISA list
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="{{ (request()->is('manpower-office*')) ? 'mm-active' : '' }}">
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-portfolio"></i>
-                                    Manpower
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ url('manpower-office/create') }}" class="{{ (request()->is('manpower-office/create')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Add Office
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('manpower-office') }}" class="{{ (request()->is('manpower-office')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Office List
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-portfolio"></i>
-                                    Office
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="components-tabs.html">
-                                            <i class="metismenu-icon"></i>Add New Office
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-accordions.html">
-                                            <i class="metismenu-icon"></i>Office List
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
-                                <a href="{{ url('jobs') }}" class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
-                                    <i class="metismenu-icon pe-7s-box1"></i>
-                                    Jobs
-                                </a>
-                            </li>
+            </li>
+            <li class=""><a href="index.html"><i class="zmdi zmdi-home"></i><span>Dashboard</span></a></li>
+            <li><a href="javascript:void(0);" class="menu-toggle {{ request()->is('candidate*') ? 'active open toggled' : '' }}"><i class="zmdi zmdi-apps"></i><span>Candidate</span></a>
+                <ul class="ml-menu">
+                    <li class="{{ request()->is('candidate/create') ? 'active' : '' }}"><a href="{{ url('/candidate/create') }}">New Candidate</a></li>
+                    <li class="{{ request()->is('candidate') ? 'active' : '' }}"><a href="{{ url('/candidate') }}">Candidate List</a></li>
+                    <li><a href="events.html">Pending Candidate List</a></li>
+                    <li><a href="contact.html">Completed Candidate List</a></li>                    
+                    <li><a href="contact.html">Returned Candidate List</a></li>                    
+                </ul>
+            </li>
+            <li> <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>VISA</span></a>
+                <ul class="ml-menu">
+                    <li><a href="project-list.html">Assign VISA</a></li>
+                    <li><a href="taskboard.html">VISA List</a></li>
+                    <li><a href="ticket-list.html">Pending VISA List</a></li>
+                    <li><a href="ticket-detail.html">Completed VISA List</a></li>
+                    <li><a href="ticket-detail.html">Returned VISA List</a></li>
+                </ul>
+            </li>
+            <li> <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-folder"></i><span>Ticket</span></a>
+                <ul class="ml-menu">
+                    <li><a href="file-dashboard.html">New Ticket</a></li>
+                    <li><a href="file-documents.html">Candidate Ticket List</a></li>
+                    <li><a href="file-images.html">Outside Candidate List</a></li>
+                    <li><a href="file-media.html">Outside Candidate Ticket List</a></li>
+                </ul>
+            </li>
+            <li> <a href="javascript:void(0);" class="menu-toggle {{ (request()->is('agent*')) ? 'active open toggled' : '' }}"><i class="zmdi zmdi-blogger"></i><span>Agent</span></a>
+                <ul class="ml-menu">
+                    <li class="{{ (request()->is('agent/create')) ? 'active' : '' }}"><a href="{{ url('agent/create') }}">Add New Agent</a></li>
+                    <li class="{{ (request()->is('agent')) ? 'active' : '' }}"><a href="{{ url('agent') }}">Agent List</a></li>
+                    <li><a href="blog-list.html">List View</a></li>
+                    <li><a href="blog-grid.html">Grid View</a></li>
+                    <li><a href="blog-details.html">Blog Details</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>Pay Mode</span></a>
+                <ul class="ml-menu">
+                    <li><a href="ec-dashboard.html">Dashboard</a></li>
+                    <li><a href="ec-product.html">Product</a></li>
+                    <li><a href="ec-product-List.html">Product List</a></li>
+                    <li><a href="ec-product-detail.html">Product detail</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle {{ (request()->is('employee*')) ? 'active open toggled' : '' }}"><i class="zmdi zmdi-swap-alt"></i><span>HRM</span></a>
+                <ul class="ml-menu">
+                    <li class="{{ (request()->is('employee')) ? 'active' : '' }}"><a href="{{ route('employee') }}">Add New Employee</a></li>                    
+                    <li class="{{ (request()->is('employee-show')) ? 'active' : '' }}"><a href="alerts.html">Employee List</a></li>                    
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-flower"></i><span>CRM</span></a></li>
+            <li><a href="javascript:void(0);" class="menu-toggle {{ (request()->is('delegate*')) ? 'active open toggled' : '' }}"><i class="zmdi zmdi-assignment"></i><span>Delegate</span></a>
+                <ul class="ml-menu">
+                    <li class="{{ (request()->is('delegate')) ? 'active' : '' }}"><a href="{{ route('delegate') }}">Add New Delegate</a></li>
+                    <li class="{{ (request()->is('delegate/list')) ? 'mm-active' : '' }}"><a href="{{ route('delegate-show') }}">elegates List</a></li>
+                    <li><a href="form-examples.html">Mr. Maheer Bu Arish</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle {{ (request()->is('sponsor*')) ? 'active open toggled' : '' }}"><i class="zmdi zmdi-grid"></i><span>Sponsor</span></a>
+                <ul class="ml-menu">
+                    <li class="{{ (request()->is('sponsor')) ? 'mm-active' : '' }}"><a href="{{ route('sponsor') }}">Add New Sponsor</a></li>
+                    <li class="{{ (request()->is('sponsor/list*')) ? 'mm-active' : '' }}"><a href="{{ route('sponsor-list') }}">Sponsor List</a></li>
+                    <li class="{{ (request()->is('sponsor-visa/create')) ? 'mm-active' : '' }}"><a href="{{ url('/sponsor-visa/create') }}">Add Sponsor's VISA</a></li>
+                    <li class="{{ (request()->is('sponsor-visa.list')) ? 'mm-active' : '' }}"><a href="{{ url('/sponsor-visa.list') }}">Show VISA list</a></li>
+                </ul>
+            </li>            
+            <li><a href="javascript:void(0);" class="menu-toggle {{ (request()->is('manpower-office*')) ? 'active open toggled' : '' }}"><i class="zmdi zmdi-chart"></i><span>Manpower</span></a>
+                <ul class="ml-menu">
+                    <li class="{{ (request()->is('manpower-office/create')) ? 'mm-active' : '' }}"><a href="{{ url('manpower-office/create') }}">Add Office</a></li>
+                    <li class="{{ (request()->is('manpower-office')) ? 'mm-active' : '' }}"><a href="{{ url('manpower-office') }}">Office List</a></li>
+                </ul>
+            </li>            
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-delicious"></i><span>Office</span></a>
+                <ul class="ml-menu">
+                    <li><a href="widgets-app.html">Add New Office</a></li>
+                    <li><a href="widgets-data.html">Office List</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-lock"></i><span>Authentication</span></a>
+                <ul class="ml-menu">
+                    <li><a href="sign-in.html">Sign In</a></li>
+                    <li><a href="sign-up.html">Sign Up</a></li>
+                    <li><a href="forgot-password.html">Forgot Password</a></li>
+                    <li><a href="404.html">Page 404</a></li>
+                    <li><a href="500.html">Page 500</a></li>
+                    <li><a href="page-offline.html">Page Offline</a></li>
+                    <li><a href="locked.html">Locked Screen</a></li>
+                </ul>
+            </li>
+            <li class="{{ (request()->is('jobs*')) ? 'active open toggled' : '' }}"><a href="{{ url('jobs') }}"><i class="zmdi zmdi-home"></i><span>Jobs</span></a></li>
+            <?php
+                $all_packages = App\Models\WebsiteContent::get()->unique('section')->skip(3);
+            ?>
+            <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-lock"></i><span>Website</span></a>
+                <ul class="ml-menu">
+                    <li><a href="{{ url('website') }}"><i class="zmdi zmdi-home"></i><span>Website Frontpage</span></a></li>
+                    <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-home"></i><span>Packages</span></a>
+                        <ul class="ml-menu">
+                            @foreach($all_packages as $row)
+                            <li><a href="{{ url('package_image_headline',$row->id) }}"><i class="zmdi zmdi-home"></i><span>{{$row->section}}</span></a></li>
+                            @endforeach
                         </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</aside>
+
+<!-- Right Sidebar -->
+<aside id="rightsidebar" class="right-sidebar">
+    <ul class="nav nav-tabs sm">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#setting"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#chat"><i class="zmdi zmdi-comments"></i></a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="setting">
+            <div class="slim_scroll">
+                <div class="card">
+                    <h6>Theme Option</h6>
+                    <div class="light_dark">
+                        <div class="radio">
+                            <input type="radio" name="radio1" id="lighttheme" value="light" checked="">
+                            <label for="lighttheme">Light Mode</label>
+                        </div>
+                        <div class="radio mb-0">
+                            <input type="radio" name="radio1" id="darktheme" value="dark">
+                            <label for="darktheme">Dark Mode</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="app-main__outer">
-                <div class="app-main__inner">
-                    @yield('content')
+                <div class="card">
+                    <h6>Color Skins</h6>
+                    <ul class="choose-skin list-unstyled">
+                        <li data-theme="purple"><div class="purple"></div></li>
+                        <li data-theme="blue"><div class="blue"></div></li>
+                        <li data-theme="cyan"><div class="cyan"></div></li>
+                        <li data-theme="green"><div class="green"></div></li>
+                        <li data-theme="orange"><div class="orange"></div></li>
+                        <li data-theme="blush" class="active"><div class="blush"></div></li>
+                    </ul>                                        
+                </div>
+                <div class="card">
+                    <h6>General Settings</h6>
+                    <ul class="setting-list list-unstyled">
+                        <li>
+                            <div class="checkbox">
+                                <input id="checkbox1" type="checkbox">
+                                <label for="checkbox1">Report Panel Usage</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <input id="checkbox2" type="checkbox" checked="">
+                                <label for="checkbox2">Email Redirect</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <input id="checkbox3" type="checkbox" checked="">
+                                <label for="checkbox3">Notifications</label>
+                            </div>                        
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <input id="checkbox4" type="checkbox">
+                                <label for="checkbox4">Auto Updates</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <input id="checkbox5" type="checkbox" checked="">
+                                <label for="checkbox5">Offline</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="checkbox">
+                                <input id="checkbox6" type="checkbox" checked="">
+                                <label for="checkbox6">Location Permission</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>                
+            </div>                
+        </div>       
+        <div class="tab-pane right_chat" id="chat">
+            <div class="slim_scroll">
+                <div class="card">
+                    <ul class="list-unstyled">
+                        <li class="online">
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object " src="assets/images/xs/avatar4.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Sophia <small class="float-right">11:00AM</small></span>
+                                        <span class="message">There are many variations of passages of Lorem Ipsum available</span>
+                                        <span class="badge badge-outline status"></span>
+                                    </div>
+                                </div>
+                            </a>                            
+                        </li>
+                        <li class="online">
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object " src="assets/images/xs/avatar5.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Grayson <small class="float-right">11:30AM</small></span>
+                                        <span class="message">All the Lorem Ipsum generators on the</span>
+                                        <span class="badge badge-outline status"></span>
+                                    </div>
+                                </div>
+                            </a>                            
+                        </li>
+                        <li class="offline">
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object " src="assets/images/xs/avatar2.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Isabella <small class="float-right">11:31AM</small></span>
+                                        <span class="message">Contrary to popular belief, Lorem Ipsum</span>
+                                        <span class="badge badge-outline status"></span>
+                                    </div>
+                                </div>
+                            </a>                            
+                        </li>
+                        <li class="me">
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object " src="assets/images/xs/avatar1.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="name">John <small class="float-right">05:00PM</small></span>
+                                        <span class="message">It is a long established fact that a reader</span>
+                                        <span class="badge badge-outline status"></span>
+                                    </div>
+                                </div>
+                            </a>                            
+                        </li>
+                        <li class="online">
+                            <a href="javascript:void(0);">
+                                <div class="media">
+                                    <img class="media-object " src="assets/images/xs/avatar3.jpg" alt="">
+                                    <div class="media-body">
+                                        <span class="name">Alexander <small class="float-right">06:08PM</small></span>
+                                        <span class="message">Richard McClintock, a Latin professor</span>
+                                        <span class="badge badge-outline status"></span>
+                                    </div>
+                                </div>
+                            </a>                            
+                        </li>                        
+                    </ul>
                 </div>
             </div>
         </div>
-        @yield('modals')
-    @endauth
-    @guest
-        @yield('login')
-    @endguest
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
-    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js" integrity="sha512-i8ERcP8p05PTFQr/s0AZJEtUwLBl18SKlTOZTH0yK5jVU0qL8AIQYbbG5LU+68bdmEqJ6ltBRtCxnmybTbIYpw==" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> --}}
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.8/r-2.2.7/datatables.min.js"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> --}}
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="{{ asset('js/template.js') }}"></script></body>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script> --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
-    {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> --}}
-    <script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!-- include FilePond library -->
-    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    </div>
+</aside>
 
-    <!-- include FilePond plugins -->
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+<!-- Main Content -->
 
-    <!-- include FilePond jQuery adapter -->
-    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
-    @yield('script')
-    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
-    @yield('script-file-pond')
+<section class="content">
+    <div class="">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2>Dashboard</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="zmdi zmdi-home"></i> Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard 1</li>
+                    </ul>
+                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">                
+                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            @yield('content')
+        </div>
+    </div>
+</section>
+@yield('modals')
+@endauth
+@guest
+    @yield('login')
+@endguest
+
+<!-- Jquery Core Js --> 
+<script src="{{ asset('assets/bundles/libscripts.bundle.js')}}"></script> <!-- Lib Scripts Plugin Js ( jquery.v3.2.1, Bootstrap4 js) --> 
+<script src="{{ asset('assets/bundles/vendorscripts.bundle.js')}}"></script> <!-- slimscroll, waves Scripts Plugin Js -->
+
+<script src="{{ asset('assets/bundles/jvectormap.bundle.js')}}"></script> <!-- JVectorMap Plugin Js -->
+<script src="{{ asset('assets/bundles/sparkline.bundle.js')}}"></script> <!-- Sparkline Plugin Js -->
+<script src="{{ asset('assets/bundles/c3.bundle.js')}}"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.8/r-2.2.7/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+<script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="{{ asset('assets/bundles/mainscripts.bundle.js')}}"></script>
+<script src="{{ asset('assets/js/pages/index.js')}}"></script>
+
+<script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+<script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    });
+</script>
+
+@yield('script')
+<script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
+@yield('script-file-pond')
 </body>
+
+
 </html>

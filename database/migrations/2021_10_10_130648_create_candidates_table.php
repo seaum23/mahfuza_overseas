@@ -34,7 +34,7 @@ class CreateCandidatesTable extends Migration
             $table->foreignIdFor(ManpowerOffice::class);
             $table->tinyInteger('test_medical_status')->default(0); // Fit -> 1 || Unfit -> 2 || Not done yet -> 0
             $table->tinyInteger('final_medical_status')->default(0); // Fit -> 1 || Unfit -> 2 || Not done yet -> 0
-            $table->date('final_medical_report')->default(NULL);
+            $table->date('final_medical_report')->nullable()->default(NULL);
             $table->tinyInteger('experience_status'); // New -> 1 || Experienced -> 2
             $table->string('comment');
             $table->string('updated_by');
@@ -60,10 +60,10 @@ class CreateCandidatesTable extends Migration
             /**
              * For experienced candidate.
              */
-            $table->string('departureSealFile')->default('');
-            $table->string('arrivalSealFile')->default('');
-            $table->date('departure_date')->default(NULL);
-            $table->date('arrival_date')->default(NULL);
+            $table->string('departureSealFile')->nullable()->default('');
+            $table->string('arrivalSealFile')->nullable()->default('');
+            $table->date('departure_date')->nullable()->default(NULL);
+            $table->date('arrival_date')->nullable()->default(NULL);
 
             $table->timestamps();
         });

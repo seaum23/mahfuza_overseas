@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use App\Models\Agent;
+use App\Models\Candidate;
 use Illuminate\Http\Request;
 use App\Models\ManpowerOffice;
+use DateInterval;
+use DateTime;
 use Illuminate\Support\Facades\DB;
+use Yajra\Datatables\Datatables;
 
 class CandidateController extends Controller
 {
@@ -17,7 +21,7 @@ class CandidateController extends Controller
      */
     public function index()
     {
-        //
+        return view('templates.candidate.candidate_list');
     }
 
     /**
@@ -50,7 +54,110 @@ class CandidateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $eighteen = new DateTime(date('Y-m-d'));
+        $eighteen->sub(new DateInterval('P18Y'));
+        $this->validate($request, [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'gender' => 'required',
+            'phone_number' => 'required|size:11',
+            'date_of_birth' => 'required|before_or_equal:' . $eighteen->format('Y-m-d'),
+            'job_type' => 'required',
+            'passport_number' => 'required',
+            'country' => 'required',
+            'issu_date' => 'required',
+            'manpower' => 'required',
+            'agent' => 'required',
+            'passport_scan' => 'required',
+        ]);
+
+        if($request->departureDate > $request->arrivalDate){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'departureDate' => ['Departure Date Must Be Smaller Than Arrival Date!'],
+            ]);
+            throw $error;
+        }
+
+        $exisitng = Candidate::where('passportNum', $request->passport_number)->get();
+        if(!$exisitng->isEmpty()){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'passport_number' => ['Passport already exists!'],
+            ]);
+            throw $error;
+        }
+
+        $candidate = Candidate::create([
+            'passportNum' => $request->passport_number,
+            'fName' => $request->first_name,
+            'lName' => $request->last_name,
+            'phone' => $request->phone_number,
+            'data_of_birth' => $request->date_of_birth,
+            'gender' => $request->gender,
+            'issue_date' => $request->issu_date,
+            'validity' => $request->validityYear,
+            'job_id' => $request->job_type,
+            'country' => $request->country,
+            'agent_id' => $request->agent,
+            'manpower_office_id' => $request->manpower,
+            'experience_status' => $request->experience,
+            'comment' => '',
+            'updated_by' => auth()->id(),
+        ]);
+
+        if(!empty($request->expCountry)){
+            foreach($request->expCountry as $country){
+                $candidate->countries()->create([
+                    'country' => $country
+                ]);
+            }
+        }        
+
+        if(!empty($request->departureDate)){
+            $candidate->departure_date = $request->departureDate;
+        }
+        
+
+        if(!empty($request->arrivalDate)){
+            $candidate->arrival_date = $request->arrivalDate;
+        }
+
+        if(!empty($request->passport_scan)){
+            $candidate->passport_scanned_copy = move($request->passport_scan, 'candidate', 'passport_scanned_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->policeVerification)){
+            $candidate->police_clearance_file = move($request->policeVerification, 'candidate', 'police_clearance_file_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->photoFile)){
+            $candidate->personal_photo_file = move($request->photoFile, 'candidate', 'personal_photo_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->trainingCard)){
+            $candidate->training_card_file = move($request->trainingCard, 'candidate', 'training_card_' . $candidate->id . '_' . time() );
+        }        
+
+        if(!empty($request->departureSealFile)){
+            $candidate->departureSealFile = move($request->departureSealFile, 'candidate', 'departureSealFile_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->arrivalSealFile)){
+            $candidate->arrivalSealFile = move($request->arrivalSealFile, 'candidate', 'arrivalSealFile_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->optionalFile)){
+            foreach($request->optionalFile as $file){
+                $tmp = move($file, 'candidate', 'optional_file_' . $candidate->id . '_' . uniqid() . '_' . uniqid() );
+                print_r($tmp);
+                $candidate->experience_filse()->create([
+                    'file_path' => $tmp
+                ]);
+            }
+        }
+
+        $candidate->save();
+
+        alert($request);
     }
 
     /**
@@ -96,5 +203,119 @@ class CandidateController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function datatable(Request $request)
+    {
+        // <a href="'.asset($query->test_medical_file).'" target="_blank">
+        //                             <button class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
+        //                         </a>
+        if ($request->ajax()) {
+            $query = Candidate::with('agent')->select('candidates.*');
+            
+            return Datatables::of($query)
+            ->editColumn('fName', function ($query)
+            {
+                $html = '<p> <span class="text-secondary">Name: </span>' . $query->fName . ' ' . $query->lName . '</p>';
+                $html .= '<p> <span class="text-secondary">Agent: </span>' . $query->agent->full_name . '</p>';
+                return $html;
+            })
+            ->editColumn('data_of_birth', function ($query)
+            {
+                return $query->age().' Years';
+            })            
+            ->addColumn('passport_expiry', function ($query) {
+                return $query->passport_expiry();
+            })
+            ->editColumn('experience_status', function ($query)
+            {
+                if($query->experience_status == 1){
+                    return 'New';
+                }
+                
+                return $query->experience();
+            }) 
+            ->editColumn('test_medical_status', function ($query)
+            {
+                if($query->test_medical_status == 0){
+                    return '<button onclick="update_test_medical('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#test_medical_modal" class="btn btn-xs btn-secondary">No</button>';
+                }
+                
+                $html = '<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group" role="group" aria-label="First group">
+                                <button onclick="test_medical_file(\''.asset($query->test_medical_file).'\', \''.$query->id.'\')" data-target="#test_medical_file_show" data-toggle="modal" class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>';
+                if($query->test_medical_status == 1){
+                    $html .=    '<button class="btn btn-xs btn-success">Fit</button>';
+                }
+                if($query->test_medical_status == 2){
+                    $html .=    '<button class="btn btn-xs btn-danger">Unfit</button>';
+                }
+                return $html.
+                            '</div>
+                        </div>';
+            })
+            ->editColumn('final_medical_status', function ($query)
+            {
+                if($query->final_medical_status == 0){
+                    return '<button onclick="update_final_medical('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#final_medical_modal" class="btn btn-xs btn-secondary">No</button>';
+                }
+                
+                $html = '<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button onclick="final_medical_file(\''.asset($query->final_medical_file).'\', \''.$query->id.'\')" data-target="#final_medical_file_show" data-toggle="modal"  class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>';
+                if($query->final_medical_status == 1){
+                    $html .=    '<button class="btn btn-xs btn-success">Fit</button>';
+                }
+                if($query->final_medical_status == 2){
+                    $html .=    '<button class="btn btn-xs btn-danger">Unfit</button>';
+                }
+                // '<badge></bdag>'
+                return $html.
+                            '</div>
+                        </div>';
+            })
+            ->editColumn('police_clearance_file', function ($query)
+            {
+                if(empty($query->police_clearance_file)){
+                    return '<button onclick="update_police_clearance('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#police_clearance_modal" class="btn btn-xs btn-secondary">No</button>';
+                }
+                
+                $html = '<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button onclick="police_clearance_file(\''.asset($query->police_clearance_file).'\', \''.$query->id.'\')" data-target="#police_clearance_file_show" data-toggle="modal"  class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
+                            </div>';
+                return $html .
+                        '</div>';
+            })
+            ->editColumn('training_card_file', function ($query)
+            {
+                if($query->experience_status == 2){
+                    return '<button class="btn btn-xs btn-info">Experienced</button>';
+                }
+
+                if($query->experience_status == 1 AND empty($query->training_card_file)){
+                    return '<button class="btn btn-xs btn-secondary">No</button>';
+                }
+                
+                $html = '<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <a href="'.asset($query->training_card_file).'" target="_blank">
+                                    <button class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
+                                </a>
+                            </div>';
+                return $html .
+                        '</div>';
+            })
+            ->addColumn('action', function ($query) {
+                return '';
+            })
+            ->rawColumns(['fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file'])
+            ->make(true);
+        }
     }
 }

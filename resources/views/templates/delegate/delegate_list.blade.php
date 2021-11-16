@@ -28,13 +28,12 @@ Delegate List
                                 <td>
                                     @foreach ($delegate->delegate_offices as $office)
                                         <button class="btn btn-sm btn-info" onclick="change_delegate_office({{ $office->id }}, '{{ $office->name }}', '{{ $office->license_number }}')" data-target="#changeDelegateOffice" data-toggle="modal">
-                                            <p class="m-0 p-0">{{ $office->name }}: <span class="m-0 p-0">{{ $office->license_number }}</span></p>
-                                            
+                                            <p class="m-0 p-0">{{ $office->name }}: <span class="m-0 p-0">{{ $office->license_number }}</span></p>                                            
                                         </button>
                                     @endforeach
                                 </td>
-                                <td>{{ $delegate->comment; }}</td>                            
-                                <td>  --  </td>                            
+                                <td>{{ $delegate->comment; }}</td>
+                                <td>  --  </td>
                                 <td> 
                                     <button class="btn btn-primary btn-sm" data-target="#add_office_modal" data-toggle="modal" onclick="add_office_delegatge({{ $delegate->id }})">Add Office</button>
                                     <button class="btn btn-warning btn-sm" data-target="#update_delegate_modal" data-toggle="modal" onclick="update_delegate({{ $delegate->id }}, '{{ $delegate->name }}', '{{ $delegate->country }}', '{{ $delegate->state }}', '{{ $delegate->comment }}')">Update</button>

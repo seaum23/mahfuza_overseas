@@ -16,7 +16,13 @@ class FormTemplateController extends Controller
     }
     public function candidate_experience_tempalte($status)
     {
-        if($status == 'new'){
+        /**
+         * 
+         * 1 => New Candidate
+         * 2 => Experienced Candidate
+         * 
+         */
+        if($status == '1'){
             return view('form_templates.no_experience_candidate');
         }else{
             return view('form_templates.experienced_candidate');

@@ -150,6 +150,10 @@ Route::get('package_image_headline/{id}', [WebController::class, 'package_image_
 Route::post('PackageUpdate/{id}', [WebController::class, 'PackageUpdate']);
 Route::post('create_package_section', [WebController::class, 'create_package_section']);
 Route::get('package_section_and_all_its_packages_delete/{id}', [WebController::class, 'package_section_and_all_its_packages_delete']);
+Route::post('new_package_create/{id}', [WebController::class, 'new_package_create']);
+Route::post('sectionPackageUpdate/{id}', [WebController::class, 'sectionPackageUpdate']);
+Route::get('sectionPackageDelete/{id}', [WebController::class, 'sectionPackageDelete']);
+
 
 
 

@@ -97,7 +97,7 @@ Route::group(['middleware' => 'auth'], function () {
     
 
 
-    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
     /**
      * FilePond temporary file uplaod

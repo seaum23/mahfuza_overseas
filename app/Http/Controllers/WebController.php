@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\WebsiteContent;
-use App\Models\package;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File; 
 
@@ -45,16 +45,16 @@ class WebController extends Controller
     public function package_section_and_all_its_packages_delete($id){
 
         $package_name = WebsiteContent::where('id',$id)->value('section');
-        $get_all_rows_from_package_table = package::where('package_section_id',$id)->get()->all();
+        $get_all_rows_from_package_table = Package::where('package_section_id',$id)->get()->all();
         
         foreach($get_all_rows_from_package_table as $row){
 
             //deleting pckage image
-            $image = package::where('id',$row->id)->value('package_image');
+            $image = Package::where('id',$row->id)->value('package_image');
             $Path = 'public/';
             File::delete($Path.$image);
 
-            $passport = package::where('id',$row->id)->first();
+            $passport = Package::where('id',$row->id)->first();
             $passport->delete();
         }
 
@@ -72,12 +72,73 @@ class WebController extends Controller
 
     public function package_image_headline($id){
         $package_image_headline = WebsiteContent::where('id',$id)->get()->all();
-
-        return view('section_headline_image',compact('package_image_headline'));
+        $package_name = WebsiteContent::where('id',$id)->value('section');
+        $all_packages = Package::where('package_section_id',$id)->get()->all();
+        return view('website_section',compact('package_image_headline','package_name','id','all_packages'));
     }
 
-    public function logo_update_route(){
+    public function new_package_create(Request $request,$id){
+        $image = $request->file('packageImage');
+        $package_name = $request->get('packageName');
+        $is_package_already_exist = Package::where('package_headline',$package_name)->value('id');
 
+        if(!empty($is_package_already_exist)){
+            return redirect()->back()->with('warning',$package_name.' Package existed!');
+        }else{
+            $passport = new Package;
+            $passport->package_section_id = $id;
+            $passport->package_headline = $package_name;
+            $passport->package_detail = $request->get('application');
+
+            if(!empty($image)){
+                $image_name = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = base_path('public/storage/website/');
+                $image->move($destinationPath, $image_name);
+
+            $passport->package_image = 'storage/website/'.$image_name;
+            }
+            $passport->save();
+
+            $section_name = WebsiteContent::where('id',$id)->value('section');
+            return redirect()->back()->with('success',$package_name.' Package Added to'.$section_name.' section successfully!');
+        }
+    }
+
+    public function sectionPackageUpdate(Request $request,$id){
+        $image = $request->file('packageImage');
+
+            $passport = Package::where('id',$id)->first();
+            $passport->package_detail = $request->get('sectionPackageDetail');
+
+            if(!empty($image)){
+                $previous_image = Package::where('id',$id)->value('package_image');
+                $Path = 'public/';
+                File::delete($Path.$previous_image);
+
+                $image_name = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = base_path('public/storage/website/');
+                $image->move($destinationPath, $image_name);
+
+            $passport->package_image = 'storage/website/'.$image_name;
+            }
+            $passport->save();
+
+            $package_name = Package::where('id',$id)->value('package_headline');
+            return redirect()->back()->with('success',$package_name.' Package updated successfully!');
+    }
+
+    public function sectionPackageDelete($id){
+
+            $package_name = Package::where('id',$id)->value('package_headline');
+
+            $previous_image = Package::where('id',$id)->value('package_image');
+            $Path = 'public/';
+            File::delete($Path.$previous_image);
+
+            $passport = Package::where('id',$id)->first();
+            $passport->delete();
+
+            return redirect()->back()->with('success',$package_name.' Package deleted successfully!');
     }
 
     public function add_new_tourist_package(Request $request){

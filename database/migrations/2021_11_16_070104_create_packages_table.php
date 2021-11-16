@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWebisiteContentsTable extends Migration
+class CreatePackagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateWebisiteContentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('website_contents', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('section');
-            $table->string('image');
-            $table->string('text');
+            $table->bigInteger('package_section_id');
+            $table->string('package_headline');
+            $table->string('package_image');
+            $table->text('package_detail');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateWebisiteContentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('website_contents');
+        Schema::dropIfExists('packages');
     }
 }

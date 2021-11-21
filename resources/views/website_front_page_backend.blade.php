@@ -110,56 +110,57 @@ Website
         </form>
     </div>
 {{-- front backend image end--}}
-
-
-<!-- Add new section Modal start -->
-<div class="modal fade" id="add_new_section_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Create new Package Section</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form action="{{url('create_package_section')}}" method="POST" enctype="multipart/form-data" id="add_package_section_form">
-                @csrf
-                <div class="form-row">
-                    <label for="">Package Section Name : </label>
-                    <div class="form-group col-md-6">
-                        <input type="text" name="package_section" id="package_section" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <label for="">Package Section Image : </label>
-                    <div class="form-group col-md-6">
-                        <input type="file" name="package_section_image" id="package_section_image" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <label for="">Package Section Headline : </label>
-                    <div class="form-group col-md-6">
-                        <input type="text" name="package_section_headline" id="package_section_headline" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <button class="btn btn-primary" type="submit" onclick="AddPackageSection()">Create</button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right;">Cancel</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- Add new section Modal end -->
-
-
 </div>
 
 
+@endsection
+
+@section('modals')
+
+<!-- Add new section Modal start -->
+<div class="modal fade" id="add_new_section_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create new Package Section</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url('create_package_section')}}" method="POST" enctype="multipart/form-data" id="add_package_section_form">
+                    @csrf
+                    <div class="form-row">
+                        <label for="">Package Section Name : </label>
+                        <div class="form-group col-md-6">
+                            <input type="text" name="package_section" id="package_section" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="">Package Section Image : </label>
+                        <div class="form-group col-md-6">
+                            <input type="file" name="package_section_image" id="package_section_image" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label for="">Package Section Headline : </label>
+                        <div class="form-group col-md-6">
+                            <input type="text" name="package_section_headline" id="package_section_headline" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-primary" type="submit" onclick="AddPackageSection()">Create</button>
+                            <button type="button" class="btn btn-warning" data-dismiss="modal" style="float: right;">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add new section Modal end -->
+    
 @endsection
 
 @section('script')

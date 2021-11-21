@@ -119,44 +119,48 @@ Website
                 </div>
                 @endforeach
                 </div>
-
-                <!-- Add new package Modal start -->
-                <div class="modal fade" id="addNewPackage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-                    <div class="modal-dialog" role="document" style="min-width: 600px;margin-right;auto;margin-left:auto;">
-                        <div class="modal-content" >
-                                <center style="color:red;font-weight:95;font-size:15pt;padding-top:15px;">
-                                    Add new {{$package_name}} Package
-                                </center>
-                            <div class="modal-body" >
-                                <form id="newPackageCreateFoorm" action="{{url('new_package_create',$id)}}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="">Package Name : </label>
-                                        <input class="form-control" name="packageName" id="packageName" type="text" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Package Image : </label>
-                                        <input class="form-control" name="packageImage" id="packageImage" type="file" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Package Detail : </label>
-                                        <textarea class="form-control" name="application" id="editor1" style="min-height:100px;" required></textarea>
-                                    </div>
-                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" style="float: left" onclick="createPackageFormSubmitFunction();">Create</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right;">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Add new package Modal end -->
             </div>
         </div>
         {{--tourist section end--}}
     </div>
 </div>
+@endsection
+
+@section('modals')
+
+<!-- Add new package Modal start -->
+<div class="modal fade" id="addNewPackage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document" style="min-width: 600px;margin-right;auto;margin-left:auto;">
+        <div class="modal-content" >
+                <center style="color:red;font-weight:95;font-size:15pt;padding-top:15px;">
+                    Add new {{$package_name}} Package
+                </center>
+            <div class="modal-body" >
+                <form id="newPackageCreateFoorm" action="{{url('new_package_create',$id)}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="">Package Name : </label>
+                        <input class="form-control" name="packageName" id="packageName" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Package Image : </label>
+                        <input class="form-control" name="packageImage" id="packageImage" type="file" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Package Detail : </label>
+                        <textarea class="form-control" name="application" id="editor1" style="min-height:100px;" required></textarea>
+                    </div>
+                    </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" style="float: left" onclick="createPackageFormSubmitFunction();">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right;">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add new package Modal end -->
+    
 @endsection
 
 @section('script')

@@ -21,6 +21,7 @@ use App\Http\Controllers\Manpower\ManpowerOfficeController;
 use App\Http\Controllers\WebController;
 
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
+use App\Http\Controllers\ProcessingController;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 /*
@@ -46,7 +47,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 });
 
-Route::group(['middleware' => 'auth'], function () {    
+Route::group(['middleware' => 'auth'], function () {
     // Route::resources([
     //     'employee' => EmployeeController::class,
     // ]);
@@ -94,8 +95,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/candidate/test.medical',[CandidateUpdateController::class, 'test_medical']);
     Route::post('/candidate/final.medical',[CandidateUpdateController::class, 'final_medical']);
     Route::post('/candidate/police.clearance',[CandidateUpdateController::class, 'police_clearance']);
-    
+    Route::post('/candidate/training.card',[CandidateUpdateController::class, 'training_card']);
+    Route::post('candidate/departure-seal/{candidate}',[CandidateUpdateController::class, 'departure_seal'])->name('departure-update-file');
+    Route::post('/candidate/arrival-seal/{candidate}',[CandidateUpdateController::class, 'arrival_seal'])->name('arrival-update-file');
+    Route::get('/candidate/experienced/{id}',[CandidateController::class, 'experienced'])->name('experienced');
+    Route::get('/candidate/sponsor.visa/{candidate}',[CandidateController::class, 'sponsor_visa'])->name('sponsor_visa');
+    Route::post('/candidate/sponsor.visa',[CandidateController::class, 'sponsor_visa_insert'])->name('sponsor_visa');
 
+    Route::get('/processing', [ProcessingController::class, 'index'])->name('processing');
+    Route::get('/processing.list', [ProcessingController::class, 'datatable'])->name('processing.datatable');
+    
 
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 

@@ -106,8 +106,6 @@ class WebController extends Controller
 
     public function sectionPackageUpdate(Request $request,$id){
         $image = $request->file('sectionPackageImage_' . $id);
-        print_r('sectionPackageImage_' . $id);
-        dd($image);
 
         $passport = Package::where('id',$id)->first();
         $passport->package_detail = $request->get('sectionPackageDetail');

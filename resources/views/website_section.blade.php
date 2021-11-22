@@ -45,34 +45,10 @@ Website
                             <button class="btn btn-primary" type="submit">update</button>
                         </div>
                         <div class="form-group col-md-6">
-                                <button style="float: right;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">delete</button>
+                            <button style="float: right;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">delete</button>
                         </div>
                     </div>
                 </form>
-
-                <!-- Package add/delete confirmation Modal start -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel" style="text-align: center;color:red;font-weight:900;">Warning</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Do you really want to delete <span style="color:green;font-weight:900;">{{$item->section}}</span> Package Section? It will also delete all of its packages.
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="{{url('package_section_and_all_its_packages_delete',$item->id)}}">
-                                        <button type="button" class="btn btn-danger">Sure Delete</button>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <!-- Package adelete confirmation Modal end -->
             @endforeach
             </div>
             <div class="col-md-8">
@@ -93,7 +69,7 @@ Website
                         </center>
                     </div>
                     <div class="col-md-12">
-                        <form id="sectionPackageUpdateForm" action="{{url('sectionPackageUpdate',$package->id)}}" method="post" enctype="multipart/form-data">
+                        <form action="{{url('sectionPackageUpdate',$package->id)}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="">Package Name : </label>
@@ -136,6 +112,30 @@ Website
 
 @section('modals')
 
+<!-- Package add/delete confirmation Modal start -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="text-align: center;color:red;font-weight:900;">Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you really want to delete <span style="color:green;font-weight:900;">{{$item->section}}</span> Package Section? It will also delete all of its packages.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a href="{{url('package_section_and_all_its_packages_delete',$item->id)}}">
+                        <button type="button" class="btn btn-danger">Sure Delete</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Package adelete confirmation Modal end -->
+
 <!-- Add new package Modal start -->
 <div class="modal fade" id="addNewPackage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
     <div class="modal-dialog" role="document" style="min-width: 600px;margin-right;auto;margin-left:auto;">
@@ -166,12 +166,13 @@ Website
                         <label for="">Package Detail : </label>
                         <textarea class="form-control" name="application" id="editor1" style="min-height:100px;" required></textarea>
                     </div>
-                    </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" style="float: left" onclick="createPackageFormSubmitFunction();">Create</button>
+                <button type="submit" class="btn btn-success" style="float: left">Create</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right;">Cancel</button>
             </div>
+            
+            </form>
         </div>
     </div>
 </div>

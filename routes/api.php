@@ -44,3 +44,7 @@ Route::get('/package_detail/{id}', function ($id) {
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/section_name/{id}', function ($id) {
+    return WebsiteContent::where('id',$id)->value('section');
+});

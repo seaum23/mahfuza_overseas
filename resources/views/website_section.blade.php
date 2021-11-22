@@ -150,12 +150,13 @@ Website
                         <label for="">Package Detail : </label>
                         <textarea class="form-control" name="application" id="editor1" style="min-height:100px;" required></textarea>
                     </div>
-                    </form>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success" style="float: left">Create</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right;">Cancel</button>
             </div>
+            
+            </form>
         </div>
     </div>
 </div>

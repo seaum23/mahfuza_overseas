@@ -89,6 +89,8 @@ class WebController extends Controller
             $passport->package_section_id = $id;
             $passport->package_headline = $package_name;
             $passport->package_detail = $request->get('application');
+            $passport->price = $request->get('package_price');
+            $passport->salary = $request->get('salary');
 
             if(!empty($image)){
                 $image_name = time().'.'.$image->getClientOriginalExtension();
@@ -105,10 +107,12 @@ class WebController extends Controller
     }
 
     public function sectionPackageUpdate(Request $request,$id){
-        $image = $request->file('sectionPackageImage_' . $id);
-
+        $image = $request->file('sectionPackageImage_'.$id);
         $passport = Package::where('id',$id)->first();
-        $passport->package_detail = $request->get('sectionPackageDetail');
+        $passport->package_detail = $request->get('sectionPackageDetail_'.$id);
+        $passport->package_headline = $request->get('sectionPackageName_'.$id);
+        $passport->price = $request->get('package_price_'.$id);
+        $passport->salary = $request->get('salary_'.$id);
 
         if(!empty($image)){
             $previous_image = Package::where('id',$id)->value('package_image');

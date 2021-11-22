@@ -42,7 +42,7 @@ Website
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <button class="btn btn-primary" type="submit" onclick="PackageUpdateFormSubmit()">update</button>
+                            <button class="btn btn-primary" type="submit">update</button>
                         </div>
                         <div class="form-group col-md-6">
                             <button style="float: right;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">delete</button>
@@ -73,7 +73,7 @@ Website
                             @csrf
                             <div class="form-group">
                                 <label for="">Package Name : </label>
-                                <input class="form-control" name="sectionPackageName" id="sectionPackageName" type="text" value="{{$package->package_headline}}" required>
+                                <input class="form-control" name="sectionPackageName_{{$package->id}}" id="sectionPackageName" type="text" value="{{$package->package_headline}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="">Package Image : </label>
@@ -81,8 +81,16 @@ Website
                                 <input class="form-control" name="sectionPackageImage_{{$package->id}}" id="sectionPackageImage" type="file">
                             </div>
                             <div class="form-group">
+                                <label for="">Package Price : </label>
+                                <input class="form-control" name="package_price_{{$package->id}}" id="package_price" value="{{$package->price}}" type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Salary : </label>
+                                <input class="form-control" name="salary_{{$package->id}}" id="salary" type="text" value="{{$package->salary}}" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="">Package Detail : </label>
-                                <textarea class="form-control editor2" name="sectionPackageDetail" id="gh" style="min-height:100px;" required><?php  echo htmlspecialchars_decode($package->package_detail); ?></textarea>
+                                <textarea class="form-control editor2" name="sectionPackageDetail_{{$package->id}}" id="gh" style="min-height:100px;" required><?php  echo htmlspecialchars_decode($package->package_detail); ?></textarea>
                             </div>
                             <div class="form-class">
                                 <button type="submit" class="btn btn-success" style="float: left">Update</button>
@@ -147,6 +155,14 @@ Website
                         <input class="form-control" name="packageImage" id="packageImage" type="file" required>
                     </div>
                     <div class="form-group">
+                        <label for="">Package Price : </label>
+                        <input class="form-control" name="package_price" id="package_price" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Salary : </label>
+                        <input class="form-control" name="salary" id="salary" type="text" required>
+                    </div>
+                    <div class="form-group">
                         <label for="">Package Detail : </label>
                         <textarea class="form-control" name="application" id="editor1" style="min-height:100px;" required></textarea>
                     </div>
@@ -196,11 +212,6 @@ function createPackageFormSubmitFunction(){
         document.getElementById("newPackageCreateFoorm").submit();
     }
 }
-
-function sectionPackageUpdateFormSubmitFunction(){
-    document.getElementById("sectionPackageUpdateForm").submit();
-}
-
 
 
 </script>

@@ -47,7 +47,7 @@ class SponsorVisaController extends Controller
         // dd($request->sponsorNid);
         $sponsor = Sponsor::find($request->sponsorNid);
         foreach($request->visaNo as $idx=>$visa_no){
-            $sponsor->visas()->create([
+            $sponsor->visa()->create([
                 'sponsor_visa' => $visa_no,
                 'issue_date' => $request->issueDate[$idx],
                 'visa_amount' => $request->visaAmount[$idx],

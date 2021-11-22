@@ -105,26 +105,26 @@ class WebController extends Controller
     }
 
     public function sectionPackageUpdate(Request $request,$id){
-        $image = $request->file('packageImage');
+        $image = $request->file('sectionPackageImage');
 
-            $passport = Package::where('id',$id)->first();
-            $passport->package_detail = $request->get('sectionPackageDetail');
+        $passport = Package::where('id',$id)->first();
+        $passport->package_detail = $request->get('sectionPackageDetail');
 
-            if(!empty($image)){
-                $previous_image = Package::where('id',$id)->value('package_image');
-                $Path = 'public/';
-                File::delete($Path.$previous_image);
+        if(!empty($image)){
+            $previous_image = Package::where('id',$id)->value('package_image');
+            $Path = 'public/';
+            File::delete($Path.$previous_image);
 
-                $image_name = time().'.'.$image->getClientOriginalExtension();
-                $destinationPath = base_path('public/storage/website/');
-                $image->move($destinationPath, $image_name);
+            $image_name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = base_path('public/storage/website/');
+            $image->move($destinationPath, $image_name);
 
             $passport->package_image = 'storage/website/'.$image_name;
-            }
-            $passport->save();
+        }
+        $passport->save();
 
-            $package_name = Package::where('id',$id)->value('package_headline');
-            return redirect()->back()->with('success',$package_name.' Package updated successfully!');
+        $package_name = Package::where('id',$id)->value('package_headline');
+        return redirect()->back()->with('success',$package_name.' Package updated successfully!');
     }
 
     public function sectionPackageDelete($id){

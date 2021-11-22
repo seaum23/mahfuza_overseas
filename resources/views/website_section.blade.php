@@ -45,7 +45,7 @@ Website
                             <button class="btn btn-primary" type="submit" onclick="PackageUpdateFormSubmit()">update</button>
                         </div>
                         <div class="form-group col-md-6">
-                                <button style="float: right;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">delete</button>
+                            <button style="float: right;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">delete</button>
                         </div>
                     </div>
                 </form>
@@ -93,7 +93,7 @@ Website
                         </center>
                     </div>
                     <div class="col-md-12">
-                        <form id="sectionPackageUpdateForm" action="{{url('sectionPackageUpdate',$package->id)}}" method="post" enctype="multipart/form-data">
+                        <form action="{{url('sectionPackageUpdate',$package->id)}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="">Package Name : </label>
@@ -102,14 +102,14 @@ Website
                             <div class="form-group">
                                 <label for="">Package Image : </label>
                                 <img src="{{url('public/'.$package->package_image)}}" alt="" style="width:300px;margin-bottom:20px;margin-left:auto;margin-right:auto;">
-                                <input class="form-control" name="sectionPackageImage" id="sectionPackageImage" type="file">
+                                <input class="form-control" name="sectionPackageImage_{{$package->id}}" id="sectionPackageImage" type="file">
                             </div>
                             <div class="form-group">
                                 <label for="">Package Detail : </label>
                                 <textarea class="form-control editor2" name="sectionPackageDetail" id="gh" style="min-height:100px;" required><?php  echo htmlspecialchars_decode($package->package_detail); ?></textarea>
                             </div>
                             <div class="form-class">
-                                <button type="button" class="btn btn-success" style="float: left" onclick="sectionPackageUpdateFormSubmitFunction();">Update</button>
+                                <button type="submit" class="btn btn-success" style="float: left">Update</button>
                                 <a href="{{url('sectionPackageDelete',$package->id)}}">
                                     <button type="button"  class="btn btn-danger" style="float: right;">Delete</button>
                                 </a>
@@ -153,7 +153,7 @@ Website
                     </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" style="float: left" onclick="createPackageFormSubmitFunction();">Create</button>
+                <button type="submit" class="btn btn-success" style="float: left">Create</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right;">Cancel</button>
             </div>
         </div>

@@ -10,8 +10,8 @@ class WebController extends Controller
 {
     public function website_backend_all_content(){
         $logo = WebsiteContent::where('id',1)->first();
-        $front_background_image = WebsiteContent::where('section','background')->first();
-        $brand_name = WebsiteContent::where('id',2)->first();
+        $front_background_image = WebsiteContent::where('id',2)->first();
+        $brand_name = WebsiteContent::where('id',3)->first();
         $packages = WebsiteContent::get()->unique('section')->skip(3);
 
         return view('website_front_page_backend',compact('logo','front_background_image','brand_name','packages'));

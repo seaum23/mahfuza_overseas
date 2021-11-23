@@ -12,7 +12,7 @@ class WebController extends Controller
         $logo = WebsiteContent::where('id',1)->first();
         $front_background_image = WebsiteContent::where('id',2)->first();
         $brand_name = WebsiteContent::where('id',3)->first();
-        $packages = WebsiteContent::get()->unique('section')->skip(3);
+        $packages = WebsiteContent::orderBy('serial','asc')->get()->unique('section')->skip(3);
 
         return view('website_front_page_backend',compact('logo','front_background_image','brand_name','packages'));
     }
@@ -21,6 +21,7 @@ class WebController extends Controller
         $new_package_section_name = $request->get('package_section');
         $get_if_existed_already = WebsiteContent::where('section',$new_package_section_name)->value('section');
         $image = $request->file('package_section_image');
+        $getting_last_serial = WebsiteContent::max('serial');
 
         if(!empty($get_if_existed_already)){
             return redirect()->back()->with('warning',$get_if_existed_already.' package section already existed!');
@@ -28,6 +29,7 @@ class WebController extends Controller
             $passport = new WebsiteContent;
             $passport->section = $new_package_section_name;
             $passport->headline = $request->get('package_section_headline');
+            $passport->serial = $getting_last_serial+1;
 
             if(!empty($image)){
                 $image_name = time().'.'.$image->getClientOriginalExtension();
@@ -40,6 +42,17 @@ class WebController extends Controller
 
             return redirect()->back()->with('success',$new_package_section_name.' package added successfully!');
         }
+    }
+
+    public function update_section_serial(Request $request){
+        $ids = WebsiteContent::pluck('id');
+
+        foreach($ids as $row){
+            $passport = WebsiteContent::where('id',$row)->first();
+            $passport->serial = $request->get($row);
+            $passport->save();
+        }
+        return redirect()->back()->with('success','Section serial updated successfully!');
     }
 
     public function package_section_and_all_its_packages_delete($id){

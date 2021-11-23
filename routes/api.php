@@ -27,7 +27,7 @@ Route::get('/sections/{section}', function ($section) {
 });
 
 Route::get('/sections', function () {
-    return WebsiteContentResource::collection(WebsiteContent::get()->unique('section')->skip(3));
+    return WebsiteContentResource::collection(WebsiteContent::orderBy('serial','asc')->get()->unique('section')->skip(3));
 });
 
 Route::get('/packages/{package_section_id}', function ($package_section_id) {

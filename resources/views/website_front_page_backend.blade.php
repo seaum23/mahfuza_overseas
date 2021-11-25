@@ -90,7 +90,7 @@ Website
 
     </div>
 
-{{-- front backend image start--}}
+{{-- front Background image start--}}
     <div class="col-md-8" style="border: 5px solid #6ac4f7;padding:20px;">
         <h5 style="padding-top: 15px;">Front Background Image:</h5>
         <img src="{{url('public/'.$front_background_image->image)}}" alt="" style="width:100%;margin-left:auto;margin-right:auto">
@@ -109,7 +109,7 @@ Website
             </div>
         </form>
     </div>
-{{-- front backend image end--}}
+{{-- front Background image end--}}
 </div>
 
 

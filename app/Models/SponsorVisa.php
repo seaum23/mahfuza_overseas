@@ -35,4 +35,9 @@ class SponsorVisa extends Model
     {
         return $this->belongsTo(Sponsor::class);
     }
+
+    public function delegates()
+    {
+        return $this->hasManyThrough(Delegate::class, Sponsor::class);
+    }
 }

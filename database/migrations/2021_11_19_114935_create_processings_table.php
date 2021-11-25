@@ -24,32 +24,31 @@ class CreateProcessingsTable extends Migration
             $table->id();
             $table->foreignIdFor(Candidate::class);
             $table->foreignIdFor(SponsorVisa::class);
-            $table->tinyInteger('employee_request');
-            $table->tinyInteger('foreign_mole');
-            $table->tinyInteger('okala');
-            $table->string('okala_file');
-            $table->tinyInteger('mufa');
-            $table->string('mufa_file');
-            $table->tinyInteger('medical_update');
-            $table->tinyInteger('visa_stamping');
-            $table->string('visa_stamping_file');
-            $table->date('visa_stamping_date');
-            $table->tinyInteger('finger');
-            $table->tinyInteger('manpower');
-            $table->string('manpower_card_file');
+            $table->tinyInteger('employee_request')->default(0);
+            $table->tinyInteger('foreign_mole')->default(0);
+            $table->tinyInteger('okala')->default(0);
+            $table->string('okala_file')->nullable();
+            $table->tinyInteger('mufa')->default(0);
+            $table->string('mufa_file')->nullable();
+            $table->tinyInteger('medical_update')->default(0);
+            $table->tinyInteger('visa_stamping')->default(0);
+            $table->date('visa_stamping_date')->nullable();
+            $table->tinyInteger('finger')->default(0);
+            $table->tinyInteger('manpower')->default(0);
+            $table->string('manpower_card_file')->nullable();
             $table->bigInteger('updated_by');
-            $table->string('comment');
+            $table->string('comment')->nullable();
             
             /**
              * Pending has different values then other tingIntegers:
-             * 0 - Assigned
+             * 0 - VISA Assigned
              * 1 - Assigned ticket date has passed - pending
              * 2 - 3 months after ticket date - completed
              * 3 - 3 months before ticket date if return - returned
              */
-            $table->tinyInteger('pending');
-            $table->date('pending_till');
-            $table->string('youtube');
+            $table->tinyInteger('pending')->default(0);
+            $table->date('pending_till')->nullable();
+            $table->string('youtube')->nullable();
             $table->timestamps();
         });
     }

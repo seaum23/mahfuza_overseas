@@ -53,6 +53,7 @@ Sponsor VISA List
 
 @section('modals')
 <!-- Edit Sponsor VISA -->
+<button class="hidden" id="edit_sponsor_modal_button" data-toggle="modal" data-target="#edit_sponsor_modal"></button>
 <div class="modal fade" id="edit_sponsor_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" method="post" enctype="multipart/form-data" id="edit_sponsor_form">
@@ -145,7 +146,7 @@ Sponsor VISA List
                 $('#comment').val(info.sponsor_visa.comment);
                 $('#edit_sponsor_form').prop('action', '{{ url('/') }}' + '/sponsor-visa/' + info.sponsor_visa.id);
                 $('.loader-container').hide();
-                $('#edit_sponsor_modal').modal('toggle');
+                $('#edit_sponsor_modal_button').click();
             }
         });
     }

@@ -6,9 +6,9 @@ Delegate
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-12">
-        <div class="card mt-3 card">
-            <div class="header"><h5>New Candidate</h5></div>
-            <div class="body">
+        <div class="card mt-3">
+            <div class="card-header"><h5>New Candidate</h5></div>
+            <div class="card-body">
                 <form id="candidate_form" action="" method="post" enctype="multipart/form-data">
                     @csrf  
                     <div class="row">
@@ -152,14 +152,18 @@ Delegate
                                     <input class="my-pond form-control-file" type="file" name="passport_scan" id="passport_scan" >
                                     <div id="passport_scan_invalid" class="invalid-feedback"> </div>
                                 </div>  
-                                <div class="form-group col-md-4" id="passportScanFile">
+                                <div class="form-group col-md-4">
                                     <label for="policeVerification" style="display: block"> Police Verification </label>
                                     <input class="my-pond form-control-file" type="file" name="policeVerification" id="policeVerification" >
                                 </div>
-                                <div class="form-group col-md-4" id="passportScanFile">
+                                <div class="form-group col-md-4">
                                     <label for="photoFile" style="display: block"> Candidate Photo </label>
                                     <input class="my-pond form-control-file" type="file" name="photoFile" id="photoFile" >
-                                </div>                              
+                                </div>                                
+                                <div class="form-group col-md-4">
+                                    <label>Optional File/Files</label>
+                                    <input class="my-pond-multiple form-control-file" type="file" name="optionalFile[]" id="optionalFile" multiple>
+                                </div>                           
                             </fieldset>
                         </div>
                     </div> 

@@ -7,6 +7,8 @@ use App\Models\Agent;
 use App\Models\Candidate;
 use Illuminate\Http\Request;
 use App\Models\ManpowerOffice;
+use App\Models\Processing;
+use App\Models\SponsorVisa;
 use DateInterval;
 use DateTime;
 use Illuminate\Support\Facades\DB;
@@ -148,7 +150,6 @@ class CandidateController extends Controller
         if(!empty($request->optionalFile)){
             foreach($request->optionalFile as $file){
                 $tmp = move($file, 'candidate', 'optional_file_' . $candidate->id . '_' . uniqid() . '_' . uniqid() );
-                print_r($tmp);
                 $candidate->experience_filse()->create([
                     'file_path' => $tmp
                 ]);
@@ -203,6 +204,54 @@ class CandidateController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function experienced($id)
+    {
+        $experience_info = Candidate::select('id', 'lName', 'fName', 'departureSealFile', 'arrivalSealFile', 'departure_date', 'arrival_date')->where('id', $id)->first();
+        return view('templates.candidate.experienced_candidate_files', [
+            'experience_info' => $experience_info
+        ]);
+    }
+
+    public function sponsor_visa(Candidate $candidate)
+    {
+        $visas =  SponsorVisa::whereHas('sponsor.delegate_office.delegate', function ($query) use ($candidate)
+        {
+            $query->where('delegates.country', $candidate->country);
+        })->with('sponsor.delegate_office.delegate', 'job')->get();
+        
+        foreach($visas as $visa){
+            echo '<option value="'.$visa->id.'">'.$visa->sponsor->sponsor_name.' - '.$visa->job->name.' - '.$visa->sponsor->delegate_office->delegate->name.'</option>';
+        }
+    }
+
+    public function sponsor_visa_insert(Request $request)
+    {
+        $candidate = Candidate::find($request->candidate_id);
+
+        if(is_null($candidate)){
+            return;
+        }
+
+        $sponsor_visa = SponsorVisa::find($request->sponsor_visa_id);
+
+        if($sponsor_visa->visa_amount == 0){
+            json_encode(array('error' => true, 'message' => 'Visa Amount Zero!'));
+            return;
+        }
+
+        Processing::create([
+            'candidate_id' => $request->candidate_id,
+            'sponsor_visa_id' => $request->sponsor_visa_id,
+            'updated_by' => auth()->id(),
+        ]);
+
+        $sponsor_visa->visa_amount = $sponsor_visa->visa_amount - 1;
+
+        $candidate->in_processing = 1;
+        $candidate->save();
+        $sponsor_visa->save();
     }
 
     /**
@@ -295,26 +344,28 @@ class CandidateController extends Controller
             ->editColumn('training_card_file', function ($query)
             {
                 if($query->experience_status == 2){
-                    return '<button class="btn btn-xs btn-info">Experienced</button>';
+                    return '<a href="'.url('/candidate/experienced/' . $query->id).'"><button class="btn btn-xs btn-info">Experienced</button></a>';
                 }
 
                 if($query->experience_status == 1 AND empty($query->training_card_file)){
-                    return '<button class="btn btn-xs btn-secondary">No</button>';
+                    return '<button onclick="update_training_card('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#traning_card_modal" class="btn btn-xs btn-secondary">No</button>';
                 }
                 
                 $html = '<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group mr-2" role="group" aria-label="First group">
-                                <a href="'.asset($query->training_card_file).'" target="_blank">
-                                    <button class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
-                                </a>
+                                <button onclick="training_card_file(\''.asset($query->training_card_file).'\', \''.$query->id.'\')" data-target="#training_card_file_show" data-toggle="modal"  class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
                             </div>';
                 return $html .
                         '</div>';
             })
             ->addColumn('action', function ($query) {
-                return '';
+                $html = '';
+                if($query->in_processing == 0){
+                    $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
+                }
+                return $html;
             })
-            ->rawColumns(['fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file'])
+            ->rawColumns(['action', 'fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file'])
             ->make(true);
         }
     }

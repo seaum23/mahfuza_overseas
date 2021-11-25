@@ -58,6 +58,12 @@ legend {
     position: absolute;
 }
 
+.image > img {
+    display: block;
+    min-height: 100%;
+    min-width: 100%;
+}
+
 @keyframes scaleUp {
     from { transform: translate(0px,-50px); }
     to {transform: translate(0px,0px); }

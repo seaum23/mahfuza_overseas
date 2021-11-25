@@ -32,4 +32,42 @@ class CandidateUpdateController extends Controller
         
         $candidate->save();
     }
+
+    public function arrival_seal(Request $request, Candidate $candidate)
+    {
+        if(!empty($request->arrivalSealFile)){
+            $candidate->arrivalSealFile = move($request->arrivalSealFile, 'candidate', 'arrivalSealFile_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->arrival_date_update)){
+            $candidate->arrival_date = $request->arrival_date_update;
+        }
+        
+        $candidate->save();
+    
+        return back();
+    }
+
+    public function departure_seal(Request $request, Candidate $candidate)
+    {
+        if(!empty($request->departureSealFile)){
+            $candidate->departureSealFile = move($request->departureSealFile, 'candidate', 'departureSealFile_' . $candidate->id . '_' . time() );
+        }
+
+        if(!empty($request->departure_date_update)){
+            $candidate->departure_date = $request->departure_date_update;
+        }
+
+        $candidate->save();
+
+        return back();
+    }
+
+    public function training_card(Request $request)
+    {
+        $candidate = Candidate::find($request->update_id_training);
+        $candidate->training_card_file = move($request->training_file, 'candidate', 'trainingCard_' . $candidate->id . '_' . time() );
+        
+        $candidate->save();
+    }
 }

@@ -6,10 +6,6 @@
     <label>Arrival Seal <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
     <input class="my-pond-ajax form-control-file" type="file" name="arrivalSealFile" id="arrivalSealFile">
 </div>
-<div class="col-md-4">
-    <label>Optional File/Files</label>
-    <input class="my-pond-multiple-ajax form-control-file" type="file" name="optionalFile[]" id="optionalFile" multiple>
-</div>
 <div class="col-md-6">
     <label>Departure Date <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
     <input type="text" autocomplete="off" class="form-control experience_dates datepicker" name="departureDate" id="departureDate" placeholder="yyyy/mm/dd"/>

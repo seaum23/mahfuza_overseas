@@ -15,7 +15,7 @@
                 @if (session('status'))
                     <p class="text-danger font-weight-500">{{ session('status') }}</p>
                 @endif
-                <form action="{{ route('login') }}" method="post" class="form login-form">
+                <form action="{{ route('login') }}" method="post" class="form login-form" novalidate="novalidate">
                     @csrf
                     <?php if(isset($_SESSION['failed_login'])){ ?><p class="text-danger">Incorrect Credentials</p> <?php } ?>
                     <div class="form-group" >
@@ -31,11 +31,19 @@
                         </label>
                     </div>
                     <div class="form-group">
-                        <input class="form-control btn-info" type="submit" value="Login">
+                        <input onclick="test()" class="form-control btn-info" type="submit" value="Login">
                     </div>                    
                 </form>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    let test = () => {
+        console.log('test');
+    }
+</script>
 @endsection

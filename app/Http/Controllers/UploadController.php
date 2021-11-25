@@ -55,7 +55,7 @@ class UploadController extends Controller
             $file = $request->file('trainingCard');
             $tmp = $this->upload($file);
             return $tmp;
-        }        
+        }
 
         if($request->hasFile('optionalFile')){
             $file = $request->file('optionalFile')[0];
@@ -101,6 +101,65 @@ class UploadController extends Controller
 
         if($request->hasFile('police_file')){
             $file = $request->file('police_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }                        
+
+        if($request->hasFile('update_police_clearance_file')){
+            $file = $request->file('update_police_clearance_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }                        
+
+        if($request->hasFile('training_file')){
+            $file = $request->file('training_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }                        
+
+        if($request->hasFile('update_training_card_file')){
+            $file = $request->file('update_training_card_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        return '';
+    }
+
+    public function processing_photo(Request $request)
+    {
+        if ($request->hasFile('okala_file')){
+            $file = $request->file('okala_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        if ($request->hasFile('mufa_file')){
+            $file = $request->file('mufa_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }        
+
+        if($request->hasFile('visa_stamping_file')){
+            $file = $request->file('visa_stamping_file')[0];
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        if($request->hasFile('training_file')){
+            $file = $request->file('training_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        if($request->hasFile('manpower_card_file')){
+            $file = $request->file('manpower_card_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        if($request->hasFile('ticketCopy')){
+            $file = $request->file('ticketCopy');
             $tmp = $this->upload($file);
             return $tmp;
         }

@@ -22,6 +22,7 @@ use App\Http\Controllers\WebController;
 
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 use App\Http\Controllers\ProcessingController;
+use App\Http\Controllers\TicketController;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 /*
@@ -90,20 +91,44 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/agent.list',[AgentController::class, 'datatable']);
     Route::resource('agent', AgentController::class);
 
-    Route::get('/candidate.list',[CandidateController::class, 'datatable']);
     Route::resource('candidate', CandidateController::class);
-    Route::post('/candidate/test.medical',[CandidateUpdateController::class, 'test_medical']);
-    Route::post('/candidate/final.medical',[CandidateUpdateController::class, 'final_medical']);
-    Route::post('/candidate/police.clearance',[CandidateUpdateController::class, 'police_clearance']);
-    Route::post('/candidate/training.card',[CandidateUpdateController::class, 'training_card']);
-    Route::post('candidate/departure-seal/{candidate}',[CandidateUpdateController::class, 'departure_seal'])->name('departure-update-file');
-    Route::post('/candidate/arrival-seal/{candidate}',[CandidateUpdateController::class, 'arrival_seal'])->name('arrival-update-file');
-    Route::get('/candidate/experienced/{id}',[CandidateController::class, 'experienced'])->name('experienced');
-    Route::get('/candidate/sponsor.visa/{candidate}',[CandidateController::class, 'sponsor_visa'])->name('sponsor_visa');
-    Route::post('/candidate/sponsor.visa',[CandidateController::class, 'sponsor_visa_insert'])->name('sponsor_visa');
+    Route::get('/candidate.list',[CandidateController::class, 'datatable']);
+    Route::prefix('candidate')->group(function () {
+        Route::get('/experienced/{id}',[CandidateController::class, 'experienced'])->name('experienced');
+        Route::get('/sponsor.visa/{candidate}',[CandidateController::class, 'sponsor_visa'])->name('sponsor_visa');
+        Route::post('/sponsor.visa',[CandidateController::class, 'sponsor_visa_insert'])->name('sponsor_visa');
+        
+        Route::post('/test.medical',[CandidateUpdateController::class, 'test_medical']);
+        Route::post('/final.medical',[CandidateUpdateController::class, 'final_medical']);
+        Route::post('/police.clearance',[CandidateUpdateController::class, 'police_clearance']);
+        Route::post('/training.card',[CandidateUpdateController::class, 'training_card']);
+        Route::post('/candidate/departure-seal/{candidate}',[CandidateUpdateController::class, 'departure_seal'])->name('departure-update-file');
+        Route::post('/arrival-seal/{candidate}',[CandidateUpdateController::class, 'arrival_seal'])->name('arrival-update-file');
+    });
 
-    Route::get('/processing', [ProcessingController::class, 'index'])->name('processing');
     Route::get('/processing.list', [ProcessingController::class, 'datatable'])->name('processing.datatable');
+    Route::prefix('processing')->group(function () {
+        Route::get('/', [ProcessingController::class, 'index'])->name('processing');
+        Route::post('/employee_request/{processing}', [ProcessingController::class, 'employee_request']);
+        Route::post('/foreign_mole/{processing}', [ProcessingController::class, 'foreign_mole']);
+        Route::post('/okala_update', [ProcessingController::class, 'okala_update']);
+        Route::post('/mufa_update', [ProcessingController::class, 'mufa_update']);
+        Route::post('/medical_update/{processing}', [ProcessingController::class, 'medical_update']);
+        Route::post('/visa_stamping_update', [ProcessingController::class, 'visa_stamping_update'])->name('visa_stamping_update');
+        Route::delete('/visa_stamping_update', [ProcessingController::class, 'delete_stamping_file']);
+        Route::get('/visa_stamping/{id}', [ProcessingController::class, 'visa_stamping'])->name('visa_stamping');
+        Route::post('/finger_update/{processing}', [ProcessingController::class, 'finger_update']);
+        Route::post('/manpower_update', [ProcessingController::class, 'manpower_update']);        
+    });
+    Route::prefix('ticket')->group(function ()
+    {
+        Route::get('/list', [TicketController::class, 'datatable']);
+        Route::get('create/{processing}', [TicketController::class, 'create'])->name('ticket');
+        Route::post('/{processing}', [TicketController::class, 'store']);
+        Route::get('/', [TicketController::class, 'index'])->name('ticket-index');
+        Route::get('/{ticket}/edit', [TicketController::class, 'edit'])->name('ticket.edit');
+        Route::put('/{ticket}', [TicketController::class, 'update'])->name('ticket.update');
+    });
     
 
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
@@ -115,6 +140,7 @@ Route::group(['middleware' => 'auth'], function () {
      */
     Route::post('/upload/agent-photo', [UploadController::class, 'agent_photo']);
     Route::post('/upload/candidate-photo', [UploadController::class, 'candidate_photo']);
+    Route::post('/upload/processing-photo', [UploadController::class, 'processing_photo']);
     Route::delete('/revert', [UploadController::class, 'delete']);
 
     /**
@@ -126,6 +152,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     /**
      * For fetching templates
+     * 
+     * @return HTML template
      */
     Route::get('sponsor-visa-template/{index}', [FormTemplateController::class, 'visa_form_template']);
     Route::get('candidate-experience-status/{status}', [FormTemplateController::class, 'candidate_experience_tempalte']);

@@ -514,7 +514,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li class="{{ request()->is('ticket*') ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-plane"></i>
                                     Ticket
@@ -522,12 +522,12 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="components-tabs.html">
+                                        <a href="#">
                                             <i class="metismenu-icon"></i>New Ticket
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="{{ route('ticket-index') }}" class="{{ request()->is('ticket') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Candidate Ticket List
                                         </a>
                                     </li>
@@ -765,6 +765,7 @@
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
     {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> --}}
     <script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
+    <script src="{{ asset('js/timepicker.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- include FilePond library -->
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
@@ -774,16 +775,27 @@
 
     <!-- include FilePond jQuery adapter -->
     <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        document.addEventListener('FilePond:processfilestart', (e) => {
+            $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $(".file-pond-submit").prop('disabled', true);        
+        });
+        document.addEventListener('FilePond:processfile', (e) => {
+            $(".file-pond-submit").html('Save');
+            $(".file-pond-submit").prop('disabled', false);
+        });
     </script>
 
+<script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
     @yield('script')
-    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
     @yield('script-file-pond')
 </body>
 </html>

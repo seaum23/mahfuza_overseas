@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Models\Agent;
+use App\Models\Processing;
 use Illuminate\Support\Str;
 use App\Models\ExperiencedFile;
 use Illuminate\Database\Eloquent\Model;
@@ -45,6 +46,11 @@ class Candidate extends Model
     public function countries()
     {
         return $this->hasMany(CandidateTraveledCountry::class);
+    }
+
+    public function processings()
+    {
+        return $this->hasMany(Processing::class);
     }
 
     /**

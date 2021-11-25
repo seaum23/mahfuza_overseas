@@ -47,7 +47,7 @@ Website
             <h5>Brand Name : 
             </h5>
             <p style="width: 200px;margin-right:auto;margin-left:auto;">
-                <img src="{{url('public/'.$brand_name->image)}}" alt="" style="width:450px;margin-left:auto;margin-right:auto">
+                <img src="{{url('public/'.$brand_name->image)}}" alt="" style="width:250px;margin-left:auto;margin-right:auto">
             </p>
             <hr>
             <form action="{{url('brand_name_update',$brand_name->id)}}" method="POST" enctype="multipart/form-data" id="brandNameForm">
@@ -85,6 +85,9 @@ Website
                     </ul>
                 </h6>
             </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateSectionSerial">
+                Update Serial
+            </button>
         </div>
         {{-- packages --}}
 
@@ -160,6 +163,42 @@ Website
     </div>
 </div>
 <!-- Add new section Modal end -->
+
+<!-- section serial update modal start -->
+<div class="modal fade" id="updateSectionSerial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div>
+        <center style="font-size:12pt;font-weight:900;padding-top:10px;">Update Section Serial</center>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+                <tr>
+                    <th>Section Name</th>
+                    <th>serial</th>
+                </tr>
+                <form action="{{url('update_section_serial')}}" method="POST" enctype="multipart/form-data" id="add_package_section_form">
+                    @csrf
+                @foreach($packages as $package)
+                <tr>
+                    <td>{{$package->section}}</td>
+                    <td>
+                        <input type="number" min="1" name="{{$package->id}}" value="{{$package->serial}}" required>
+                    </td>
+                </tr>
+                @endforeach
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Confirm Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- section serial update modal end -->
     
 @endsection
 

@@ -190,6 +190,7 @@ Route::get('package_section_and_all_its_packages_delete/{id}', [WebController::c
 Route::post('new_package_create/{id}', [WebController::class, 'new_package_create']);
 Route::post('sectionPackageUpdate/{id}', [WebController::class, 'sectionPackageUpdate']);
 Route::get('sectionPackageDelete/{id}', [WebController::class, 'sectionPackageDelete']);
+Route::post('update_section_serial', [WebController::class, 'update_section_serial']);
 
 
 

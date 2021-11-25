@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\WebsiteContentResource;
+use App\Http\Resources\LogoBackgroundBrandNameResource;
 use App\Models\Package;
 use App\Models\WebsiteContent;
 use Illuminate\Support\Facades\Route;
@@ -22,11 +23,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/sections/{section}', function ($section) {
-    return WebsiteContentResource::collection(WebsiteContent::where('section', $section)->get()->all());
+    return WebsiteContent::where('section', $section)->value('image');
 });
 
 Route::get('/sections', function () {
-    return WebsiteContentResource::collection(WebsiteContent::get()->unique('section')->skip(3));
+    return WebsiteContentResource::collection(WebsiteContent::orderBy('serial','asc')->get()->unique('section')->skip(3));
 });
 
 Route::get('/packages/{package_section_id}', function ($package_section_id) {
@@ -39,6 +40,10 @@ Route::get('/package/{id}', function ($id) {
 
 Route::get('/package_detail/{id}', function ($id) {
     return Package::select('package_detail')->where('id', $id)->get()->toJson();
+});
+
+Route::get('/packages/{package_section_id}', function ($package_section_id) {
+    return PackageResource::collection(Package::where('package_section_id', $package_section_id)->get()->all());
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

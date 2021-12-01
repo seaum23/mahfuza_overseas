@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Account;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -15,9 +16,10 @@ class CreateCreditsTable extends Migration
     public function up()
     {
         Schema::create('credits', function (Blueprint $table) {
-            $table->id();            
+            $table->id();
+            $table->double('amount', 12, 2);
             $table->foreignIdFor(Account::class);
-            $table->morphs('creditalbe');
+            $table->foreignIdFor(Transaction::class)->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

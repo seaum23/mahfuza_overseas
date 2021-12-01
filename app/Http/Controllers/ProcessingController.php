@@ -21,9 +21,7 @@ class ProcessingController extends Controller
      */
     public function datatable(Request $request)
     {
-        // <a href="'.asset($query->test_medical_file).'" target="_blank">
-        //                             <button class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
-        //                         </a>
+        
         if ($request->ajax()) {
             $query = Processing::with('candidate.agent', 'sponsor_visa.sponsor')->select('processings.*');
             
@@ -144,8 +142,9 @@ class ProcessingController extends Controller
             ->addColumn('action', function ($query) {
                 $html = '';
                 if($query->in_processing == 0){
-                    $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
+                    $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->candidate->fName . ' ' . $query->candidate->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
                 }
+                $html .= '<button onclick="processing_transaction(\''.$query->id.'\', \''.$query->candidate->fName.' '.$query->candidate->lName.'\')" data-toggle="modal" data-target="#transaction_modal" class="btn btn-info btn-xs">+</button>';
                 return $html;
             })
             ->rawColumns(['action', 'candidate.fName', 'sponsor_visa.sponsor_visa', 'employee_request', 'foreign_mole', 'okala', 'mufa', 'medical_update', 'visa_stamping', 'finger', 'candidate.training_card_file', 'manpower', 'ticket'])

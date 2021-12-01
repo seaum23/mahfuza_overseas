@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Debit extends Model
 {
     use HasFactory;
+    
+    protected $fillable = ['amount', 'account_id'];
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
 }

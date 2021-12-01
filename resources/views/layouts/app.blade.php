@@ -484,35 +484,12 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>                            
                             <li class="{{ request()->is('processing*') ? 'mm-active' : '' }}">
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-note2"></i>
-                                    VISA
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                <a href="{{ route('processing') }}">
+                                    <i class="metismenu-icon pe-7s-credit {{ request()->is('processing') ? 'mm-active' : '' }}"></i>
+                                    VISA List
                                 </a>
-                                <ul>
-                                    <li>
-                                        <a href="{{ route('processing') }}" class="{{ request()->is('processing') ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Pending VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Completed VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Returned VISA List
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                             <li class="{{ request()->is('ticket*') ? 'mm-active' : '' }}">
                                 <a href="#">
@@ -794,8 +771,98 @@
         });
     </script>
 
-<script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
+    <script>
+        let get_particular = (particular_type) => {
+            $.ajax({
+                type: 'post',
+                enctype: 'multipart/form-data',
+                url: '{{ route("get.particular") }}',
+                data: {particular_type},
+                // beforeSend:function(){
+                //     $("#experience_div").html('<i class="fas fa-spinner fa-pulse"></i>');
+                // },
+                success: function (response){
+                    $("#particular").html(response);
+                }
+            });
+        }
+
+        let get_account_input_field = (e) => {            
+            $('.left_input_div').show();
+            $('.right_input_div').show();
+            if(typeof $(e).find(':selected').data('account_type') != 'undefined'){
+                console.log('test');
+                let account_type = $(e).find(':selected').data('account_type');
+                $('.transaction_inputs').show();
+                if( e.value == '1' ){
+                    $('.right_input_div').hide();
+                    $('#left_input_label').html('পেলাম');
+                    return;
+                }
+                if( e.value == '2' ){
+                    $('.left_input_div').hide();
+                    $('#right_input_label').html('দিলাম');
+                    return;
+                }
+                if( account_type == 'revenue' ){
+                    $('#left_input_label').html('পাব');
+                    $('#right_input_label').html('পেলাম');
+                    return;
+                }
+                if( account_type == 'asset' ){
+                    $('#left_input_label').html('কেনা');
+                    $('#right_input_label').html('দিলাম');
+                    return;
+                }
+                if( account_type == 'expense' ){
+                    $('.left_input_div').hide();
+                    $('#right_input_label').html('দিলাম');
+                    return;
+                }
+            }
+        }
+
+        let processing_transaction = (id, name) => {
+            $('#transaction_title').val(name);
+            $('#transaction_candidate_id').val(id);
+        }
+
+        $('#transaction_form').on('submit', (e) => {
+            e.preventDefault();
+            
+            var form = $('#transaction_form')[0];
+            var data = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ route("transaction") }}',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend:function(){
+                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    $("#transaction_form_submit").prop('disabled', true);
+                },
+                success: function (response){
+                    $('#transaction_modal_close').click();
+                    $('#transaction_form').trigger('reset');
+                    $('.select2').val(null).trigger('change');
+                    $('.transaction_inputs').hide();
+                    $("#transaction_form_submit").html('Submit');
+                    $("#transaction_form_submit").prop('disabled', true);
+                    // $('#update_okala_button_close').click();
+                    // $("#update_okala_button").html('Update');
+                    // $("#update_okala_button").prop('disabled', true);
+                    // datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                },
+            });
+        })
+    </script>
+
+    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
     @yield('script')
     @yield('script-file-pond')
+</body>
+
 </body>
 </html>

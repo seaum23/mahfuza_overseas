@@ -23,6 +23,7 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
 use App\Http\Controllers\ProcessingController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TransactionController;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 /*
@@ -130,6 +131,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/{ticket}', [TicketController::class, 'update'])->name('ticket.update');
     });
     
+
+    Route::prefix('transaction')->group(function ()
+    {
+        Route::post('/particular', [TransactionController::class, 'get_particular'])->name('get.particular');
+        Route::post('/', [TransactionController::class, 'make_transaction'])->name('transaction');
+    });
+
 
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 

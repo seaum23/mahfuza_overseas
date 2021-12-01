@@ -237,5 +237,3 @@ $(".timePicker").timepicker();
 //     $(".file-pond-submit").html('Add');
 //     $(".file-pond-submit").prop('disabled', false);
 // });
-
-

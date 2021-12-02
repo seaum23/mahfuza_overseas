@@ -68,6 +68,7 @@ class AgentController extends Controller
 
         $agent = Agent::create([
             'full_name' => $request->agentName,
+            'opening_balance' => (!empty($request->opening_balance)) ? $request->opening_balance : 0,
             'email' => $request->agentEmail,
             'phone' => $request->agentPhone,
             'comment' => $request->comment,

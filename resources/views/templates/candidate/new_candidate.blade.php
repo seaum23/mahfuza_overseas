@@ -27,7 +27,7 @@ Delegate
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Gender <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i> </label>
-                                    <select class="form-control show-tick ms select2" data-placeholder="Select Gender">
+                                    <select name="gender" class="form-control show-tick ms select2" data-placeholder="Select Gender">
                                         <option></option>
                                         <option>Male</option>
                                         <option>Female</option>
@@ -263,7 +263,18 @@ Delegate
                 $("#manpower").html(response);
             }
         });
-    }    
+    }   
+    // Generic file-pond
+    $('.my-pond').filepond({
+        credits: false,
+        'allowMultiple': false
+    });
+
+    // Generic file-pond multiple
+    $('.my-pond-multiple').filepond({
+        credits: false,
+        'allowMultiple': true
+    }); 
     
     document.addEventListener('FilePond:processfilestart', (e) => {
         $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');

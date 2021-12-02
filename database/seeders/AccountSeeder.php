@@ -36,6 +36,55 @@ class AccountSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
+            [
+                'account' => 'Visa Purchase',
+                'payment_account' => '0',
+                'account_type' => 'asset',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'account' => 'Visa sale',
+                'payment_account' => '0',
+                'account_type' => 'revenue',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'account' => 'Delegate Comission',
+                'payment_account' => '0',
+                'account_type' => 'revenue',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'account' => 'Agent Comission',
+                'payment_account' => '0',
+                'account_type' => 'expense',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'account' => 'Ticket Expense',
+                'payment_account' => '0',
+                'account_type' => 'expense',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'account' => 'Manpower Card Expense',
+                'payment_account' => '0',
+                'account_type' => 'expense',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'account' => 'Visa Processing Cost',
+                'payment_account' => '0',
+                'account_type' => 'expense',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
         ]);
     }
 }

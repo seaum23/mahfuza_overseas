@@ -31,6 +31,7 @@ class Candidate extends Model
         'manpower_office_id',
         'experience_status',
         'updated_by',
+        'in_processing'
     ];
 
     public function agent()

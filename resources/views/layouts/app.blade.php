@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="icon" href="{{ asset('images/favicon.ico') }}">
+    <link rel="icon" href="{{ asset('storage/images/favicon.ico') }}">
     <title>@yield('title') - Mahfuza Overseas</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/template.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
@@ -468,21 +468,6 @@
                                             <i class="metismenu-icon"></i>Candidate List
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="elements-icons.html">
-                                            <i class="metismenu-icon"></i>Pending Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-badges-labels.html">
-                                            <i class="metismenu-icon"></i>Completed Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-cards.html">
-                                            <i class="metismenu-icon"></i>Returned Candidate List
-                                        </a>
-                                    </li>
                                 </ul>
                             </li>                            
                             <li class="{{ request()->is('processing*') ? 'mm-active' : '' }}">
@@ -498,17 +483,17 @@
                                     <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
                                 <ul>
-                                    <li>
+                                    {{-- <li>
                                         <a href="#">
                                             <i class="metismenu-icon"></i>New Ticket
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <a href="{{ route('ticket-index') }}" class="{{ request()->is('ticket') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Candidate Ticket List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Outside Candidate List
                                         </a>
@@ -517,7 +502,7 @@
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Outside Candidate Ticket List
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('agent*')) ? 'mm-active' : '' }}">
@@ -537,14 +522,14 @@
                                             <i class="metismenu-icon"></i>Agent List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Add Agent Expense
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="tables-regular.html">
                                     <i class="metismenu-icon pe-7s-credit"></i>
                                     Pay Mode
@@ -555,7 +540,7 @@
                                     <i class="metismenu-icon pe-7s-display2"></i>
                                     Report
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="{{ (request()->is('employee*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-users"></i>
@@ -573,7 +558,7 @@
                                             <i class="metismenu-icon"></i>Employee List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Add Sections
                                         </a>
@@ -582,15 +567,15 @@
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Send SMS
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>                            
-                            <li>
+                            {{-- <li>
                                 <a href="tables-regular.html">
                                     <i class="metismenu-icon pe-7s-phone"></i>
                                     CRM
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="app-sidebar__heading">Foreign Affair</li>
                             <li class="{{ (request()->is('delegate*')) ? 'mm-active' : '' }}" >
                                 <a href="#">
@@ -609,11 +594,11 @@
                                             <i class="metismenu-icon"></i>Delegates List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Mr. Maheer Bu Arish
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('sponsor*')) ? 'mm-active' : '' }}" >
@@ -664,7 +649,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-portfolio"></i>
                                     Office
@@ -682,7 +667,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
                                 <a href="{{ url('jobs') }}" class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
                                     <i class="metismenu-icon pe-7s-box1"></i>

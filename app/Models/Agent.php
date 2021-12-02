@@ -16,7 +16,8 @@ class Agent extends Model
         'phone',
         'comment',
         'updated_by',
-        'password'
+        'password',
+        'opening_balance'
     ];
 
     public function candidates()

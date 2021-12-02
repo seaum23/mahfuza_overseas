@@ -104,6 +104,7 @@ class CandidateController extends Controller
             'experience_status' => $request->experience,
             'comment' => '',
             'updated_by' => auth()->id(),
+            'in_processing' => 0
         ]);
 
         if(!empty($request->expCountry)){

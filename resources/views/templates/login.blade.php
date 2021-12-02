@@ -1,11 +1,14 @@
 @extends('layouts.app')
+@section('title')
+    Login
+@endsection
 
 @section('login')
 <div class="wrapper login-wrapper row justify-content-center">
     <div class="company-logo" style="width: 100%;">
         <div class="row">
             <div class="col-md-12 text-center">
-                <img src="{{ asset('images/company-logo.png') }}" alt="" width="200px">
+                <img src="{{ asset('storage/images/company-logo.png') }}" alt="" width="200px">
             </div>
         </div>
     </div>

@@ -31,11 +31,14 @@ Delegate
                                 <input class="form-control" type="text" name="comment" id="comment" placeholder="Comment / Note">
                             </div>
                             <div class="form-group col-md-6">
+                                <label for="sel1">Opening Balance:</label>
+                                <input class="form-control" type="number" name="opening_balance" id="opening_balance" placeholder="Opening Balance" >
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label for="sel1">Password:</label>
                                 <input class="form-control" type="text" name="password" id="password" placeholder="Password" >
                                 <div id="password_invalid" class="invalid-feedback"> </div>
                             </div>
-                            <div class="form-group col-md-6"></div>
                             <div class="form-group col-md-4">
                                 <label for="sel1">Photo:</label>
                                 <input class="my-pond form-control-file" type="file" name="agentImage" id="agentImage" >

@@ -29,7 +29,7 @@ Sponsor VISA List
                                 <td>{{ $sponsor_visa->sponsor->sponsor_name; }}</td>
                                 <td>{{ $sponsor_visa->sponsor->sponsor_NID; }}</td>
                                 <td>{{ $sponsor_visa->sponsor_visa; }}</td>
-                                <td>{{ $sponsor_visa->sponsor->delegate_office->delegate->country; }}</td>
+                                <td>{{ $sponsor_visa->country; }}</td>
                                 <td>{{ $sponsor_visa->issue_date; }}</td>
                                 <td>{{ $sponsor_visa->visa_amount; }}</td>
                                 <td>{{ $sponsor_visa->visa_gender_type; }}</td>
@@ -103,6 +103,12 @@ Sponsor VISA List
                                     <option>Female</option>
                                 </select>
                             </div>
+                            <div class="form-group col-md-6" >                    
+                                <label>Country</label>
+                                <select class="form-control select2 @error('country.0') is-invalid @enderror" name="country" id="country" data-placeholder="Select Country" required>
+                                    <x-select-countries/>
+                                </select>
+                            </div>
                             <div class="form-group col-md-12">
                                 <textarea class="form-control" name="comment" id="comment" cols="30" rows="2" placeholder="Any Remark"></textarea>
                             </div>
@@ -146,6 +152,8 @@ Sponsor VISA List
                 $('#comment').val(info.sponsor_visa.comment);
                 $('#edit_sponsor_form').prop('action', '{{ url('/') }}' + '/sponsor-visa/' + info.sponsor_visa.id);
                 $('.loader-container').hide();
+                $('#country').val(info.country); // Select the option with a value of '1'
+                $('#country').trigger('change');
                 $('#edit_sponsor_modal_button').click();
             }
         });

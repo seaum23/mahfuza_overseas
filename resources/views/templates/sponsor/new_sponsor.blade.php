@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6 mt-5">
         <div class="main-card mt-3 card">
-            <div class="card-body"><h5 class="card-title">New Delegate</h5>
+            <div class="card-body"><h5 class="card-title">New Sponsor</h5>
                 <form action="{{ route('sponsor') }}" method="post" class="@if ($errors->any()) needs-validation @endif">
                     @csrf
                     <div class="form-group">

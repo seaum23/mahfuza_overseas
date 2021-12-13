@@ -20,6 +20,7 @@ class SponsorVisa extends Model
         'visa_rate',
         'updated_by',
         'job_id',
+        'country',
     ];
 
     protected $attributes = [

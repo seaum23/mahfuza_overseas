@@ -36,4 +36,11 @@ class FormTemplateController extends Controller
             'manpowers' => $manpowers
         ]);
     }
+
+    public function sponsor_office($idx)
+    {
+        return view('form_templates.sponsor_visa_form', [
+            'idx' => $idx
+        ]);
+    }
 }

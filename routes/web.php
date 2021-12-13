@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('sponsor-visa-template/{index}', [FormTemplateController::class, 'visa_form_template']);
     Route::get('candidate-experience-status/{status}', [FormTemplateController::class, 'candidate_experience_tempalte']);
     Route::get('get-manpower-office/{job}', [FormTemplateController::class, 'get_manpower_office']);
+    Route::get('get-sponsor-visa-form/{idx}', [FormTemplateController::class, 'sponsor_office']);
     
 
 });

@@ -779,13 +779,9 @@
                 console.log('test');
                 let account_type = $(e).find(':selected').data('account_type');
                 $('.transaction_inputs').show();
-                if( e.value == '1' ){
-                    $('.right_input_div').hide();
+                if( e.value == '1' || e.value == '2' ){
+                    // $('.right_input_div').hide();
                     $('#left_input_label').html('পেলাম');
-                    return;
-                }
-                if( e.value == '2' ){
-                    $('.left_input_div').hide();
                     $('#right_input_label').html('দিলাম');
                     return;
                 }

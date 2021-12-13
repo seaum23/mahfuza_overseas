@@ -49,6 +49,12 @@ Delegate
                                 <div class="invalid-feedback"> @error('licenseNumber') {{ $message }} @enderror </div>
                             </div>
                         </div>
+                        <div class="form-row mt-2">
+                            <div class="col-md-6">
+                                <label for="opening_balance">Opening Balance: </label>
+                                <input class="form-control" type="number" name="opening_balance" id="opening_balance" placeholder="Opening Balance">
+                            </div>
+                        </div>
                         <div id="officeDiv">
                         </div>                
                         {{-- <div class="form-row">

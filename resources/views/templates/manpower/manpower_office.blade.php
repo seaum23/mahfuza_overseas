@@ -14,22 +14,22 @@ Manpower Office
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Office Name</label>
-                                <input class="form-control @error('officeName') is-invalid @enderror" autocomplete="off" type="text" name="officeName" placeholder="Enter Name" required>
+                                <input class="form-control @error('officeName') is-invalid @enderror" autocomplete="off" type="text" name="officeName" placeholder="Enter Name" value="{{ old('officeName') }}" required>
                                 <div class="invalid-feedback"> @error('officeName') {{ $message }} @enderror </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>License Number</label>
-                                <input class="form-control @error('licenseNumber') is-invalid @enderror" autocomplete="off" type="text" name="licenseNumber" placeholder="Enter License Number" required>
+                                <input class="form-control @error('licenseNumber') is-invalid @enderror" autocomplete="off" type="text" name="licenseNumber" placeholder="Enter License Number" value="{{ old('licenseNumber') }}" required>
                                 <div class="invalid-feedback"> @error('licenseNumber') {{ $message }} @enderror </div>
                             </div>                
                             <div class="form-group col-md-6">
                                 <label>Office Address</label>
-                                <input class="form-control @error('officeAddress') is-invalid @enderror" autocomplete="off" type="text" name="officeAddress" placeholder="Enter Office Address" required>
+                                <input class="form-control @error('officeAddress') is-invalid @enderror" autocomplete="off" type="text" name="officeAddress" placeholder="Enter Office Address" value="{{ old('officeAddress') }}" required>
                                 <div class="invalid-feedback"> @error('officeAddress') {{ $message }} @enderror </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Comment</label>
-                                <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment">
+                                <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment" value="{{ old('comment') }}" >
                                 <div class="invalid-feedback"> @error('comment') {{ $message }} @enderror </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@ Manpower Office
                                 </div>
                                 <div class="col-sm">
                                     <label>Processing Cost</label>
-                                    <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" required>
+                                    <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" value="{{ old('processingCost[0]') }}" required>
                                 </div>
                             </div>              
                         </div>
@@ -60,6 +60,12 @@ Manpower Office
                                         <button class="btn btn-sm btn-danger" type="button" id="remove_office"><span class="fas fa-minus" aria-hidden="true"></span></button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="opening_balance">Opening Balance: </label>
+                                <input class="form-control" type="number" name="opening_balance" id="opening_balance" placeholder="Opening Balance" value="{{ old('opening_balance') }}" >
                             </div>
                         </div>
                     </div>

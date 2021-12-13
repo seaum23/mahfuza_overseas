@@ -29,7 +29,7 @@ Delegate List
                                         <p>No Job Assigned!</p>
                                     @else
                                         @foreach ($office->manpower_job as $manpower_job)
-                                            <button onclick="edit_manpower_job({{ $manpower_job->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }}: {{$manpower_job->pivot->processing_cost}}</button>
+                                            <button onclick="edit_manpower_job({{ $manpower_job->pivot->id }}, {{ $office->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }}: {{$manpower_job->pivot->processing_cost}}</button>
                                         @endforeach
                                     @endif
                                 </td>
@@ -57,7 +57,7 @@ Delegate List
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Office Info</h5>
+                <h5 class="modal-title">Job Info</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -92,6 +92,7 @@ Delegate List
 </div>
 
 <!-- Add New Job -->
+<button style="display: hidden" id="manpower_job_modal_button" data-toggle="modal" data-target="#add_manpower_job_modal"></button>
 <div class="modal fade" id="add_manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -168,7 +169,7 @@ Delegate List
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="update_button_manpower">Update</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="update_manpower_office_modal_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
@@ -195,7 +196,7 @@ let update_manpower_office = (id) => {
             $('#officeAddress').val(info.address);
             $('#comment').val(info.comment);
             $('#manpower_id').val(info.id);            
-            $('#update_manpower_office_modal').modal('toggle');
+            $('#update_manpower_office_modal_close').click();
             $('.loader-container').hide();
         }
     });
@@ -224,11 +225,12 @@ $('#update_manpower_office_form').on('submit', function(){
     });
 });
 
-let edit_manpower_job= (id) => {
+let edit_manpower_job= (id, office_id) => {
     $.ajax({
         type: 'get',
         enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' +'/manpower-job/' + id + '/edit',        
+        url: '{{ url('/') }}' +'/manpower-job/' + id + '/edit',    
+        data: {office_id},
 		beforeSend:function(){
             $('.loader-container').show();
         },
@@ -237,7 +239,7 @@ let edit_manpower_job= (id) => {
             $('#manpower_office_id').val(id);
             $('#jobId').html(info.jobs_option);
             $('#processingCost').val(info.processing_cost);
-            $('#manpower_job_modal').modal('toggle');
+            $('#manpower_job_modal_button').click();
             $('.loader-container').hide();
         }
     });
@@ -309,12 +311,13 @@ let add_manpower_office = (id) => {
     promise.then((response) => {
         idx_of_jobs_div++;
         let info = JSON.parse(response);
+        console.log(info.html);
         $('#job-body').html(info.html);
         $('.select2').select2({
             width: '100%'
         });
     });
-    $('#add_manpower_job_modal').modal('toggle');
+    $('#manpower_job_modal_button').click();
     $('.jod-extra-body').attr('id', 'form_body_number_' + 0);
     console.log('form_body_number_' + 0);
     $('.loader').show();

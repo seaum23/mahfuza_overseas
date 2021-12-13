@@ -40,15 +40,19 @@ class ManpowerJobController extends Controller
     {
         DB::beginTransaction();
         foreach($request->jobId as $idx => $jobId){
-            $validate = ManpowerJob::where('manpower_office_id', $request->add_to_manpower_office_id)
-                                ->where('job_id', $jobId)
-                                ->get();
+            $validate = DB::table('job_manpower_office')
+                            ->where('manpower_office_id', $request->add_to_manpower_office_id)
+                            ->where('job_id', $jobId)
+                            ->get();
             if($validate->isEmpty()){
-                $manpower_job = new ManpowerJob();
-                $manpower_job->manpower_office_id = $request->add_to_manpower_office_id;
-                $manpower_job->job_id = $jobId;
-                $manpower_job->processing_cost = $request->processingCost[$idx];
-                $manpower_job->save();
+                DB::table('job_manpower_office')->insert([
+                    'manpower_office_id' => $request->add_to_manpower_office_id,
+                    'job_id' => $jobId,
+                    'processing_cost' => $request->processingCost[$idx],
+                    'manpower_office_id' => $request->add_to_manpower_office_id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
             }else{
                 DB::rollBack();
                 echo json_encode(array('error' => true, 'error_number' => $idx));
@@ -77,12 +81,13 @@ class ManpowerJobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ManpowerJob $manpower_job)
+    public function edit($id, Request $request)
     {
+        $manpower_job = DB::table('job_manpower_office')->where('id', $id)->get()->first();
         $html = '';
         $jobs = Job::get();
         foreach($jobs as $job){
-            if($job->id = $manpower_job->job_id){
+            if($job->id == $manpower_job->job_id){
                 $html .= "<option value=\"{$job->id}\" selected> {$job->name} </option>";
             }else{                
                 $html .= "<option value=\"{$job->id}\"> {$job->name} </option>";
@@ -98,12 +103,14 @@ class ManpowerJobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ManpowerJob $manpower_job)
+    public function update(Request $request, $id)
     {
-        $manpower_job->job_id = $request->jobId;
-        $manpower_job->processing_cost = $request->processingCost;
-
-        $manpower_job->save();
+        DB::table('job_manpower_office')
+            ->where('id', $id)
+            ->update([
+                'job_id' => $request->jobId,
+                'processing_cost' => $request->processingCost,
+            ]);
 
         echo json_encode(array('error' => false));
 
@@ -116,9 +123,11 @@ class ManpowerJobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, ManpowerJob $manpower_job)
+    public function destroy(Request $request, $id)
     {
-        $manpower_job->delete();
+        DB::table('job_manpower_office')
+            ->where('id', $id)
+            ->delete();
 
         echo json_encode(array('error' => false));
 

@@ -39,6 +39,7 @@ class DelegateController extends Controller
         $delegate->state = $request->delegateState;
         $delegate->comment = $request->comment;
         $delegate->updated_by = auth()->id();
+        $delegate->opening_balance = (empty($request->opening_balance)) ? 0 : $request->opening_balance;
 
         $delegate->save();
 

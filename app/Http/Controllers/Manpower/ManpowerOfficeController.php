@@ -60,6 +60,12 @@ class ManpowerOfficeController extends Controller
             'opening_balance' => (empty($request->opening_balance)) ? 0 : $request->opening_balance,
             'updated_by' => auth()->id(),
         ]);
+
+        if(!empty($request->balanceSheet)){
+            $manpower_office->balance_sheet = move($request->balanceSheet, 'manpower', 'manpower_balance_sheet_' . $manpower_office->id . '_' . time() );
+            $manpower_office->save();
+        }
+
         foreach($request->jobId as $idx=>$job){
             $manpower_office->manpower_job()->attach(
                 ['job_id' => $job],

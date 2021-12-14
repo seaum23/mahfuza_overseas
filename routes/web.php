@@ -149,6 +149,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/upload/agent-photo', [UploadController::class, 'agent_photo']);
     Route::post('/upload/candidate-photo', [UploadController::class, 'candidate_photo']);
     Route::post('/upload/processing-photo', [UploadController::class, 'processing_photo']);
+    Route::post('/upload/delegate', [UploadController::class, 'delegate_files']);    
+    Route::post('/upload/manpower', [UploadController::class, 'manpower_files']);    
     Route::delete('/revert', [UploadController::class, 'delete']);
 
     /**

@@ -42,14 +42,17 @@ Delegate
                             <div class="form-group col-md-4">
                                 <label for="sel1">Photo:</label>
                                 <input class="my-pond form-control-file" type="file" name="agentImage" id="agentImage" >
+                                <div id="agentImage_invalid" class="invalid-feedback"> </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="sel1">Passport Scan Copy:</label>
                                 <input class="my-pond form-control-file" type="file" name="agentPassport" id="agentPassport" >
+                                <div id="agentPassport_invalid" class="invalid-feedback"> </div>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="sel1">Police Clearance:</label>
-                                <input class="my-pond form-control-file" type="file" name="agentPolice" id="agentPolice" >
+                                <label for="sel1">Opening Balance Sheet:</label>
+                                <input class="my-pond form-control-file" type="file" name="balanceSheet" id="balanceSheet" >
+                                <div id="balanceSheet_invalid" class="invalid-feedback"> </div>
                             </div>
                         </div>
                     </div>
@@ -66,15 +69,7 @@ Delegate
 @endsection
 
 @section('script-file-pond')
-<script>    
-    document.addEventListener('FilePond:processfilestart', (e) => {
-        $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
-        $("#submit").prop('disabled', true);        
-    });
-    document.addEventListener('FilePond:processfile', (e) => {
-        $("#submit").html('Add');
-        $("#submit").prop('disabled', false);
-    });
+<script> 
     $('#agent_form').on('submit', (e) => {
         $('#agent_form').removeClass('needs-validation');
         $('.form-control').removeClass('is-invalid');
@@ -113,8 +108,16 @@ Delegate
                 }
             }
         });
+    });   
+
+    document.addEventListener('FilePond:processfilestart', (e) => {
+        $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+        $("#submit").prop('disabled', true);        
     });
-    
+    document.addEventListener('FilePond:processfile', (e) => {
+        $("#submit").html('Add');
+        $("#submit").prop('disabled', false);
+    });    
     $(function(){
         FilePond.setOptions({
             server: {

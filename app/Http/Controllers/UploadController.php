@@ -28,6 +28,12 @@ class UploadController extends Controller
             return $tmp;
         }
 
+        if($request->hasFile('balanceSheet')){
+            $file = $request->file('balanceSheet');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }        
+
         return '';
     }
 
@@ -165,6 +171,24 @@ class UploadController extends Controller
         }
 
         return '';
+    }
+
+    public function delegate_files(Request $request)
+    {
+        if($request->hasFile('balanceSheet')){
+            $file = $request->file('balanceSheet');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+    }
+
+    public function manpower_files(Request $request)
+    {
+        if($request->hasFile('balanceSheet')){
+            $file = $request->file('balanceSheet');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
     }
 
     public function delete(Request $request)

@@ -46,6 +46,9 @@ class AgentController extends Controller
             'agentEmail' => 'required',
             'agentPhone' => 'required',
             'password' => 'required',
+            'agentImage' => 'required',
+            'agentPassport' => 'required',
+            'balanceSheet' => 'required',
         ]);
 
         $validate_existing_agent = Agent::where('email', $request->agentEmail)
@@ -80,7 +83,7 @@ class AgentController extends Controller
 
         $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
 
-        $agent->police_clearance = move($request->agentPolice, 'agent', 'agent_police_verification_' . $agent->id . '_' . time() );
+        $agent->balance_sheet = move($request->balanceSheet, 'agent', 'agent_balance_sheet_' . $agent->id . '_' . time() );
 
         $agent->save();
          
@@ -171,7 +174,7 @@ class AgentController extends Controller
                 return '<img class="table-photo" src="'.asset($query->photo).'">';
             })
             ->addColumn('document', function ($query) {
-                return '<a href="'.asset($query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset($query->police_clearance).'"> <button class="btn btn-warning btn-sm"> Clearance </button> </a>';
+                return '<a href="'.asset($query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset($query->balance_sheet).'"> <button class="btn btn-warning btn-sm"> Balance Sheet </button> </a>';
             })            
             ->addColumn('action', function ($query) {
                 return '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';

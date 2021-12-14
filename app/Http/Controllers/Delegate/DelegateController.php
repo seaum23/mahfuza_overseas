@@ -43,6 +43,10 @@ class DelegateController extends Controller
 
         $delegate->save();
 
+        $delegate->balance_sheet = move($request->balanceSheet, 'delegate', 'delegate_balance_sheet_' . $delegate->id . '_' . time() );
+        
+        $delegate->save();
+
         foreach($offices as $idx=>$office){
             $delegate->delegate_offices()->create([
                 'name' => $office,

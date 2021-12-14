@@ -141,9 +141,6 @@ class ProcessingController extends Controller
             })
             ->addColumn('action', function ($query) {
                 $html = '<div class="btn-group" role="group" aria-label="Basic example">';
-                if($query->in_processing == 0){
-                    $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->candidate->fName . ' ' . $query->candidate->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
-                }
                 $html .= '<button onclick="processing_transaction(\''.$query->id.'\', \''.$query->candidate->fName.' '.$query->candidate->lName.'\')" data-toggle="modal" data-target="#transaction_modal" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
                 return $html . '</div>';
             })

@@ -7,7 +7,7 @@ Ticket List
 <div class="row clearfix">
     <div class="col-lg-12">
         <div class="card mt-3 card">
-            <div class="card-body"><h5 class="card-title">All Candidates</h5>
+            <div class="card-body"><h5 class="card-title">Candidate Ticket List</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover js-basic-example dataTable w-100" id="datatable">
                         <thead>

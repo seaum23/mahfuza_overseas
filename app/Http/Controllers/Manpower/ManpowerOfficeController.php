@@ -63,9 +63,9 @@ class ManpowerOfficeController extends Controller
         foreach($request->jobId as $idx=>$job){
             $manpower_office->manpower_job()->attach(
                 ['job_id' => $job],
-                ['processing_cost' => $request->processingCost[$idx],
+                ['processing_cost' => $request->processingCost[$idx]],
                 ['updated_at' => date('Y-m-d H:i:s')]
-            ]);
+            );
         }
         $request->session()->flash('alert', 'Yes');
         $request->session()->flash('message', 'Task was successful!');

@@ -46,7 +46,7 @@ Manpower Office
                                 </div>
                                 <div class="col-sm">
                                     <label>Processing Cost</label>
-                                    <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" value="{{ old('processingCost[0]') }}" required>
+                                    <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" value="{{ old('processingCost.0') }}" required>
                                 </div>
                             </div>              
                         </div>

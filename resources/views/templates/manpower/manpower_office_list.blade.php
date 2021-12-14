@@ -53,6 +53,7 @@ Delegate List
 @section('modals')
 
 <!-- Edit Delete Job -->
+<button style="display: hidden" id="edit_manpower_job_modal_button" data-toggle="modal" data-target="#manpower_job_modal"></button>
 <div class="modal fade" id="manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -239,7 +240,7 @@ let edit_manpower_job= (id, office_id) => {
             $('#manpower_office_id').val(id);
             $('#jobId').html(info.jobs_option);
             $('#processingCost').val(info.processing_cost);
-            $('#manpower_job_modal_button').click();
+            $('#edit_manpower_job_modal_button').click();
             $('.loader-container').hide();
         }
     });

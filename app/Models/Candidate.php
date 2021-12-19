@@ -58,8 +58,8 @@ class Candidate extends Model
      * Accessor for Age.
      */
     public function age()
-    {
-        return Carbon::parse($this->attributes['data_of_birth'])->age;
+    {        
+        return Carbon::createFromFormat('Y-m-d', $this->attributes['data_of_birth'])->diff(Carbon::now())->format('%yy%mm%dd');
     }
 
     /**
@@ -70,7 +70,7 @@ class Candidate extends Model
         $issue_date = new Carbon($this->attributes['issue_date']);
         $issue_date->addYears($this->attributes['validity']);
 
-        $today = new Carbon();
+        $today = Carbon::now();
 
         $diff = $today->diff($issue_date);
 

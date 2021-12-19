@@ -741,6 +741,31 @@
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+        /**
+         * 
+         * Filepond configuration!
+         * 
+         */
+        
+        const pond = FilePond.create();
+
+        // First register any plugins
+        $.fn.filepond.registerPlugin(FilePondPluginImagePreview);        
+            
+        // Generic file-pond
+        $('.my-pond').filepond({
+            credits: false,
+            'allowMultiple': false
+        });
+
+
+
+        // Generic file-pond multiple
+        $('.my-pond-multiple').filepond({
+            credits: false,
+            'allowMultiple': true
+        });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -803,6 +828,7 @@
                 $('.transaction_inputs').show();
                 // 1 => Accounts receivable / পাবো ; 2 => Accounts payable / পাবে
                 if( e.value == '1' || e.value == '2' ){
+                    console.log('pelam');
                     // $('.right_input_div').hide();
                     $('#left_input_label').html('পেলাম');
                     $('#right_input_label').html('দিলাম');

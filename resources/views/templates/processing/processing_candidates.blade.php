@@ -51,8 +51,9 @@ Processing Candidate List
                 <div class="modal-body">
                     <input type="hidden" name="update_okala_id" id="update_okala_id">
                     <h4 id="update_okala_name"></h4>
-                    <input type="file" class="my-pond" name="okala_file" id="okala_file">
+                    <input type="file" class="my-pond" name="okala_file" id="okala_file" required>
                 </div>
+                <x-transaction-form-specified name="okala_amount"/>
                 <div class="modal-footer">
                     <button id="update_okala_button_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="update_okala_button" type="submit" class="btn btn-primary file-pond-submit">Save</button>
@@ -79,6 +80,7 @@ Processing Candidate List
                     <h4 id="update_mufa_name"></h4>
                     <input type="file" class="my-pond" name="mufa_file" id="mufa_file">
                 </div>
+                <x-transaction-form-specified name="mufa_amount"/>
                 <div class="modal-footer">
                     <button id="update_mufa_button_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="update_mufa_button" type="submit" class="btn btn-primary file-pond-submit">Save</button>
@@ -130,6 +132,7 @@ Processing Candidate List
                     <h4 id="update_training_candidate_name"></h4>
                     <input type="file" class="my-pond" name="training_file" id="training_file">
                 </div>
+                <x-transaction-form-specified name="training_card_amount"/>
                 <div class="modal-footer">
                     <button id="traning_card_modal_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="update_training_button" type="submit" class="btn btn-primary">Submit</button>
@@ -155,6 +158,7 @@ Processing Candidate List
                     <h4 id="update_manpower_name"></h4>
                     <input type="file" class="my-pond" name="manpower_card_file" id="manpower_card_file">
                 </div>
+                <x-transaction-form-specified name="manpower_amount"/>
                 <div class="modal-footer">
                     <button id="manpower_modal_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="update_manpower_button" type="submit" class="btn btn-primary">Submit</button>

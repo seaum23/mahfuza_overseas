@@ -105,6 +105,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/training.card',[CandidateUpdateController::class, 'training_card']);
         Route::post('/candidate/departure-seal/{candidate}',[CandidateUpdateController::class, 'departure_seal'])->name('departure-update-file');
         Route::post('/arrival-seal/{candidate}',[CandidateUpdateController::class, 'arrival_seal'])->name('arrival-update-file');
+        Route::post('/assign.job',[CandidateUpdateController::class, 'update_job']);
+        
     });
 
     Route::get('/processing.list', [ProcessingController::class, 'datatable'])->name('processing.datatable');

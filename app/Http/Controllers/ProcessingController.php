@@ -165,20 +165,28 @@ class ProcessingController extends Controller
 
     public function okala_update(Request $request)
     {
-        $processing = Processing::find($request->update_okala_id);
+        $processing = Processing::with('candidate.agent')->find($request->update_okala_id);
 
         $processing->okala = 1;
         $processing->okala_file = move($request->okala_file, 'candidate', 'okala_file_' . $processing->id . '_' . time() );
+        
+        if($request->okala_amount > 0){
+            transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account);
+        }
 
         $processing->save();
     }
 
     public function mufa_update(Request $request)
     {
-        $processing = Processing::find($request->update_mufa_id);
+        $processing = Processing::with('candidate.agent')->find($request->update_mufa_id);
 
         $processing->mufa = 1;
         $processing->mufa_file = move($request->mufa_file, 'candidate', 'mufa_file_' . $processing->id . '_' . time() );
+        
+        if($request->mufa_amount > 0){
+            transaction($request->mufa_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->mufa_amount_payment_account);
+        }
 
         $processing->save();
     }
@@ -243,6 +251,10 @@ class ProcessingController extends Controller
 
         $processing->manpower = 1;
         $processing->manpower_card_file = move($request->manpower_card_file, 'candidate', 'manpower_file_' . $processing->id . '_' . time() );
+
+        if($request->manpower_amount > 0){
+            transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account);
+        }        
 
         $processing->save();
     }

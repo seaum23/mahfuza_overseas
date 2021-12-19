@@ -64,11 +64,8 @@ class CandidateController extends Controller
             'gender' => 'required',
             'phone_number' => 'required|size:11',
             'date_of_birth' => 'required|before_or_equal:' . $eighteen->format('Y-m-d'),
-            'job_type' => 'required',
             'passport_number' => 'required',
-            'country' => 'required',
             'issu_date' => 'required',
-            'manpower' => 'required',
             'agent' => 'required',
             'passport_scan' => 'required',
         ]);
@@ -97,12 +94,10 @@ class CandidateController extends Controller
             'gender' => $request->gender,
             'issue_date' => $request->issu_date,
             'validity' => $request->validityYear,
-            'job_id' => $request->job_type,
-            'country' => $request->country,
             'agent_id' => $request->agent,
-            'manpower_office_id' => $request->manpower,
             'experience_status' => $request->experience,
             'comment' => '',
+            'country' => $request->country,
             'updated_by' => auth()->id(),
             'in_processing' => 0
         ]);
@@ -124,6 +119,9 @@ class CandidateController extends Controller
             $candidate->arrival_date = $request->arrivalDate;
         }
 
+        /**
+         * Inserting all files
+         */
         if(!empty($request->passport_scan)){
             $candidate->passport_scanned_copy = move($request->passport_scan, 'candidate', 'passport_scanned_' . $candidate->id . '_' . time() );
         }
@@ -266,7 +264,7 @@ class CandidateController extends Controller
         //                             <button class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
         //                         </a>
         if ($request->ajax()) {
-            $query = Candidate::with('agent')->select('candidates.*');
+            $query = Candidate::with('agent')->select('candidates.*')->orderBy('id', 'desc');
             
             return Datatables::of($query)
             ->editColumn('fName', function ($query)
@@ -277,7 +275,7 @@ class CandidateController extends Controller
             })
             ->editColumn('data_of_birth', function ($query)
             {
-                return $query->age().' Years';
+                return $query->age();
             })            
             ->addColumn('passport_expiry', function ($query) {
                 return $query->passport_expiry();
@@ -360,11 +358,14 @@ class CandidateController extends Controller
                         '</div>';
             })
             ->addColumn('action', function ($query) {
-                $html = '';
+                $html = '<div class="btn-group">';
+                if(is_null($query->job_id)){
+                    $html .= '<button onclick="assign_job('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#assign_job_modal" class="btn btn-warning btn-xs">Job</button>';
+                }
                 if($query->in_processing == 0){
                     $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
                 }
-                return $html;
+                return $html . "</div>" ;
             })
             ->rawColumns(['action', 'fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file'])
             ->make(true);

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-Delegate
+New Candidate
 @endsection
 
 @section('content')
@@ -43,19 +43,9 @@ Delegate
                                     <label>Date of Birth <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <input style="width: inherit" type="text" class="form-control datepicker" name="date_of_birth" id="date_of_birth" autocomplete="off" placeholder="yyyy/mm/dd" {{-- onchange="getCandidateFromAgentExpense(this.value)" --}}/>
                                     <div id="date_of_birth_invalid" class="invalid-feedback"> </div>
-                                </div>
+                                </div>                                
                                 <div class="form-group col-md-6">
-                                    <label>Job Type. <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i> </label>
-                                    <select class="form-control ms select2" name="job_type" id="job_type" onchange="get_manpower_office(this.value)"  data-placeholder="Select Job" >
-                                        <option value=""></option>
-                                        @foreach ($jobs as $job)
-                                            <option value="{{ $job->id }}">{{ $job->name . ' - ' . $job->credit_type }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div id="job_type_invalid" class="invalid-feedback"> </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="hidden" value="no" id="includeCandidateFromAgent" name="includeCandidateFromAgent">                   
+                                    <input type="hidden"    value="no" id="includeCandidateFromAgent" name="includeCandidateFromAgent">                   
                                     <label>NID / Birth Certificate <span id="text-show" style="color: #ff3d00; display: none;" date-toggle="modal" data-target="#show">Candidate Exists In Agent Expense List <button type="button" data-target="#show" data-toggle="modal" class="btn btn-sm btn-info mr-1" style="padding: .16rem .3rem;"><i class="fas fa-eye"></i></button><button value="no" name="includeCandidate" id="includeCandidate" type="button" class="btn btn-sm btn-danger" style="padding: .16rem .3rem;" onclick="include_Candidate(this.value)"><i class="fa fa-ban"></i></button></span> </label>
                                     <input class="form-control" type="text" name="nid" id="nid" placeholder="Enter NID" onchange="getInfo()">
                                 </div>
@@ -68,23 +58,20 @@ Delegate
                                     <label>Passport No. <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <input type="text" class="form-control" name="passport_number" id="passport_number" placeholder="Enter Passport Number"/>
                                     <div id="passport_number_invalid" class="invalid-feedback"> </div>
-                                </div>            
-                                <div class="form-group col-md-6">
-                                    <label>Country <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
-                                    <select class="form-control select2" name="country" id="country" >
-                                        <option value=""> Select Country </option>
-                                        @foreach ($countries as $country)
-                                            <option>{{ $country->country }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div id="country_invalid" class="invalid-feedback"> </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Issue Date <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <input type="text" class="form-control datepicker" autocomplete="off" name="issu_date" id="issu_date" placeholder="yyyy/mm/dd"/>
                                     <div id="issu_date_invalid" class="invalid-feedback"> </div>
                                 </div>
-                                <div class="form-group col-md-6" style="text-align: center;">
+                                <div class="form-group col-md-6">
+                                    <label>Country <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
+                                    <select class="form-control select2" name="country" id="country" >
+                                        <x-select-countries/>
+                                    </select>
+                                    <div id="country_invalid" class="invalid-feedback"> </div>
+                                </div>
+                                <div class="form-group col-md-12 text-center">
                                     <label>Validity Year <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <div>
                                         <div class="custom-radio custom-control custom-control-inline">
@@ -101,13 +88,6 @@ Delegate
                             <fieldset class="form-row form-group p-2" style="border: 1px solid gray; border-radius: 5px">
                                 <legend>Agent Information:</legend>
                                 <div class="row w-100">
-                                    <div class="col-md-6">
-                                        <label for="manpower"> Manpower Office <i class="fa fa-asterisk fa-xs fa-xxs text-danger" ></i></label>
-                                        <select class="form-control select2" id="manpower" name="manpower" style="width: 100%" >
-                                            <option value=""> Select Job Type First </option>                                            
-                                        </select>
-                                        <div id="manpower_invalid" class="invalid-feedback"> </div>
-                                    </div>
                                     <div class="col-md-6" id="agentNotOffice">
                                         <label for="agent" style="display: block"> Agent <i class="fa fa-asterisk fa-xs fa-xxs text-danger" ></i></label>
                                         <select class="form-control select2" name="agent" id="agent" >
@@ -251,30 +231,18 @@ Delegate
         });
     })
 
-    let get_manpower_office = (id) => {
-        $.ajax({
-            type: 'get',
-            enctype: 'multipart/form-data',
-            url: '{{ url('/') }}' + '/get-manpower-office/' + id,
-            // beforeSend:function(){
-            //     $("#experience_div").html('<i class="fas fa-spinner fa-pulse"></i>');
-            // },
-            success: function (response){
-                $("#manpower").html(response);
-            }
-        });
-    }   
+     
     // Generic file-pond
-    $('.my-pond').filepond({
-        credits: false,
-        'allowMultiple': false
-    });
+    // $('.my-pond').filepond({
+    //     credits: false,
+    //     'allowMultiple': false
+    // });
 
-    // Generic file-pond multiple
-    $('.my-pond-multiple').filepond({
-        credits: false,
-        'allowMultiple': true
-    }); 
+    // // Generic file-pond multiple
+    // $('.my-pond-multiple').filepond({
+    //     credits: false,
+    //     'allowMultiple': true
+    // }); 
     
     document.addEventListener('FilePond:processfilestart', (e) => {
         $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');

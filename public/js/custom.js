@@ -195,28 +195,6 @@ let trigget_alert = () => {
 
 window.onload = trigget_alert();
 
-/**
- * 
- * Filepond configuration!
- * 
- */
-
-// First register any plugins
-$.fn.filepond.registerPlugin(FilePondPluginImagePreview);        
-    
-// Generic file-pond
-$('.my-pond').filepond({
-    credits: false,
-    'allowMultiple': false
-});
-
-// Generic file-pond multiple
-$('.my-pond-multiple').filepond({
-    credits: false,
-    'allowMultiple': true
-});
-
-
 // Initiate datepicker
 
 $('.datepicker').datepicker({

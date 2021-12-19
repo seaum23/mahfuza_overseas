@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-Sponsors List
+Candidate List
 @endsection
 
 @section('content')
@@ -50,7 +50,7 @@ Sponsors List
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="candidate_id" id="update_id">
+                    <input type="hidden" name="candidate_id" id="candidate_id">
                     <h4 id="assign_visa_name"></h4>
                     <select class="form-control select2" name="sponsor_visa_id" id="sponsor_visa" data-placeholder="Select Sponsor">
                         <option value=""></option>
@@ -81,8 +81,9 @@ Sponsors List
                     <h4 id="update_test_candidate_name"></h4>
                     <input type="file" class="my-pond" name="test_candidate_file" id="test_candidate_file">
                 </div>
+                <x-transaction-form-specified name="test_medical_amount"/>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="test_medical_insert_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -105,6 +106,7 @@ Sponsors List
                     <input type="text" class="form-control datepicker mb-2" name="final_date" id="final_date" autocomplete="off" placeholder="Final Medical Report Date"/>
                     <input type="file" class="my-pond" name="final_candidate_file" id="final_candidate_file">
                 </div>
+                <x-transaction-form-specified name="final_medical_amount"/>
                 <div class="modal-footer">
                     <button id="insert_medical_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -128,8 +130,9 @@ Sponsors List
                     <h4 id="update_police_candidate_name"></h4>
                     <input type="file" class="my-pond" name="police_file" id="police_file">
                 </div>
+                <x-transaction-form-specified name="police_clearance_amount"/>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="police_file_insert_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -151,9 +154,33 @@ Sponsors List
                     <h4 id="update_training_candidate_name"></h4>
                     <input type="file" class="my-pond" name="training_file" id="training_file">
                 </div>
+                <x-transaction-form-specified name="training_card_amount"/>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="training_card_insert_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="update_training_button" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="assign_job_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" id="assign_job_form" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Assign Job</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="update_job_candidate_id" id="update_job_candidate_id">
+                    <h4 id="assign_job_candidate_name"></h4>
+                    <x-assign-job-to-candidate/>
+                </div>
+                <div class="modal-footer">
+                    <button id="assign_job_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="assign_job_submit" type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </form>
@@ -178,7 +205,7 @@ Sponsors List
                     <span style="color: Tomato;"><i class="fas fa-redo fa-xs"></i></span>
                 </button>
 
-                <button type="button" class="close ml-2" data-dismiss="modal" aria-label="Close">
+                <button id="test_medical_update_close" type="button" class="close ml-2" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -227,7 +254,7 @@ Sponsors List
                     <span style="color: Tomato;"><i class="fas fa-redo fa-xs"></i></span>
                 </button>
 
-                <button type="button" class="close ml-2" data-dismiss="modal" aria-label="Close">
+                <button id="police_clearance_update_close" type="button" class="close ml-2" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -263,9 +290,60 @@ Sponsors List
 @section('script')
 <script>
 let datatable;
-const pond = FilePond.create();
-    
 
+const reset_form = (file, close_button, form = '') => {
+    $(`#${close_button}`).click();
+    datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+    if(form){
+        $(`#${form}`)[0].reset();
+    }
+    $(`#${file}`).filepond('removeFile');
+}
+
+let assign_job = (id, name) => {
+    $('#assign_job_candidate_name').html(name);
+    $('#update_job_candidate_id').val(id);
+}
+
+let get_manpower_office = (id) => {
+    $.ajax({
+        type: 'get',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/get-manpower-office/' + id,
+        // beforeSend:function(){
+        //     $("#experience_div").html('<i class="fas fa-spinner fa-pulse"></i>');
+        // },
+        success: function (response){
+            $("#manpower").html(response);
+        }
+    });
+}
+
+$('#assign_job_form').on('submit', (e) => {
+    e.preventDefault();
+
+    var form = $('#assign_job_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/candidate/assign.job',
+        data: data,        
+        processData: false,
+        contentType: false,
+		beforeSend:function(){
+            $("#assign_job_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#assign_job_submit").prop('disabled', true);
+        },
+        success: function (response){
+            $("#assign_job_submit").html('Submit');
+            $("#assign_job_submit").prop('disabled', false);
+            $('#assign_job_close').click();
+            $('#assign_job_form')[0].reset();
+            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+        }
+    });
+})
 
 /**
  * Start Sponsor & Sponsor VISA CRUD
@@ -379,8 +457,7 @@ let update_test_medical_submit = () => {
         success: function (response){            
             $("#update_test_candidate_file_button").html('<span style="color: Dodgerblue;"><i class="fas fa-save"></i></span>');
             $("#update_test_candidate_file_button").prop('disabled', false);
-            $('#test_medical_file_show').modal('hide');
-            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+            reset_form('update_test_candidate_file', 'test_medical_update_close');
         }
     });
 }
@@ -402,11 +479,7 @@ let update_final_medical_submit = () => {
             $('#final_medical_close').click();
             $("#update_final_candidate_file_button").html('<span style="color: Dodgerblue;"><i class="fas fa-save"></i></span>');
             $("#update_final_candidate_file_button").prop('disabled', false);
-            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
-            $('#final_medical_file').attr('src', '');
-            $('#update_final_candidate_file').filepond('removeFile');
-            let filePond = FilePond.find(document.getElementById('update_final_candidate_file'));
-            filePond.removeFiles();
+            reset_form('update_final_candidate_file', 'final_medical_close');
         }
     });
 }
@@ -424,15 +497,10 @@ let update_police_clearance_submit = () => {
             $("#update_police_clearance_file_button").prop('disabled', true);
         },
         success: function (response){
-            $('#final_medical_close').click();
             datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
             $("#update_police_clearance_file_button").html('<span style="color: Dodgerblue;"><i class="fas fa-save"></i></span>');
             $("#update_police_clearance_file_button").prop('disabled', false);
-            $('#police_file_modal').attr('src', '');
-            $('.reupload').hide();
-            $('#update_final_candidate_file').filepond('removeFile');
-            let filePond = FilePond.find(document.getElementById('update_final_candidate_file'));
-            filePond.removeFiles();
+            reset_form('update_police_clearance_file', 'police_clearance_update_close');
         }
     });
 }
@@ -450,15 +518,9 @@ let update_training_card_submit = () => {
             $("#update_training_card_file_button").prop('disabled', true);
         },
         success: function (response){
-            $('#training_card_close').click();
-            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
             $("#update_training_card_file_button").html('<span style="color: Dodgerblue;"><i class="fas fa-save"></i></span>');
             $("#update_training_card_file_button").prop('disabled', false);
-            $('#police_file_modal').attr('src', '');
-            $('.reupload').hide();
-            $('#update_final_candidate_file').filepond('removeFile');
-            let filePond = FilePond.find(document.getElementById('update_final_candidate_file'));
-            filePond.removeFiles();
+            reset_form('update_training_card_file', 'training_card_close');
         }
     });
 }
@@ -566,7 +628,7 @@ $('#test_medical_form').on('submit', function(e){
             $("#update_button_agent").prop('disabled', true);
         },
         success: function (response){
-            location.reload();
+            reset_form('test_candidate_file', 'test_medical_insert_close','test_medical_form');
         },
     });
 });
@@ -588,9 +650,7 @@ $('#final_medical_form').on('submit', function(e){
             $("#update_button_agent").prop('disabled', true);
         },
         success: function (response){
-            $('.my-pond').filepond.removeFile('final_candidate_file');
-            $('#insert_medical_close').click();
-            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+            reset_form('final_candidate_file', 'insert_medical_close', 'final_medical_form');
         },
     });
 });
@@ -612,7 +672,7 @@ $('#police_clearance_form').on('submit', function(e){
             $("#update_button_agent").prop('disabled', true);
         },
         success: function (response){
-            location.reload();
+            reset_form('police_file', 'police_file_insert_close', 'police_clearance_form');
         },
     });
 });
@@ -635,23 +695,22 @@ $('#training_card_form').on('submit', function(e){
             $("#update_training_button").prop('disabled', true);
         },
         success: function (response){
-            location.reload();
+            reset_form('training_file', 'training_card_insert_close', 'training_card_form');
         },
     });
 });
 
-$(function(){
-    FilePond.setOptions({
-        server: {
-            url: "{{ url('/') }}",
-            process: '/upload/candidate-photo',
-            revert: '/revert',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        },
-    });
+FilePond.setOptions({
+    server: {
+        url: "{{ url('/') }}",
+        process: '/upload/candidate-photo',
+        revert: '/revert',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    },
 });
 
+console.log(pond);
 </script>
 @endsection

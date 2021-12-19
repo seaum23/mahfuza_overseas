@@ -35,11 +35,11 @@
                     <div class="form-row mt-3 transaction_inputs justify-content-between" style="display: none">
                         <div class="col-md-4 left_input_div">
                             <label id="left_input_label" for="left_input"> <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
-                            <input class="form-control" type="number" name="left_input" id="left_input" placeholder="Enter Amount" step="any">
+                            <input class="form-control amount-input" type="number" name="left_input" id="left_input" placeholder="Enter Amount" step="any">
                         </div>
                         <div class="col-md-4 right_input_div">
                             <label id="right_input_label" for="right_input"> <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
-                            <input class="form-control" type="number" name="right_input" id="right_input" placeholder="Enter Amount" step="any">
+                            <input class="form-control amount-input" type="number" name="right_input" id="right_input" placeholder="Enter Amount" step="any">
                         </div>
                         <div class="col-md-4">
                             <label for="">Payment A/C <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>

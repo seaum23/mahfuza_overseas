@@ -757,6 +757,29 @@
     </script>
 
     <script>
+        $('.amount-input').on('keyup', () => {
+            let account = $('#account').val();
+            let left_input = $('#left_input').val();
+            let right_input = $('#right_input').val();
+            if(account == '1' || account == '2'){
+                if(left_input === "" && right_input === ""){
+                    $('#left_input').prop('disabled', false);
+                    $('#right_input').prop('disabled', false);
+                    return;
+                }
+                if(left_input === ""){
+                    $('#left_input').prop('disabled', true);
+                    return;
+                }
+                if(right_input === ""){
+                    $('#right_input').prop('disabled', true);
+                    return;
+                }
+            }
+            $('#left_input').prop('disabled', false);
+            $('#right_input').prop('disabled', false);
+        })
+
         let get_particular = (particular_type) => {
             $.ajax({
                 type: 'post',
@@ -776,9 +799,9 @@
             $('.left_input_div').show();
             $('.right_input_div').show();
             if(typeof $(e).find(':selected').data('account_type') != 'undefined'){
-                console.log('test');
                 let account_type = $(e).find(':selected').data('account_type');
                 $('.transaction_inputs').show();
+                // 1 => Accounts receivable / পাবো ; 2 => Accounts payable / পাবে
                 if( e.value == '1' || e.value == '2' ){
                     // $('.right_input_div').hide();
                     $('#left_input_label').html('পেলাম');

@@ -747,7 +747,7 @@
          * 
          */
         
-        const pond = FilePond.create();
+        // const pond = FilePond.create();
 
         // First register any plugins
         $.fn.filepond.registerPlugin(FilePondPluginImagePreview);        

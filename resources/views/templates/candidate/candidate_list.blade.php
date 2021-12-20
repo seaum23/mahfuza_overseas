@@ -352,7 +352,7 @@ $('#assign_job_form').on('submit', (e) => {
 
 let assign_visa = (id, name) => {
     $('#assign_visa_name').html(name);
-    $('#update_id').val(id);
+    $('#candidate_id').val(id);
     $.ajax({
         type: 'GET',
         enctype: 'multipart/form-data',

@@ -75,10 +75,10 @@ class Candidate extends Model
         $diff = $today->diff($issue_date);
 
         $difference = array();
-        ($diff->y > 0 ) ? ( $difference[] = $diff->y . ' ' . Str::plural('Year', $diff->y) ) : '';
-        ($diff->m > 0 ) ? ( $difference[] = $diff->m . ' ' . Str::plural('Month', $diff->m) ) : '';
-        ($diff->d > 0 ) ? ( $difference[] = $diff->d . ' ' . Str::plural('Day', $diff->d) ) : '';        
-        return implode(', ', $difference);
+        ($diff->y > 0 ) ? ( $difference[] = $diff->y . 'y' ) : '';
+        ($diff->m > 0 ) ? ( $difference[] = $diff->m . 'm' ) : '';
+        ($diff->d > 0 ) ? ( $difference[] = $diff->d . 'd' ) : '';        
+        return implode('', $difference);
     }
 
     /**

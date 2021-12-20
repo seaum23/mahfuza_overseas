@@ -23,7 +23,7 @@ class ProcessingController extends Controller
     {
         
         if ($request->ajax()) {
-            $query = Processing::with('candidate.agent', 'sponsor_visa.sponsor')->select('processings.*');
+            $query = Processing::with('candidate.agent', 'sponsor_visa.sponsor')->select('processings.*')->orderBy('id', 'desc');
             
             return Datatables::of($query)
             ->editColumn('candidate.fName', function ($query)
@@ -136,12 +136,20 @@ class ProcessingController extends Controller
 
                 $latest_ticket = $query->tickets()->latest()->first();
 
-                return '<a href="'.route('visa_stamping', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$latest_ticket->flight_time.'</badge></a>';
+                return '<a href="'.route('ticket.edit', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$latest_ticket->flight_time.'</badge></a>';
                 
             })
             ->addColumn('action', function ($query) {
                 $html = '<div class="btn-group" role="group" aria-label="Basic example">';
                 $html .= '<button onclick="processing_transaction(\''.$query->id.'\', \''.$query->candidate->fName.' '.$query->candidate->lName.'\')" data-toggle="modal" data-target="#transaction_modal" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
+                if($query->pending == '0'){
+                    $html .= '<button onclick="flight_update(\''.$query->id.'\')" class="btn btn-secondary btn-xs"><i class="fas fa-plane"></i></button>';
+                    $html .= '<button onclick="flight_return_update(\''.$query->id.'\')" class="btn btn-danger btn-xs"><i class="fas fa-user"></i></button>';
+                }else if($query->pending == '2'){
+                    $html .= '<button class="btn btn-success btn-xs"><i class="fas fa-plane"></i></button>';
+                }else if($query->pending == '3'){
+                    $html .= '<button class="btn btn-danger btn-xs"><i class="fas fa-plane"></i></button>';
+                }
                 return $html . '</div>';
             })
             ->rawColumns(['action', 'candidate.fName', 'sponsor_visa.sponsor_visa', 'employee_request', 'foreign_mole', 'okala', 'mufa', 'medical_update', 'visa_stamping', 'finger', 'candidate.training_card_file', 'manpower', 'ticket'])
@@ -202,9 +210,8 @@ class ProcessingController extends Controller
     {
         $processing = Processing::find($request->update_visa_stamping_id);
 
-        if(isset($request->visa_stamping)){
-            $processing->visa_stamping = 1;
-        }
+        $processing->visa_stamping = 1;
+
         if(isset($request->stamping_date)){
             $processing->visa_stamping_date = $request->stamping_date;
         }
@@ -258,4 +265,17 @@ class ProcessingController extends Controller
 
         $processing->save();
     }
+
+    public function flight_update(Processing $processing)
+    {
+        $processing->pending = 2;
+        $processing->save();
+    }
+
+    public function return_update(Processing $processing)
+    {
+        $processing->pending = 3;
+        $processing->save();
+    }
+    
 }

@@ -14,7 +14,12 @@ class AddInProcessingToCandidatesTable extends Migration
     public function up()
     {
         Schema::table('candidates', function (Blueprint $table) {
-            $table->tinyInteger('in_processing');
+            /**
+             * 0 => Country not assigned
+             * 1 => Country assigned
+             * 2 => In Processing
+             */
+            $table->tinyInteger('in_processing')->default(0);
         });
     }
 

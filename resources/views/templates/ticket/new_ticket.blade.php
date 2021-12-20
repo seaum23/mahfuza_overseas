@@ -92,7 +92,7 @@ Ticket Assign
                             <input class="form-control" type="text" name="comment" placeholder="Remarks" value="{{ (isset($edit)) ? $edit->comment : '' }}">
                         </div>
                         <div class="form-group col-md-12 col-12 text-center">
-                            <button type="submit" class="btn btn-success">Submit</button>                    
+                            <button id="submit" type="submit" class="btn btn-success">Submit</button>                    
                         </div>
                     </div>
                 </form>
@@ -144,7 +144,7 @@ $('#ticket_form').on('submit', (e) => {
             $("#submit").prop('disabled', true);
         },
         success: function (response){
-            // location.reload();
+            location.href = "{{ url('ticket') }}";
         },
         error: function (xhr, status, error){
             $("#submit").html('Add');

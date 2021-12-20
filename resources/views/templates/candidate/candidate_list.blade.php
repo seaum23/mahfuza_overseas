@@ -285,11 +285,75 @@ Candidate List
         </div>
     </div>
 </div>
+<button id="change_country_toggle" style="display: none" data-target="#change_country" data-toggle="modal"></button>
+<div class="modal fade" id="change_country" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" id="assign_country_form" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Country</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="update_country_id" id="update_country_id">
+                    <h4 id="update_country_candidate_name"></h4>
+                    <select class="form-control select2" name="update_country" id="update_country" data-placeholder="Select Country">
+                        <option value=""></option>
+                        @foreach ($countries as $country)
+                            <option>{{ $country }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button id="assign_country_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="assign_country_submit" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
 <script>
 let datatable;
+
+$('#assign_country_form').on('submit', (e) => {
+    e.preventDefault();
+
+    var form = $('#assign_country_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/candidate/assign.country',
+        data: data,        
+        processData: false,
+        contentType: false,
+		beforeSend:function(){
+            $("#assign_country_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#assign_country_submit").prop('disabled', true);
+        },
+        success: function (response){
+            $("#assign_country_submit").html('Submit');
+            $("#assign_country_submit").prop('disabled', false);
+            $('#assign_job_close').click();
+            $('#change_country_toggle').click();
+            $('#assign_country_form')[0].reset();
+            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+        }
+    });
+})
+
+let assign_country = (id, name) => {
+    $('#update_country_candidate_name').html(name);
+    $('#update_country_id').val(id);
+    $('#change_country_toggle').click();
+    console.log('test');
+}
 
 const reset_form = (file, close_button, form = '') => {
     $(`#${close_button}`).click();
@@ -711,6 +775,5 @@ FilePond.setOptions({
     },
 });
 
-console.log(pond);
 </script>
 @endsection

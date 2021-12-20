@@ -35,8 +35,11 @@ Delegate List
                                 </td>
                                 <td>{{ $office->comment; }}</td>
                                 <td>
-                                    <button class="btn btn-info btn-sm" onclick="add_manpower_office({{ $office->id; }})"><i class="fas fa-plus"></i> Add Job</button>
-                                    <button class="btn btn-warning btn-sm" onclick="update_manpower_office({{ $office->id; }})"><i class="fas fa-edit"></i> Edit</button>
+                                    <div class="btn-group">
+                                        <button onclick="transaction_particular_select('manpower', '{{$office->id}}')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button> 
+                                        <button class="btn btn-info btn-sm" onclick="add_manpower_office({{ $office->id; }})"><i class="fas fa-plus"></i> Add Job</button>
+                                        <button data-toggle="modal" data-target="#update_manpower_office_modal" class="btn btn-warning btn-sm" onclick="update_manpower_office({{ $office->id; }})"><i class="fas fa-edit"></i> Edit</button>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -176,6 +179,21 @@ Delegate List
         </div>
     </div>
 </div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="transaction_modal_specific" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="transaction_form_body"></div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
@@ -197,7 +215,6 @@ let update_manpower_office = (id) => {
             $('#officeAddress').val(info.address);
             $('#comment').val(info.comment);
             $('#manpower_id').val(info.id);            
-            $('#update_manpower_office_modal_close').click();
             $('.loader-container').hide();
         }
     });
@@ -221,6 +238,8 @@ $('#update_manpower_office_form').on('submit', function(){
             $("#update_button_manpower").prop('disabled', true);
         },
         success: function (response){
+            // $('#update_manpower_office_form')[0].reset();
+            // $('#update_manpower_office_modal_close').click();
             location.reload();
         }
     });

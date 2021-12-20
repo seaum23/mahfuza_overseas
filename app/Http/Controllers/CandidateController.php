@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Job;
 use App\Models\Agent;
 use App\Models\Candidate;
+use App\Models\Delegate;
 use Illuminate\Http\Request;
 use App\Models\ManpowerOffice;
 use App\Models\Processing;
@@ -23,7 +24,10 @@ class CandidateController extends Controller
      */
     public function index()
     {
-        return view('templates.candidate.candidate_list');
+        $countries = Delegate::get()->unique('country')->pluck('country');
+        return view('templates.candidate.candidate_list', [
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -248,7 +252,7 @@ class CandidateController extends Controller
 
         $sponsor_visa->visa_amount = $sponsor_visa->visa_amount - 1;
 
-        $candidate->in_processing = 1;
+        $candidate->in_processing = 2;
         $candidate->save();
         $sponsor_visa->save();
     }
@@ -357,17 +361,26 @@ class CandidateController extends Controller
                 return $html .
                         '</div>';
             })
+            ->editColumn('country', function ($query)
+            {
+                if($query->in_processing == 1){
+                    $html = '<badge class="badge badge-success">'.$query->country.'</badge>';
+                }else{
+                    $html = '<badge onclick="assign_country('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" class="badge badge-secondary" style="cursor: pointer">'.$query->country.'</badge>';
+                }
+                return $html;
+            })            
             ->addColumn('action', function ($query) {
                 $html = '<div class="btn-group">';
                 if(is_null($query->job_id)){
                     $html .= '<button onclick="assign_job('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#assign_job_modal" class="btn btn-warning btn-xs">Job</button>';
                 }
-                if($query->in_processing == 0){
+                if($query->in_processing == 1){
                     $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
                 }
                 return $html . "</div>" ;
             })
-            ->rawColumns(['action', 'fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file'])
+            ->rawColumns(['action', 'fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file', 'country'])
             ->make(true);
         }
     }

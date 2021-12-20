@@ -154,7 +154,7 @@ class TicketController extends Controller
         //                             <button class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>
         //                         </a>
         if ($request->ajax()) {
-            $query = Ticket::with('processing.candidate')->select('tickets.*');
+            $query = Ticket::with('processing.candidate')->select('tickets.*')->orderBy('id', 'desc');
             
             return Datatables::of($query)
             ->editColumn('processing.candidate.fName', function ($query)

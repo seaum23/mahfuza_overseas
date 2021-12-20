@@ -98,5 +98,13 @@ class CandidateUpdateController extends Controller
         $candidate->save();
     }
 
+    public function assign_country(Request $request)
+    {
+        $candidate = Candidate::find($request->update_country_id);
+        $candidate->in_processing = 1;
+        $candidate->country = $request->update_country;
+
+        $candidate->save();
+    }
     
 }

@@ -102,6 +102,7 @@ Processing Candidate List
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" name="visa_stamping">
                     <input type="hidden" name="update_visa_stamping_id" id="update_visa_stamping_id">
                     <h4 id="update_visa_stamping_name"></h4>
                     <input type="text" class="form-control datepicker mb-1" autocomplete="off" name="stamping_date" id="stamping_date" placeholder="Stamping Date (Year-month-day)"/>
@@ -187,6 +188,14 @@ Processing Candidate List
 
 @section('script')
 <script>
+const reset_form = (file, close_button, form = '') => {
+    $(`#${close_button}`).click();
+    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+    if(form){
+        $(`#${form}`)[0].reset();
+    }
+    $(`#${file}`).filepond('removeFile');
+}
 // Processings
 let employee_request = (id) => {
     $.ajax({
@@ -242,6 +251,55 @@ let finger_update = (id) => {
     });
 }
 
+let flight_update = (id) => {
+    swal({
+        title: "Confirm flight complete?",
+        icon: "success",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((confirm) => {
+        if (confirm) {
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/processing/flight_update/' + id,
+                success: function (response){
+                    swal("Done!", {
+                        icon: "success",
+                    });
+                    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                }
+            });           
+        }
+    });
+}
+
+let flight_return_update = (id) => {
+    swal({
+        title: "Return Candidate?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((confirm) => {
+        if (confirm) {
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/processing/flight_return_update/' + id,
+                success: function (response){
+                    swal("Done!", {
+                        icon: "success",
+                    });
+                    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                }
+            });           
+        }
+    });
+}
+
+
 // Okala
 $('#okala_update_form').on('submit', (e) => {
     e.preventDefault();
@@ -290,13 +348,9 @@ $('#mufa_update_form').on('submit', (e) => {
             $("#update_mufa_button").prop('disabled', true);
         },
         success: function (response){
-            $('.my-pond').filepond.removeFile()
-            document.getElementById("mufa_file").value = null;
-            $('#mufa_file').val(null);
-            $('#update_mufa_button_close').click();
-            $("#update_mufa_button").html('Update');
-            $("#update_mufa_button").prop('disabled', true);
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+            $("#update_mufa_button").html('Save');
+            $("#update_mufa_button").prop('disabled', false);
+            reset_form('mufa_file', 'update_mufa_button_close', 'mufa_update_form');
         },
     });
 })
@@ -323,10 +377,9 @@ $('#visa_stamping_update_form').on('submit', (e) => {
             $("#update_visa_stamping_button").prop('disabled', true);
         },
         success: function (response){
-            $('#update_visa_stamping_button_close').click();
             $("#update_visa_stamping_button").html('Save');
-            $("#update_visa_stamping_button").prop('disabled', true);
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+            $("#update_visa_stamping_button").prop('disabled', false);
+            reset_form('visa_stamping_file', 'update_visa_stamping_button_close', 'visa_stamping_update_form');
         },
     });
 })
@@ -381,10 +434,9 @@ $('#manpower_update_form').on('submit', (e) => {
             $("#update_manpower_button").prop('disabled', true);
         },
         success: function (response){
-            $('#manpower_modal_close').click();
             $("#update_manpower_button").html('Save');
-            $("#update_manpower_button").prop('disabled', true);
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+            $("#update_manpower_button").prop('disabled', false);
+            reset_form('manpower_card_file', 'manpower_modal_close', 'manpower_update_form');
         },
     });
 })

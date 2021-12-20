@@ -164,7 +164,7 @@ class AgentController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function datatable(Request $request)
-    {
+    {        
         if ($request->ajax()) {
             $query = Agent::get();
             
@@ -175,9 +175,32 @@ class AgentController extends Controller
             })
             ->addColumn('document', function ($query) {
                 return '<a href="'.asset($query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset($query->balance_sheet).'"> <button class="btn btn-warning btn-sm"> Balance Sheet </button> </a>';
-            })            
+            })                  
+            ->addColumn('balance', function ($query) {
+                $credit = $query->transactions()
+                            ->join('credits', 'transactions.id', '=', 'credits.transaction_id')
+                            ->where(function ($query)
+                            {
+                                $query->where('credits.account_id', '1')
+                                    ->orWhere('credits.account_id', '2');
+                            })
+                            ->sum('credits.amount');
+                $debit = $query->transactions()
+                            ->join('debits', 'transactions.id', '=', 'debits.transaction_id')
+                            ->where(function ($query)
+                            {
+                                $query->where('debits.account_id', '1')
+                                    ->orWhere('debits.account_id', '2');
+                            })
+                            ->sum('debits.amount');
+                return $query->opening_balance + $credit - $debit;
+            })      
             ->addColumn('action', function ($query) {
-                return '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';
+                $html = '<div class="btn-group" role="group" aria-label="Basic example">';
+                $html .= '<button onclick="transaction_particular_select(\'agent\', '.$query->id.')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
+                $html .= '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';
+                $html .= '</div>';
+                return $html;
             })
             ->rawColumns(['document', 'photo', 'action'])
             ->make(true);

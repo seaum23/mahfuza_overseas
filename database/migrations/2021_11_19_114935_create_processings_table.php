@@ -43,8 +43,8 @@ class CreateProcessingsTable extends Migration
              * Pending has different values then other tingIntegers:
              * 0 - VISA Assigned
              * 1 - Assigned ticket date has passed - pending
-             * 2 - 3 months after ticket date - completed
-             * 3 - 3 months before ticket date if return - returned
+             * 2 - Candidate completed
+             * 3 - Candidate returned
              */
             $table->tinyInteger('pending')->default(0);
             $table->date('pending_till')->nullable();

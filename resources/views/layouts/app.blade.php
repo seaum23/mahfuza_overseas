@@ -805,6 +805,55 @@
             $('#right_input').prop('disabled', false);
         })
 
+        let amount_input = () => {
+            let account = $('#account').val();
+            let left_input = $('#left_input').val();
+            let right_input = $('#right_input').val();
+            if(account == '1' || account == '2'){
+                if(left_input === "" && right_input === ""){
+                    $('#left_input').prop('disabled', false);
+                    $('#right_input').prop('disabled', false);
+                    return;
+                }
+                if(left_input === ""){
+                    $('#left_input').prop('disabled', true);
+                    return;
+                }
+                if(right_input === ""){
+                    $('#right_input').prop('disabled', true);
+                    return;
+                }
+            }
+            $('#left_input').prop('disabled', false);
+            $('#right_input').prop('disabled', false);
+        }
+
+        let transaction_form_submit_form = () => {
+            var form = $('#transaction_form')[0];
+            var data = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ route("transaction") }}',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend:function(){
+                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    $("#transaction_form_submit").prop('disabled', true);
+                },
+                success: function (response){
+                    $('#transaction_modal_close').click();
+                    $('#transaction_form').trigger('reset');
+                    $('.select2').val(null).trigger('change');
+                    $('.transaction_inputs').hide();
+                    $("#transaction_form_submit").html('Submit');
+                    $("#transaction_form_submit").prop('disabled', true);
+                    location.reload();
+                },
+            });
+        }
+
         let get_particular = (particular_type) => {
             $.ajax({
                 type: 'post',
@@ -845,7 +894,7 @@
                     return;
                 }
                 if( account_type == 'expense' ){
-                    $('.left_input_div').hide();
+                    $('#left_input_label').html('কেনা');
                     $('#right_input_label').html('দিলাম');
                     return;
                 }
@@ -855,6 +904,25 @@
         let processing_transaction = (id, name) => {
             $('#transaction_title').val(name);
             $('#transaction_candidate_id').val(id);
+        }
+
+        let transaction_particular_select = (type, id) => {
+            $.ajax({
+                type: 'GET',
+                enctype: 'multipart/form-data',
+                url: '{{ route("transaction.specific") }}',
+                data: {type, id},
+                beforeSend:function(){
+                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    $("#transaction_form_submit").prop('disabled', true);
+                },
+                success: function (response){
+                    $('#transaction_form_body').html(response);
+                    $('.select2').select2({
+                        width: '100%',
+                    });
+                },
+            });
         }
 
         $('#transaction_form').on('submit', (e) => {
@@ -879,11 +947,7 @@
                     $('.select2').val(null).trigger('change');
                     $('.transaction_inputs').hide();
                     $("#transaction_form_submit").html('Submit');
-                    $("#transaction_form_submit").prop('disabled', true);
-                    // $('#update_okala_button_close').click();
-                    // $("#update_okala_button").html('Update');
-                    // $("#update_okala_button").prop('disabled', true);
-                    // datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                    $("#transaction_form_submit").prop('disabled', false);
                 },
             });
         })

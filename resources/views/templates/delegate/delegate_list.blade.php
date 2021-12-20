@@ -34,9 +34,12 @@ Delegate List
                                 </td>
                                 <td>{{ $delegate->comment; }}</td>
                                 <td>  --  </td>
-                                <td> 
-                                    <button class="btn btn-primary btn-sm" data-target="#add_office_modal" data-toggle="modal" onclick="add_office_delegatge({{ $delegate->id }})">Add Office</button>
-                                    <button class="btn btn-warning btn-sm" data-target="#update_delegate_modal" data-toggle="modal" onclick="update_delegate({{ $delegate->id }}, '{{ $delegate->name }}', '{{ $delegate->country }}', '{{ $delegate->state }}', '{{ $delegate->comment }}')">Update</button>
+                                <td>
+                                    <div class="btn-group">
+                                        <button onclick="transaction_particular_select('delegate', '{{$delegate->id}}')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button> 
+                                        <button class="btn btn-primary btn-sm" data-target="#add_office_modal" data-toggle="modal" onclick="add_office_delegatge({{ $delegate->id }})">Add Office</button>
+                                        <button class="btn btn-warning btn-sm" data-target="#update_delegate_modal" data-toggle="modal" onclick="update_delegate({{ $delegate->id }}, '{{ $delegate->name }}', '{{ $delegate->country }}', '{{ $delegate->state }}', '{{ $delegate->comment }}')">Update</button>
+                                    </div>
                                 </td>                            
                             </tr>
                             @endforeach
@@ -165,6 +168,21 @@ Delegate List
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="transaction_modal_specific" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="transaction_form_body"></div>
         </div>
     </div>
 </div>

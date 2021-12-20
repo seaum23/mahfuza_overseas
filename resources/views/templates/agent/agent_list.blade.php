@@ -8,7 +8,7 @@ Agents List
     <div class="col-md-12 mt-1">
         <div class="main-card mt-3 card">
             <div class="card-body"><h5 class="card-title">All Agents</h5>
-                <div class="table-responsive">
+                <div class="table-responsive w-100">
                     <table class="mb-0 table table-hover" id="agent_list_datatable">
                         <thead>
                             <tr>
@@ -17,7 +17,7 @@ Agents List
                                 <th>Agent Name</th>
                                 <th>Agent Phone</th>
                                 <th>Document</th>
-                                <th>Expense</th>
+                                <th>Balance</th>
                                 <th>Alter</th>
                             </tr>
                         </thead>
@@ -74,6 +74,21 @@ Agents List
         </div>
     </div>
 </div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="transaction_modal_specific" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="transaction_form_body"></div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
@@ -124,7 +139,7 @@ $(function() {
             { data: 'full_name', name: 'full_name' },
             { data: 'phone', name: 'phone' },
             { data: 'document', name: 'document' },
-            { data: 'id', name: 'id' },
+            { data: 'balance', name: 'balance' },
             { data: 'action', name: 'action' },
         ],
     });

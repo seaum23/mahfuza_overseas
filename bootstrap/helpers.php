@@ -55,7 +55,7 @@ function transaction($amount, $agent_id, $candidate_id, $payment_account)
 
     $transaction->debits()->create([
         'amount' => $amount,
-        'account_id' => '1',
+        'account_id' => '2',
     ]);
 
     $transaction->credits()->create([

@@ -49,6 +49,13 @@ New Candidate
                                     <label>NID / Birth Certificate <span id="text-show" style="color: #ff3d00; display: none;" date-toggle="modal" data-target="#show">Candidate Exists In Agent Expense List <button type="button" data-target="#show" data-toggle="modal" class="btn btn-sm btn-info mr-1" style="padding: .16rem .3rem;"><i class="fas fa-eye"></i></button><button value="no" name="includeCandidate" id="includeCandidate" type="button" class="btn btn-sm btn-danger" style="padding: .16rem .3rem;" onclick="include_Candidate(this.value)"><i class="fa fa-ban"></i></button></span> </label>
                                     <input class="form-control" type="text" name="nid" id="nid" placeholder="Enter NID" onchange="getInfo()">
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label>Interested Country <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
+                                    <select class="form-control select2" name="country" id="country" >
+                                        <x-select-countries/>
+                                    </select>
+                                    <div id="country_invalid" class="invalid-feedback"> </div>
+                                </div>
                             </fieldset>
                         </div>
                         <div class="col-md-6">
@@ -63,13 +70,6 @@ New Candidate
                                     <label>Issue Date <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <input type="text" class="form-control datepicker" autocomplete="off" name="issu_date" id="issu_date" placeholder="yyyy/mm/dd"/>
                                     <div id="issu_date_invalid" class="invalid-feedback"> </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Country <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
-                                    <select class="form-control select2" name="country" id="country" >
-                                        <x-select-countries/>
-                                    </select>
-                                    <div id="country_invalid" class="invalid-feedback"> </div>
                                 </div>
                                 <div class="form-group col-md-12 text-center">
                                     <label>Validity Year <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>

@@ -106,6 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/candidate/departure-seal/{candidate}',[CandidateUpdateController::class, 'departure_seal'])->name('departure-update-file');
         Route::post('/arrival-seal/{candidate}',[CandidateUpdateController::class, 'arrival_seal'])->name('arrival-update-file');
         Route::post('/assign.job',[CandidateUpdateController::class, 'update_job']);
+        Route::post('/assign.country',[CandidateUpdateController::class, 'assign_country']);
         
     });
 
@@ -121,8 +122,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/visa_stamping_update', [ProcessingController::class, 'delete_stamping_file']);
         Route::get('/visa_stamping/{id}', [ProcessingController::class, 'visa_stamping'])->name('visa_stamping');
         Route::post('/finger_update/{processing}', [ProcessingController::class, 'finger_update']);
+        Route::post('/flight_update/{processing}', [ProcessingController::class, 'flight_update']);      
+        Route::post('/flight_return_update/{processing}', [ProcessingController::class, 'return_update']);          
         Route::post('/manpower_update', [ProcessingController::class, 'manpower_update']);        
     });
+
     Route::prefix('ticket')->group(function ()
     {
         Route::get('/list', [TicketController::class, 'datatable']);
@@ -138,6 +142,7 @@ Route::group(['middleware' => 'auth'], function () {
     {
         Route::post('/particular', [TransactionController::class, 'get_particular'])->name('get.particular');
         Route::post('/', [TransactionController::class, 'make_transaction'])->name('transaction');
+        Route::get('/specific', [FormTemplateController::class, 'transaction_template'])->name('transaction.specific');
     });
 
 

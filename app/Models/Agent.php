@@ -24,4 +24,12 @@ class Agent extends Model
     {
         return $this->hasMany(Candidate::class);
     }
+
+    /**
+     * Get all of the post's comments.
+     */
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'particular');
+    }
 }

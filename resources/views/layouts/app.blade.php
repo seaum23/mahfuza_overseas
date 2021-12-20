@@ -445,7 +445,7 @@
                         <ul class="vertical-nav-menu">
                             <li class="app-sidebar__heading">Dashboards</li>
                             <li>
-                                <a href="index.html" class="">
+                                <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'mm-active' : '' }}">
                                     <i class="metismenu-icon pe-7s-rocket"></i>
                                     Dashboard
                                 </a>

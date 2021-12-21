@@ -127,6 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/flight_update/{processing}', [ProcessingController::class, 'flight_update']);      
         Route::post('/flight_return_update/{processing}', [ProcessingController::class, 'return_update']);          
         Route::post('/manpower_update', [ProcessingController::class, 'manpower_update']);        
+        Route::post('/generate_finger_pdf/{candidate}', [ProcessingController::class, 'generate_finger_pdf']);        
     });
 
     Route::prefix('ticket')->group(function ()

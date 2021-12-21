@@ -178,6 +178,7 @@ Candidate List
                     <h4 id="assign_job_candidate_name"></h4>
                     <x-assign-job-to-candidate/>
                 </div>
+                <x-transaction-form-specified name="comission_amount"/>
                 <div class="modal-footer">
                     <button id="assign_job_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="assign_job_submit" type="submit" class="btn btn-primary">Submit</button>

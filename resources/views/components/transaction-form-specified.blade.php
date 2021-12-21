@@ -1,6 +1,6 @@
 <div class="modal-body">
     <div class="card">
-        <div class="card-body">
+        <div class="card-body"><h5>{{ ($name == 'comission_amount') ? 'Comission' : '' }}</h5>
             <div class="form-row mt-3 transaction_inputs justify-content-between">
                 <div class="col-md-6 left_input_div">
                     <label id="{{ $name }}_label" for="{{ $name }}">Amount </label>

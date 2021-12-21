@@ -103,7 +103,22 @@ class CandidateController extends Controller
             'comment' => '',
             'country' => $request->country,
             'updated_by' => auth()->id(),
-            'in_processing' => 0
+            'in_processing' => 0,
+            'father_name' => $request->father_name,
+            'mother_name' => $request->mother_name,
+            'spouse_name' => $request->spouse_name,
+            'nationality' => $request->nationality,
+            'birth_place' => $request->birth_place,
+            'passport_place' => $request->passport_place,
+            'division' => $request->division,
+            'district' => $request->district,
+            'upzilla' => $request->upzilla,
+            'union' => $request->union,
+            'house' => $request->house,
+            'road' => $request->road,
+            'post_office' => $request->post_office,
+            'post_code' => $request->post_code,
+            'profession' => $request->profession,
         ]);
 
         if(!empty($request->expCountry)){

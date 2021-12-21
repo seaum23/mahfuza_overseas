@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
 use App\Models\Candidate;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -94,7 +95,7 @@ class CandidateUpdateController extends Controller
         $candidate = Candidate::find($request->update_job_candidate_id);
         $candidate->job_id = $request->job_type;
         $candidate->manpower_office_id = $request->manpower;
-
+        $candidate->agent_comission = $request->comission_amount;
         $candidate->save();
     }
 
@@ -103,7 +104,6 @@ class CandidateUpdateController extends Controller
         $candidate = Candidate::find($request->update_country_id);
         $candidate->in_processing = 1;
         $candidate->country = $request->update_country;
-
         $candidate->save();
     }
     

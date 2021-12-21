@@ -188,6 +188,23 @@ Processing Candidate List
 
 @section('script')
 <script>
+let generate_pdf = (id) => {
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/processing/generate_finger_pdf/' + id,
+		beforeSend:function(){
+            $("#generate_pdf_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#generate_pdf_button").prop('disabled', true);
+        },
+        success: function (response){
+            $("#generate_pdf_button").html('PDF');
+            $("#generate_pdf_button").prop('disabled', false);
+            window.open(response, '_blank');
+        }
+    });
+}
+    
 const reset_form = (file, close_button, form = '') => {
     $(`#${close_button}`).click();
     datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();

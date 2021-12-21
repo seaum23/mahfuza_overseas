@@ -43,18 +43,53 @@ New Candidate
                                     <label>Date of Birth <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <input style="width: inherit" type="text" class="form-control datepicker" name="date_of_birth" id="date_of_birth" autocomplete="off" placeholder="yyyy/mm/dd" {{-- onchange="getCandidateFromAgentExpense(this.value)" --}}/>
                                     <div id="date_of_birth_invalid" class="invalid-feedback"> </div>
-                                </div>                                
-                                <div class="form-group col-md-6">
-                                    <input type="hidden"    value="no" id="includeCandidateFromAgent" name="includeCandidateFromAgent">                   
-                                    <label>NID / Birth Certificate <span id="text-show" style="color: #ff3d00; display: none;" date-toggle="modal" data-target="#show">Candidate Exists In Agent Expense List <button type="button" data-target="#show" data-toggle="modal" class="btn btn-sm btn-info mr-1" style="padding: .16rem .3rem;"><i class="fas fa-eye"></i></button><button value="no" name="includeCandidate" id="includeCandidate" type="button" class="btn btn-sm btn-danger" style="padding: .16rem .3rem;" onclick="include_Candidate(this.value)"><i class="fa fa-ban"></i></button></span> </label>
-                                    <input class="form-control" type="text" name="nid" id="nid" placeholder="Enter NID" onchange="getInfo()">
                                 </div>
+
                                 <div class="form-group col-md-6">
                                     <label>Interested Country <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <select class="form-control select2" name="country" id="country" >
                                         <x-select-countries/>
                                     </select>
                                     <div id="country_invalid" class="invalid-feedback"> </div>
+                                </div>
+                                <div class="col-md-12"><hr></div>
+
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" value="no" id="includeCandidateFromAgent" name="includeCandidateFromAgent">                   
+                                    <label>NID / Birth Certificate <span id="text-show" style="color: #ff3d00; display: none;" date-toggle="modal" data-target="#show">Candidate Exists In Agent Expense List <button type="button" data-target="#show" data-toggle="modal" class="btn btn-sm btn-info mr-1" style="padding: .16rem .3rem;"><i class="fas fa-eye"></i></button><button value="no" name="includeCandidate" id="includeCandidate" type="button" class="btn btn-sm btn-danger" style="padding: .16rem .3rem;" onclick="include_Candidate(this.value)"><i class="fa fa-ban"></i></button></span> </label>
+                                    <input class="form-control" type="text" name="nid" id="nid" placeholder="Enter NID" onchange="getInfo()">
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label>Fathers Name</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="fathers_name" id="date_offathers_name_birth" autocomplete="off" placeholder="Fathers Name"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Mothers Name</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="mothers_name" id="mothers_name" autocomplete="off" placeholder="Mothers Name"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Spouse Name</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="spouse_name" id="spouse_name" autocomplete="off" placeholder="Spouse Name"/>
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label>Nationality</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="nationality" id="nationality" autocomplete="off" placeholder="Nationality"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Birth Place</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="birth_place" id="birth_place" autocomplete="off" placeholder="Birth Place"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Religion</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="religion" id="religion" autocomplete="off" placeholder="Religion"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Profession</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="profession" id="profession" autocomplete="off" placeholder="Profession"/>
                                 </div>
                             </fieldset>
                         </div>
@@ -71,7 +106,13 @@ New Candidate
                                     <input type="text" class="form-control datepicker" autocomplete="off" name="issu_date" id="issu_date" placeholder="yyyy/mm/dd"/>
                                     <div id="issu_date_invalid" class="invalid-feedback"> </div>
                                 </div>
-                                <div class="form-group col-md-12 text-center">
+                                <div class="form-group col-md-6">
+                                    <label>Passport Place</label>
+                                    <select class="form-control select2" name="passport_place" id="passport_place" >
+                                        <x-select-countries/>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6 text-center">
                                     <label>Validity Year <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <div>
                                         <div class="custom-radio custom-control custom-control-inline">
@@ -84,7 +125,7 @@ New Candidate
                                         </div>
                                     </div>
                                 </div>                    
-                            </fieldset>                            
+                            </fieldset>
                             <fieldset class="form-row form-group p-2" style="border: 1px solid gray; border-radius: 5px">
                                 <legend>Agent Information:</legend>
                                 <div class="row w-100">
@@ -97,6 +138,43 @@ New Candidate
                                             @endforeach
                                         </select>
                                         <div id="agent_invalid" class="invalid-feedback"> </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-row form-group p-2" style="border: 1px solid gray; border-radius: 5px">
+                                <legend>Address:</legend>
+                                <div class="row w-100">
+                                    <div class="form-group col-md-4">
+                                        <label>Division</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="division" id="division" autocomplete="off" placeholder="Division"/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>District</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="district" id="district" autocomplete="off" placeholder="District"/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Upzilla</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="upzilla" id="upzilla" autocomplete="off" placeholder="Upzilla"/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Union</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="union" id="union" autocomplete="off" placeholder="Union"/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>House No.</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="house" id="house" autocomplete="off" placeholder="House No."/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Road No.</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="road" id="road" autocomplete="off" placeholder="Road No."/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Post Office</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="post_office" id="post_office" autocomplete="off" placeholder="Post Office"/>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Post Code</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="post_code" id="post_code" autocomplete="off" placeholder="Post Code"/>
                                     </div>
                                 </div>
                             </fieldset>

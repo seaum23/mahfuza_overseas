@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\Agent;
+use Barryvdh\DomPDF\PDF;
+use App\Models\Candidate;
 use App\Models\Processing;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
 
 class ProcessingController extends Controller
 {
@@ -42,7 +48,7 @@ class ProcessingController extends Controller
             ->editColumn('employee_request', function ($query)
             {
                 if($query->employee_request == 0){
-                    return '<button onclick="employee_request('.$query->id.')" class="btn btn-secondary btn-sm target-click">No</button>';
+                    return '<button onclick="employee_request('.$query->id.')" class="btn btn-secondary btn-xs target-click">No</button>';
                 }
                 
                 return '<badge class="badge badge-primary">Done</badge>';
@@ -50,7 +56,7 @@ class ProcessingController extends Controller
             ->editColumn('foreign_mole', function ($query)
             {
                 if($query->foreign_mole == 0){
-                    return '<button onclick="foreign_mole('.$query->id.')" class="btn btn-secondary btn-sm">No</button>';
+                    return '<button onclick="foreign_mole('.$query->id.')" class="btn btn-secondary btn-xs">No</button>';
                 }
                 
                 return '<badge class="badge badge-primary">Done</badge>';
@@ -58,10 +64,10 @@ class ProcessingController extends Controller
             ->editColumn('okala', function ($query)
             {
                 if($query->okala == 0){
-                    return '<button onclick="update_okala_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#okala_modal" class="btn btn-secondary btn-sm">No</button>';
+                    return '<button onclick="update_okala_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#okala_modal" class="btn btn-secondary btn-xs">No</button>';
                 }
 
-                $reupload_button = '<button onclick="update_okala_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#okala_modal" class="btn btn-info btn-sm"><i class="fas fa-redo"></i></button>';
+                $reupload_button = '<button onclick="update_okala_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#okala_modal" class="btn btn-info btn-xs"><i class="fas fa-redo"></i></button>';
                 $show_file = '<a target="_blank" class="btn btn-secondary btn-xs" role="button" href="'.asset($query->okala_file).'"><i class="fas fa-search"></i></a>';
                 
                 return '<div class="btn-group" role="group" aria-label="Basic example">' . $reupload_button . $show_file . '</div>';
@@ -69,10 +75,10 @@ class ProcessingController extends Controller
             ->editColumn('mufa', function ($query)
             {
                 if($query->mufa == 0){
-                    return '<button onclick="update_mufa_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#mufa_modal" class="btn btn-secondary btn-sm">No</button>';
+                    return '<button onclick="update_mufa_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#mufa_modal" class="btn btn-secondary btn-xs">No</button>';
                 }
 
-                $reupload_button = '<button onclick="update_mufa_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#mufa_modal" class="btn btn-info btn-sm"><i class="fas fa-redo"></i></button>';
+                $reupload_button = '<button onclick="update_mufa_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#mufa_modal" class="btn btn-info btn-xs"><i class="fas fa-redo"></i></button>';
                 $show_file = '<a target="_blank" class="btn btn-secondary btn-xs" role="button" href="'.asset($query->mufa_file).'"><i class="fas fa-search"></i></a>';
                 
                 return '<div class="btn-group" role="group" aria-label="Basic example">' . $reupload_button . $show_file . '</div>';
@@ -80,7 +86,7 @@ class ProcessingController extends Controller
             ->editColumn('medical_update', function ($query)
             {
                 if($query->medical_update == 0){
-                    return '<button onclick="medical_update('.$query->id.')" class="btn btn-secondary btn-sm">No</button>';
+                    return '<button onclick="medical_update('.$query->id.')" class="btn btn-secondary btn-xs">No</button>';
                 }
                 
                 return '<badge class="badge badge-primary">Done</badge>';
@@ -88,18 +94,22 @@ class ProcessingController extends Controller
             ->editColumn('visa_stamping', function ($query)
             {
                 if($query->visa_stamping == 0){
-                    return '<button onclick="update_visa_stamping('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#visa_stamping_modal" class="btn btn-secondary btn-sm">No</button>';
+                    return '<button onclick="update_visa_stamping('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#visa_stamping_modal" class="btn btn-secondary btn-xs">No</button>';
                 }
                 
                 return '<a href="'.route('visa_stamping', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$query->visa_stamping_date.'</badge></a>';
             })
             ->editColumn('finger', function ($query)
             {
+                $html = '<div class="btn btn-group"><button id="generate_pdf_button" onclick="generate_pdf('.$query->candidate->id.')" class="btn btn-info btn-xs">PDF</button>';
+
                 if($query->finger == 0){
-                    return '<button onclick="finger_update('.$query->id.')" class="btn btn-secondary btn-sm">No</button>';
+                    $html .= '<button onclick="finger_update('.$query->id.')" class="btn btn-secondary btn-xs">No</button>';
+                }else{
+                    $html .= '<badge class="badge badge-primary">Done</badge>';
                 }
                 
-                return '<badge class="badge badge-primary">Done</badge>';
+                return $html.'</div>';
             })
             ->editColumn('candidate.training_card_file', function ($query)
             {
@@ -120,10 +130,10 @@ class ProcessingController extends Controller
             ->editColumn('manpower', function ($query)
             {
                 if($query->manpower == 0){
-                    return '<button onclick="update_manpower_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#manpower_modal" class="btn btn-secondary btn-sm">No</button>';
+                    return '<button onclick="update_manpower_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#manpower_modal" class="btn btn-secondary btn-xs">No</button>';
                 }
 
-                $reupload_button = '<button onclick="update_manpower_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#manpower_modal" class="btn btn-info btn-sm"><i class="fas fa-redo"></i></button>';
+                $reupload_button = '<button onclick="update_manpower_modal('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#manpower_modal" class="btn btn-info btn-xs"><i class="fas fa-redo"></i></button>';
                 $show_file = '<a target="_blank" class="btn btn-secondary btn-xs" role="button" href="'.asset($query->manpower_card_file).'"><i class="fas fa-search"></i></a>';
                 
                 return '<div class="btn-group" role="group" aria-label="Basic example">' . $reupload_button . $show_file . '</div>';
@@ -131,7 +141,7 @@ class ProcessingController extends Controller
             ->editColumn('ticket', function ($query)
             {
                 if(!$query->has_ticket()){
-                    return '<a href="'.route('ticket', $query->id).'"><button class="btn btn-secondary btn-sm">No</button></a>';
+                    return '<a href="'.route('ticket', $query->id).'"><button class="btn btn-secondary btn-xs">No</button></a>';
                 }
 
                 $latest_ticket = $query->tickets()->latest()->first();
@@ -270,12 +280,52 @@ class ProcessingController extends Controller
     {
         $processing->pending = 2;
         $processing->save();
+        
+        $transaction = new Transaction();
+        $transaction->quantity = 1;
+        $transaction->currency = 'bdt';
+        $transaction->unit_price = $processing->candidate->agent_comission;
+        $transaction->exchange_rate = 1;
+        $transaction->particular_type = Agent::class;
+        $transaction->particular_id = $processing->candidate->agent_id;
+        $transaction->candidate_id = $processing->candidate->id;
+        $transaction->save();
+        $transaction->transaction_id = str_pad($transaction->id, 10, '0', STR_PAD_LEFT);
+        $transaction->save();
+
+        $transaction->debits()->create([
+            'amount' => $processing->candidate->agent_comission,
+            'account_id' => '10',
+        ]);
+
+        $transaction->credits()->create([
+            'amount' => $processing->candidate->agent_comission,
+            'account_id' => '2',
+        ]);
+
+        $transaction->save();
+
     }
 
     public function return_update(Processing $processing)
     {
         $processing->pending = 3;
         $processing->save();
+    }
+
+    public function generate_finger_pdf(Candidate $candidate)
+    {
+        $images = finger_image($candidate);
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->setPaper('A4');
+        $pdf->loadView('pdf/finger', [
+            'images' => $images
+        ]);
+        $random = time();
+        $pdf->save(storage_path("app/public/candidate/finger/test_$random.pdf"));
+        unlink(storage_path("app/public/candidate/finger/$images[0]"));
+        unlink(storage_path("app/public/candidate/finger/$images[1]"));
+        return asset("storage/candidate/finger/test_$random.pdf");
     }
     
 }

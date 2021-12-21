@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
     //     'employee' => EmployeeController::class,
     // ]);
 
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee');
     Route::post('/employee', [EmployeeController::class, 'store']);
     Route::post('/employee-update-fetch/{user}', [EmployeeController::class, 'update_fetch']);

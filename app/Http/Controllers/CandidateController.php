@@ -363,10 +363,10 @@ class CandidateController extends Controller
             })
             ->editColumn('country', function ($query)
             {
-                if($query->in_processing == 1){
-                    $html = '<badge class="badge badge-success">'.$query->country.'</badge>';
-                }else{
+                if($query->in_processing == 0){
                     $html = '<badge onclick="assign_country('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" class="badge badge-secondary" style="cursor: pointer">'.$query->country.'</badge>';
+                }else{
+                    $html = '<badge class="badge badge-success">'.$query->country.'</badge>';
                 }
                 return $html;
             })            

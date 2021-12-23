@@ -46,7 +46,10 @@ class Candidate extends Model
         'road',
         'post_office',
         'post_code',
-        'profession'
+        'profession',
+        'nominee',
+        'nominee_relation',
+        'contact_name',
     ];
 
     public function agent()

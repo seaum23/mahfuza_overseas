@@ -14,7 +14,7 @@ class AddAgentComissionToCandidate extends Migration
     public function up()
     {
         Schema::table('candidates', function (Blueprint $table) {
-            $table->double('agent_comission', 12, 2);
+            $table->double('agent_comission', 12, 2)->nullable();
         });
     }
 

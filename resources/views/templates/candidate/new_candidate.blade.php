@@ -63,7 +63,7 @@ New Candidate
 
                                 <div class="form-group col-md-6">
                                     <label>Fathers Name</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="fathers_name" id="date_offathers_name_birth" autocomplete="off" placeholder="Fathers Name"/>
+                                    <input style="width: inherit" type="text" class="form-control" name="father_name" id="date_offathers_name_birth" autocomplete="off" placeholder="Fathers Name"/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Mothers Name</label>
@@ -90,6 +90,18 @@ New Candidate
                                 <div class="form-group col-md-6">
                                     <label>Profession</label>
                                     <input style="width: inherit" type="text" class="form-control" name="profession" id="profession" autocomplete="off" placeholder="Profession"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Nominee</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="nominee" id="nominee" autocomplete="off" placeholder="Nominee"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Nominee Relation</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="nominee_relation" id="nominee_relation" autocomplete="off" placeholder="Nominee Relation"/>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Contact Name</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="contact_name" id="contact_name" autocomplete="off" placeholder="Contact Name"/>
                                 </div>
                             </fieldset>
                         </div>

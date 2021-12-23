@@ -119,6 +119,9 @@ class CandidateController extends Controller
             'post_office' => $request->post_office,
             'post_code' => $request->post_code,
             'profession' => $request->profession,
+            'nominee' => $request->nominee,
+            'nominee_relation' => $request->nominee_relation,
+            'contact_name' => $request->contact_name,
         ]);
 
         if(!empty($request->expCountry)){
@@ -236,7 +239,7 @@ class CandidateController extends Controller
     {
         $visas =  SponsorVisa::whereHas('sponsor.delegate_office.delegate', function ($query) use ($candidate)
         {
-            $query->where('delegates.country', $candidate->country);
+            $query->where('delegates.country', $candidate->country)->where('delegates.country', $candidate->country);
         })->with('sponsor.delegate_office.delegate', 'job')->get();
         
         foreach($visas as $visa){

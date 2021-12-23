@@ -132,7 +132,7 @@ function finger_image($candidate)
     $page_two = imagecreatefrompng(asset('public/images/finger/page_two.png'));
     $color = imagecolorallocate($page_two, 19,21,22);
 
-    $nominee_name = $candidate->nominee_name;
+    $nominee_name = $candidate->nominee;
     $nominee_relation = $candidate->nominee_relation;
     $contact_name = $candidate->contact_name;
     imagettftext($page_two, 20, 0, 385, 1420, $color, $font_name, $nominee_relation);

@@ -75,14 +75,14 @@ function finger_image($candidate)
     $page_one = imagecreatefrompng(asset('public/images/finger/page_one.png'));
     $color = imagecolorallocate($page_one, 19,21,22);
     $name = $candidate->fName." ".$candidate->lName;
-    $fathers_name = "Fathers Name";
-    $mothers_name = "Mothers Name";
-    $spouse = "Spouse Name";
+    $fathers_name = $candidate->father_name;
+    $mothers_name = $candidate->mother_name;
+    $spouse = $candidate->spouse_name;
     $dob = $candidate->data_of_birth;
     $passport = $candidate->passportNum;
-    $nationality = "Bangladeshi";
-    $birth_palce = "Bangladeshi";
-    $passport_place = "Passport Place";
+    $nationality = $candidate->nationality;
+    $birth_palce = $candidate->birth_palce;
+    $passport_place = $candidate->passport_place;
     $issue_date = new DateTime($candidate->issue_date);
     $passport_date = $issue_date->format('d-m-Y');
 
@@ -91,17 +91,17 @@ function finger_image($candidate)
     $passport_exp_date = $exp_date->format('d-m-Y');
 
     $gender = $candidate->gender;
-    $religion = "Islam";
-    $division = "Dhaka";
-    $district = "Dhaka";
-    $upzilla = "Mohammadpur";
-    $union = "36";
-    $house_village = "13B";
-    $road_mouza = "8B";
-    $post_office = "Adabor";
-    $post_code = "1208";
+    $religion = $candidate->religion;
+    $division = $candidate->division;
+    $district = $candidate->district;
+    $upzilla = $candidate->upzilla;
+    $union = $candidate->union;
+    $house_village = $candidate->house_village;
+    $road_mouza = $candidate->road_mouza;
+    $post_office = $candidate->post_office;
+    $post_code = $candidate->post_code;
     $mobile = $candidate->phone;
-    $professional = "Doctor";
+    $professional = $candidate->passportNum;
     imagettftext($page_one, 20, 0, 175, 587, $color, $font_name, $name);
     imagettftext($page_one, 20, 0, 455, 662, $color, $font_name, $fathers_name);
     imagettftext($page_one, 20, 0, 455, 722, $color, $font_name, $mothers_name);
@@ -132,9 +132,9 @@ function finger_image($candidate)
     $page_two = imagecreatefrompng(asset('public/images/finger/page_two.png'));
     $color = imagecolorallocate($page_two, 19,21,22);
 
-    $nominee_name = "Samin Yeasar";
-    $nominee_relation = "Brother";
-    $contact_name = "Contact Name";
+    $nominee_name = $candidate->nominee_name;
+    $nominee_relation = $candidate->nominee_relation;
+    $contact_name = $candidate->contact_name;
     imagettftext($page_two, 20, 0, 385, 1420, $color, $font_name, $nominee_relation);
     imagettftext($page_two, 20, 0, 1100, 1418, $color, $font_name, $nominee_name);
     imagettftext($page_two, 20, 0, 385, 1970, $color, $font_name, $contact_name);

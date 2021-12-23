@@ -63,11 +63,11 @@ New Candidate
 
                                 <div class="form-group col-md-6">
                                     <label>Fathers Name</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="fathers_name" id="date_offathers_name_birth" autocomplete="off" placeholder="Fathers Name"/>
+                                    <input style="width: inherit" type="text" class="form-control" name="father_name" id="father_name" autocomplete="off" placeholder="Fathers Name"/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Mothers Name</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="mothers_name" id="mothers_name" autocomplete="off" placeholder="Mothers Name"/>
+                                    <input style="width: inherit" type="text" class="form-control" name="mother_name" id="mother_name" autocomplete="off" placeholder="Mothers Name"/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Spouse Name</label>

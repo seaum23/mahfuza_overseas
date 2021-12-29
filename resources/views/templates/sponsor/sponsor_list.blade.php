@@ -17,7 +17,6 @@ Sponsors List
                                 </th>
                                 <th>Sponsor Name</th>
                                 <th>Sponsor NID</th>
-                                <th>VISA No.</th>
                                 <th>Sponsor Phone</th>
                                 <th>Comment</th>
                                 <th>Alter</th>
@@ -124,7 +123,6 @@ $(function() {
             { data: 'delegate_office.name' },
             { data: 'sponsor_name' },
             { data: 'sponsor_NID' },
-            { data: 'sponsor_name' },
             { data: 'sponsor_phone' },
             { data: 'comment' },
             { data: 'action'},

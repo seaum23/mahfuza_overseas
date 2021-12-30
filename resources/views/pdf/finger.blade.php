@@ -4,7 +4,8 @@
 
 <head>
 
-    <title>Hi</title>
+    <link rel="icon" href="{{ asset('storage/images/favicon.ico') }}">
+    <title>Finger PDF</title>
 
     <style>
         @page { margin: 0px; }

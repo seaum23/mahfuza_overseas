@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use DateInterval;
+use Carbon\Carbon;
 use App\Models\Job;
 use App\Models\Agent;
-use App\Models\Candidate;
 use App\Models\Delegate;
-use Illuminate\Http\Request;
-use App\Models\ManpowerOffice;
+use App\Models\Candidate;
 use App\Models\Processing;
 use App\Models\SponsorVisa;
-use DateInterval;
-use DateTime;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\Models\ManpowerOffice;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\DB;
 
 class CandidateController extends Controller
 {
@@ -122,6 +123,7 @@ class CandidateController extends Controller
             'nominee' => $request->nominee,
             'nominee_relation' => $request->nominee_relation,
             'contact_name' => $request->contact_name,
+            'religion' => $request->religion,
         ]);
 
         if(!empty($request->expCountry)){
@@ -320,9 +322,12 @@ class CandidateController extends Controller
                             <div class="btn-group" role="group" aria-label="First group">
                                 <button onclick="test_medical_file(\''.asset($query->test_medical_file).'\', \''.$query->id.'\')" data-target="#test_medical_file_show" data-toggle="modal" class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>';
                 if($query->test_medical_status == 1){
-                    $html .=    '<button class="btn btn-xs btn-success">Fit</button>';
+                    $html .=    '<button onclick="fit_unfit('.$query->id.', \'test_medical\')" class="btn btn-xs btn-warning"><i class="fas fa-ellipsis-h"></i></button>';
                 }
                 if($query->test_medical_status == 2){
+                    $html .=    '<button class="btn btn-xs btn-success">Fit</button>';
+                }
+                if($query->test_medical_status == 3){
                     $html .=    '<button class="btn btn-xs btn-danger">Unfit</button>';
                 }
                 return $html.
@@ -339,9 +344,12 @@ class CandidateController extends Controller
                             <div class="btn-group mr-2" role="group" aria-label="First group">
                                 <button onclick="final_medical_file(\''.asset($query->final_medical_file).'\', \''.$query->id.'\')" data-target="#final_medical_file_show" data-toggle="modal"  class="btn btn-xs btn-info"><i class="fas fa-search"></i></button>';
                 if($query->final_medical_status == 1){
-                    $html .=    '<button class="btn btn-xs btn-success">Fit</button>';
+                    $html .=    '<button onclick="fit_unfit('.$query->id.', \'final_medical\')"  class="btn btn-xs btn-warning"><i class="fas fa-ellipsis-h"></i></button>';
                 }
                 if($query->final_medical_status == 2){
+                    $html .=    '<button class="btn btn-xs btn-success">Fit</button>';
+                }
+                if($query->final_medical_status == 3){
                     $html .=    '<button class="btn btn-xs btn-danger">Unfit</button>';
                 }
                 // '<badge></bdag>'
@@ -396,10 +404,30 @@ class CandidateController extends Controller
                 if($query->in_processing == 1){
                     $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
                 }
+                if($query->manpower_status == 0){
+                    $html .= '<button onclick="sent_to_manpower('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#manpower_status_modal" class="btn btn-secondary btn-xs">Manpower</button>';
+                }
+                if($query->manpower_status == 1){
+                    $processing = Processing::where('candidate_id', $query->id)->first();
+                    if(!is_null($processing)){
+                        if($processing->manpower == '0'){
+                            $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-info btn-xs" role="button" target="_blank">Manpower</a>';
+                        }else{
+                            $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-success btn-xs" role="button" target="_blank">Manpower</a>';
+                        }
+                    }else{
+                        $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-info btn-xs" role="button" target="_blank">Manpower</a>';
+                    }
+                }
                 return $html . "</div>" ;
             })
             ->rawColumns(['action', 'fName', 'test_medical_status', 'final_medical_status', 'police_clearance_file', 'training_card_file', 'country'])
             ->make(true);
         }
+    }
+
+    public function get_age(Request $request)
+    {
+        return Carbon::createFromFormat('Y/m/d', $request->birth_date)->diff(Carbon::now())->format('%yy%mm%dd');
     }
 }

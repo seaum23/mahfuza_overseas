@@ -93,6 +93,7 @@ function finger_image($candidate)
     $gender = $candidate->gender;
     $religion = $candidate->religion;
     $division = $candidate->division;
+    $birth_place = $candidate->birth_place;
     $district = $candidate->district;
     $upzilla = $candidate->upzilla;
     $union = $candidate->union;
@@ -101,7 +102,7 @@ function finger_image($candidate)
     $post_office = $candidate->post_office;
     $post_code = $candidate->post_code;
     $mobile = $candidate->phone;
-    $professional = $candidate->passportNum;
+    $professional = $candidate->profession;
     imagettftext($page_one, 20, 0, 175, 587, $color, $font_name, $name);
     imagettftext($page_one, 20, 0, 455, 662, $color, $font_name, $fathers_name);
     imagettftext($page_one, 20, 0, 455, 722, $color, $font_name, $mothers_name);
@@ -113,6 +114,7 @@ function finger_image($candidate)
     imagettftext($page_one, 20, 0, 1100, 942, $color, $font_name, $passport_place);
     imagettftext($page_one, 20, 0, 1100, 998, $color, $font_name, $passport_date);
     imagettftext($page_one, 20, 0, 1100, 1100, $color, $font_name, $passport_exp_date);
+    imagettftext($page_one, 20, 0, 376, 1040, $color, $font_name, $birth_place);
     imagettftext($page_one, 20, 0, 376, 1103, $color, $font_name, $gender);
     imagettftext($page_one, 20, 0, 376, 1168, $color, $font_name, $religion);
     imagettftext($page_one, 20, 0, 376, 1325, $color, $font_name, $division);

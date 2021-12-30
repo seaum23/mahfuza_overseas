@@ -215,51 +215,100 @@ const reset_form = (file, close_button, form = '') => {
 }
 // Processings
 let employee_request = (id) => {
-    $.ajax({
-        type: 'POST',
-        enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' + '/processing/employee_request/' + id,
-        success: function (response){
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
-        }
-    });
-}
-let foreign_mole = (id) => {
-    $.ajax({
-        type: 'POST',
-        enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' + '/processing/foreign_mole/' + id,
-        success: function (response){
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
-        }
-    });
-}
-let medical_update = (id) => {
-    $.ajax({
-        type: 'POST',
-        enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' + '/processing/medical_update/' + id,
-        success: function (response){
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
-        }
-    });
-}
-let finger_update = (id) => {
-    swal({
+    Swal.fire({
         title: "Are you sure?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
-    .then((willDelete) => {
-        if (willDelete) {
+    .then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/processing/employee_request/' + id,
+                success: function (response){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Done',
+                        showConfirmButton: false,
+                        timer: 750
+                    })
+                    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                }
+            });
+        }
+    });
+}
+let foreign_mole = (id) => {
+    Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((result) => {
+        if (result.isConfirmed) {            
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/processing/foreign_mole/' + id,
+                success: function (response){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Done',
+                        showConfirmButton: false,
+                        timer: 750
+                    })
+                    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                }
+            });
+        }
+    });
+}
+let medical_update = (id) => {
+    Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/processing/medical_update/' + id,
+                success: function (response){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Done',
+                        showConfirmButton: false,
+                        timer: 750
+                    })
+                    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+                }
+            });
+        }
+    });
+}
+let finger_update = (id) => {
+    Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',
                 url: '{{ url('/') }}' + '/processing/finger_update/' + id,
                 success: function (response){
-                    swal("Done!", {
+                    Swal.fire("Done!", {
                         icon: "success",
+                        timer: 1000
                     });
                     datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
                 }
@@ -269,20 +318,20 @@ let finger_update = (id) => {
 }
 
 let flight_update = (id) => {
-    swal({
+    Swal.fire({
         title: "Confirm flight complete?",
         icon: "success",
         buttons: true,
         dangerMode: true,
     })
-    .then((confirm) => {
-        if (confirm) {
+    .then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',
                 url: '{{ url('/') }}' + '/processing/flight_update/' + id,
                 success: function (response){
-                    swal("Done!", {
+                    Swal.fire("Done!", {
                         icon: "success",
                     });
                     datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
@@ -293,20 +342,20 @@ let flight_update = (id) => {
 }
 
 let flight_return_update = (id) => {
-    swal({
+    Swal.fire({
         title: "Return Candidate?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     })
-    .then((confirm) => {
-        if (confirm) {
+    .then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 type: 'POST',
                 enctype: 'multipart/form-data',
                 url: '{{ url('/') }}' + '/processing/flight_return_update/' + id,
                 success: function (response){
-                    swal("Done!", {
+                    Swal.fire("Done!", {
                         icon: "success",
                     });
                     datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
@@ -423,8 +472,9 @@ $('#training_card_form').on('submit', function(e){
             $("#update_training_button").prop('disabled', true);
         },
         success: function (response){
-            $('#traning_card_modal_close').click();
-            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
+            $("#update_training_button").html('Submit');
+            $("#update_training_button").prop('disabled', false);
+            reset_form('training_file', 'traning_card_modal_close', 'training_card_form');
         },
     });
 });

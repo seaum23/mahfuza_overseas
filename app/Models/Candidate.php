@@ -50,6 +50,7 @@ class Candidate extends Model
         'nominee',
         'nominee_relation',
         'contact_name',
+        'religion'
     ];
 
     public function agent()

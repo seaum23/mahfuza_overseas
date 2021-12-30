@@ -32,8 +32,8 @@ class CreateCandidatesTable extends Migration
             $table->string('country', 100)->nullable();
             $table->foreignIdFor(Agent::class);
             $table->foreignIdFor(ManpowerOffice::class)->nullable();
-            $table->tinyInteger('test_medical_status')->default(0); // Fit -> 1 || Unfit -> 2 || Not done yet -> 0
-            $table->tinyInteger('final_medical_status')->default(0); // Fit -> 1 || Unfit -> 2 || Not done yet -> 0
+            $table->tinyInteger('test_medical_status')->default(0); // Fit -> 2 || Unfit -> 3 || Not done yet -> 0 || Document Uploaded but fittness pending -> 1
+            $table->tinyInteger('final_medical_status')->default(0); // Fit -> 2 || Unfit -> 3 || Not done yet -> 0 || Document Uploaded but fittness pending -> 1
             $table->date('final_medical_report')->nullable()->default(NULL);
             $table->tinyInteger('experience_status'); // New -> 1 || Experienced -> 2
             $table->string('comment');

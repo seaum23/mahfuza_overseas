@@ -121,8 +121,8 @@ class ProcessingController extends Controller
                     return '<button onclick="update_training_card('.$query->candidate->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#traning_card_modal" class="btn btn-xs btn-secondary">No</button>';
                 }
 
-                $reupload_button = '<button onclick="update_training_card('.$query->candidate->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#traning_card_modal" class="btn btn-xs btn-secondary"><i class="fas fa-redo"></i></button>';
-                $show_file = '<a target="_blank" class="btn btn-info btn-xs" role="button" href="'.asset($query->candidate->training_card_file).'"><i class="fas fa-search"></i></a>';
+                $reupload_button = '<button onclick="update_training_card('.$query->candidate->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#traning_card_modal" class="btn btn-xs btn-info"><i class="fas fa-redo"></i></button>';
+                $show_file = '<a target="_blank" class="btn btn-secondary btn-xs" role="button" href="'.asset($query->candidate->training_card_file).'"><i class="fas fa-search"></i></a>';
                 
                 return '<div class="btn-group" role="group" aria-label="Basic example">' . $reupload_button . $show_file . '</div>';
             })
@@ -154,7 +154,7 @@ class ProcessingController extends Controller
                 $html .= '<button onclick="processing_transaction(\''.$query->id.'\', \''.$query->candidate->fName.' '.$query->candidate->lName.'\')" data-toggle="modal" data-target="#transaction_modal" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
                 if($query->pending == '0'){
                     $html .= '<button onclick="flight_update(\''.$query->id.'\')" class="btn btn-secondary btn-xs"><i class="fas fa-plane"></i></button>';
-                    $html .= '<button onclick="flight_return_update(\''.$query->id.'\')" class="btn btn-danger btn-xs"><i class="fas fa-user"></i></button>';
+                    $html .= '<button onclick="flight_return_update(\''.$query->id.'\')" class="btn btn-danger btn-xs"><i class="fas fa-plane-arrival"></i></button>';
                 }else if($query->pending == '2'){
                     $html .= '<button class="btn btn-success btn-xs"><i class="fas fa-plane"></i></button>';
                 }else if($query->pending == '3'){

@@ -109,6 +109,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/arrival-seal/{candidate}',[CandidateUpdateController::class, 'arrival_seal'])->name('arrival-update-file');
         Route::post('/assign.job',[CandidateUpdateController::class, 'update_job']);
         Route::post('/assign.country',[CandidateUpdateController::class, 'assign_country']);
+        Route::post('/fit.unfit/{candidate}',[CandidateUpdateController::class, 'fit_unfit']);
+        Route::post('/send-to-manpower',[CandidateUpdateController::class, 'send_to_manpower']);
         
     });
 
@@ -179,6 +181,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('candidate-experience-status/{status}', [FormTemplateController::class, 'candidate_experience_tempalte']);
     Route::get('get-manpower-office/{job}', [FormTemplateController::class, 'get_manpower_office']);
     Route::get('get-sponsor-visa-form/{idx}', [FormTemplateController::class, 'sponsor_office']);
+
+    Route::get('get-age', [CandidateController::class, 'get_age']);
     
 
 });

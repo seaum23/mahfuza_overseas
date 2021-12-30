@@ -121,10 +121,16 @@ class UploadController extends Controller
             $file = $request->file('training_file');
             $tmp = $this->upload($file);
             return $tmp;
-        }                        
+        }
 
         if($request->hasFile('update_training_card_file')){
             $file = $request->file('update_training_card_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        if($request->hasFile('manpower_status_file')){
+            $file = $request->file('manpower_status_file');
             $tmp = $this->upload($file);
             return $tmp;
         }

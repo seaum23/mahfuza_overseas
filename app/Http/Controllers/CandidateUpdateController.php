@@ -9,11 +9,30 @@ use Illuminate\Http\Request;
 
 class CandidateUpdateController extends Controller
 {
+    public function fit_unfit(Candidate $candidate, Request $request)
+    {
+        if($request->fittness == 'fit'){
+            if($request->medical == 'final_medical'){
+                $candidate->final_medical_status = '2';
+            }else{
+                $candidate->test_medical_status = '2';
+            }
+        }else{
+            if($request->medical == 'final_medical'){
+                $candidate->final_medical_status = '3';
+            }else{
+                $candidate->test_medical_status = '3';
+            }
+        }
+
+        $candidate->save();
+    }
+
     public function test_medical(Request $request)
     {
         $candidate = Candidate::with('agent')->find($request->update_id);
         $candidate->test_medical_file = move($request->test_candidate_file, 'candidate', 'testMedicalFile_' . $candidate->id . '_' . time() );
-        $candidate->test_medical_status = 1; // Fit
+        $candidate->test_medical_status = 1; // Pending Fittness
 
         if($request->test_medical_amount > 0){
             transaction($request->test_medical_amount, $candidate->agent->id, $candidate->id, $request->test_medical_amount_payment_account);
@@ -26,7 +45,7 @@ class CandidateUpdateController extends Controller
     {
         $candidate = Candidate::with('agent')->find($request->update_id_final);
         $candidate->final_medical_file = move($request->final_candidate_file, 'candidate', 'finalMedicalFile_' . $candidate->id . '_' . time() );
-        $candidate->final_medical_status = 1; // Fit
+        $candidate->final_medical_status = 1; // Pending Fittness
         $candidate->final_medical_report = $request->final_date;
 
         if($request->final_medical_amount > 0){
@@ -104,6 +123,17 @@ class CandidateUpdateController extends Controller
         $candidate = Candidate::find($request->update_country_id);
         $candidate->in_processing = 1;
         $candidate->country = $request->update_country;
+        $candidate->save();
+    }
+
+    public function send_to_manpower(Request $request)
+    {
+        $request->validate([
+            'manpower_status_file' => 'required'
+        ]);
+        $candidate = Candidate::find($request->manpower_status_update);
+        $candidate->manpower_status = 1;
+        $candidate->manpower_status_file = move($request->manpower_status_file, 'candidate', 'manpower_sent_receipt_' . $candidate->id . '_' . time() );
         $candidate->save();
     }
     

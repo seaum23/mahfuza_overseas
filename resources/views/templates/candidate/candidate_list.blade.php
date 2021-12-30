@@ -187,6 +187,30 @@ Candidate List
         </form>
     </div>
 </div>
+<div class="modal fade" id="manpower_status_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" id="send_to_manpower_form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sent To Manpower Office</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="manpower_status_update" id="manpower_status_update">
+                    <h4 id="manpower_status_update_name"></h4>
+                    <input type="file" class="my-pond" name="manpower_status_file" id="manpower_status_file">
+                    <div class="text-danger" id="manpower_status_file_invalid"> </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="send_to_manpower_close_button" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="send_to_manpower_button" type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Show Document -->
 <div class="modal fade" id="test_medical_file_show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -321,6 +345,86 @@ Candidate List
 @section('script')
 <script>
 let datatable;
+
+let sent_to_manpower = (id, name) => {
+    $('#send_to_manpower_form').removeClass('needs-validation');
+    $('#manpower_status_file_invalid').html('');
+    $('#manpower_status_update').val(id);
+    $('#manpower_status_update_name').html(name);
+}
+
+$('#send_to_manpower_form').on('submit', (e) => {
+    e.preventDefault();
+    console.log($('input[name=manpower_status_file]').val());
+
+    var form = $('#send_to_manpower_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/candidate/send-to-manpower',
+        data: data,        
+        processData: false,
+        contentType: false,
+		beforeSend:function(){
+            $("#send_to_manpower_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#send_to_manpower_button").prop('disabled', true);
+        },
+        success: function (response){
+            $("#send_to_manpower_button").html('Send');
+            $("#send_to_manpower_button").prop('disabled', false);
+            $('#send_to_manpower_close_button').click();
+            $('#send_to_manpower_form')[0].reset();
+            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+        },
+        error: function (xhr, status, error){
+            $("#send_to_manpower_button").html('Send');
+            $("#send_to_manpower_button").prop('disabled', false);
+            let errors = $.parseJSON(xhr.responseText);
+            for (const [key, value] of Object.entries(errors.errors)) {
+                $(`#${key}`).addClass('is-invalid');
+                $(`#${key}_invalid`).html(value);
+            }
+        }
+    });
+})
+
+let fit_unfit = (id, medical) => {
+    let message = (medical == 'final_medical') ? 'Final Medical' : 'Test Medical';
+    Swal.fire({
+        title: `Confirm Candidate ${message} Fittness?`,
+        showDenyButton: true,
+        confirmButtonText: 'Fit',
+        denyButtonText: `Unfit`,
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            let fittness = 'fit';
+            $.ajax({
+                type: 'post',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/candidate/fit.unfit/' + id,
+                data: {fittness, medical},
+                success: function (response){
+                    Swal.fire('Saved as Fit!', '', 'success')
+                    datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+                }
+            });
+        } else if (result.isDenied) {
+            let fittness = 'unfit';
+            $.ajax({
+                type: 'post',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/candidate/fit.unfit/' + id,
+                data: {fittness, medical},
+                success: function (response){
+                    Swal.fire('Saved as Unfit', '', 'info')
+                    datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+                }
+            });
+        }
+    })
+}
 
 $('#assign_country_form').on('submit', (e) => {
     e.preventDefault();

@@ -77,19 +77,32 @@ New Candidate
 
                                 <div class="form-group col-md-6">
                                     <label>Nationality</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="nationality" id="nationality" autocomplete="off" placeholder="Nationality"/>
+                                    <input style="width: inherit" type="text" class="form-control" name="nationality" id="nationality" autocomplete="off" value="Bangladeshi"/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Birth Place</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="birth_place" id="birth_place" autocomplete="off" placeholder="Birth Place"/>
+                                    <select class="form-control select2" name="birth_place" id="birth_place" data-placeholder="Select Zilla">
+                                        <x-select-zilla/>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Religion</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="religion" id="religion" autocomplete="off" placeholder="Religion"/>
+                                    <select class="form-control select2" name="religion" id="religion" data-placeholder="Select Religion">
+                                        <option value=""></option>
+                                        <option>Islam</option>
+                                        <option>Hindu</option>
+                                        <option>Buddhism</option>
+                                        <option>Christian</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Profession</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="profession" id="profession" autocomplete="off" placeholder="Profession"/>
+                                    <select class="form-control select2" name="profession" id="profession" data-placeholder="Select Profession">
+                                        <option value=""></option>
+                                        @foreach ($jobs as $job)
+                                            <option>{{ $job->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Nominee</label>
@@ -100,7 +113,7 @@ New Candidate
                                     <input style="width: inherit" type="text" class="form-control" name="nominee_relation" id="nominee_relation" autocomplete="off" placeholder="Nominee Relation"/>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Contact Name</label>
+                                    <label>Emergency Contact Name</label>
                                     <input style="width: inherit" type="text" class="form-control" name="contact_name" id="contact_name" autocomplete="off" placeholder="Contact Name"/>
                                 </div>
                             </fieldset>
@@ -114,25 +127,23 @@ New Candidate
                                     <div id="passport_number_invalid" class="invalid-feedback"> </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Issue Date <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
-                                    <input type="text" class="form-control datepicker" autocomplete="off" name="issu_date" id="issu_date" placeholder="yyyy/mm/dd"/>
+                                    <label>Issue Date <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label><span class="ml-3 font-weight-bold" id="expiry_date_diff"></span>
+                                    <input onchange="get_expiry_date()" type="text" class="form-control datepicker" autocomplete="off" name="issu_date" id="issu_date" placeholder="yyyy/mm/dd"/>
                                     <div id="issu_date_invalid" class="invalid-feedback"> </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Passport Place</label>
-                                    <select class="form-control select2" name="passport_place" id="passport_place" data-placeholder="Select Zilla">
-                                        <x-select-zilla/>
-                                    </select>
+                                    <label>Passport Issue Place</label>
+                                    <input style="width: inherit" type="text" class="form-control" name="passport_place" id="passport_place" autocomplete="off" placeholder="Passport Place"/>
                                 </div>
                                 <div class="form-group col-md-6 text-center">
                                     <label>Validity Year <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>
                                     <div>
                                         <div class="custom-radio custom-control custom-control-inline">
-                                            <input class="custom-control-input" type="radio" name="validityYear" id="validityYearFive" value="5" >
+                                            <input onclick="get_expiry_date()" class="custom-control-input" type="radio" name="validityYear" id="validityYearFive" value="5" >
                                             <label class="custom-control-label" for="validityYearFive"> 5 Years </label>
                                         </div>
                                         <div class="custom-radio custom-control custom-control-inline">
-                                            <input class="custom-control-input" type="radio" name="validityYear" id="validityYearTen" value="10" >
+                                            <input onclick="get_expiry_date()" class="custom-control-input" type="radio" name="validityYear" id="validityYearTen" value="10" >
                                             <label class="custom-control-label" for="validityYearTen"> 10 Years </label>
                                         </div>
                                     </div>
@@ -162,11 +173,13 @@ New Candidate
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>District</label>
-                                        <input style="width: inherit" type="text" class="form-control" name="district" id="district" autocomplete="off" placeholder="District"/>
+                                        <select class="form-control select2" name="district" id="district" data-placeholder="Select Zilla">
+                                            <x-select-zilla/>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Upzilla</label>
-                                        <input style="width: inherit" type="text" class="form-control" name="upzilla" id="upzilla" autocomplete="off" placeholder="Upzilla"/>
+                                        <label>Police Station</label>
+                                        <input style="width: inherit" type="text" class="form-control" name="police_station" id="police_station" autocomplete="off" placeholder="Police Station"/>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Union</label>
@@ -251,6 +264,23 @@ New Candidate
 
 @section('script')
 <script>
+    let get_expiry_date = () => {
+        let issue_date = $('#issu_date').val();
+        let validity_year = $('input[name="validityYear"]:checked').val();
+        if(issue_date != '' && typeof validity_year != 'undefined'){
+            $.ajax({
+                type: 'get',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' +'/get-expiry-date',
+                data: {issue_date, validity_year},
+                success: function (response){
+                    $('#expiry_date_diff').html(response);
+                },
+            });
+        }
+
+    }
+
     let get_age = (birth_date) => {
         $.ajax({
             type: 'get',

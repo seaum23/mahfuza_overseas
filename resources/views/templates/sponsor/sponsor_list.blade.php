@@ -32,7 +32,7 @@ Sponsors List
 
 @section('modals')
 <!-- Update Sponsor -->
-<div class="modal fade" id="update_sponsor_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="update_sponsor_modal" role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,7 +120,7 @@ $(function() {
         serverSide: true,
         ajax: '{{ url('/') }}' + '/sponsor/datatable/ajax',
         columns: [
-            { data: 'delegate_office.name' },
+            { data: 'id' },
             { data: 'sponsor_name' },
             { data: 'sponsor_NID' },
             { data: 'sponsor_phone' },

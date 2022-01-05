@@ -129,6 +129,18 @@ class AgentController extends Controller
             $agent->full_name = $request->agentName;
             $agent->comment = $request->comment;
 
+            if(!empty($request->agentImage)){
+                $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id . '_' . time() );
+            }
+
+            if(!empty($request->agentPassport)){
+                $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
+            }
+
+            if(!empty($request->balance_sheet)){
+                $agent->balance_sheet = move($request->balanceSheet, 'agent', 'agent_balance_sheet_' . $agent->id . '_' . time() );
+            }
+
             $agent->save();
 
             alert($request);

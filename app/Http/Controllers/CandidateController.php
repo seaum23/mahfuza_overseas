@@ -113,7 +113,7 @@ class CandidateController extends Controller
             'passport_place' => $request->passport_place,
             'division' => $request->division,
             'district' => $request->district,
-            'upzilla' => $request->upzilla,
+            'police_station' => $request->police_station,
             'union' => $request->union,
             'house' => $request->house,
             'road' => $request->road,
@@ -404,20 +404,25 @@ class CandidateController extends Controller
                 if($query->in_processing == 1){
                     $html .= '<button onclick="assign_visa('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#sponsor_visa_modal" class="btn btn-info btn-xs">Visa</button>';
                 }
-                if($query->manpower_status == 0){
-                    $html .= '<button onclick="sent_to_manpower('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#manpower_status_modal" class="btn btn-secondary btn-xs">Manpower</button>';
+                if($query->manpower_status == 0 AND !is_null($query->job_id)){
+                    $html .= '<button onclick="sent_to_manpower('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#manpower_status_modal" class="btn btn-secondary btn-xs">Manpower Office</button>';
                 }
                 if($query->manpower_status == 1){
                     $processing = Processing::where('candidate_id', $query->id)->first();
                     if(!is_null($processing)){
                         if($processing->manpower == '0'){
-                            $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-info btn-xs" role="button" target="_blank">Manpower</a>';
+                            $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-info btn-xs" role="button" target="_blank">Manpower Office</a>';
                         }else{
-                            $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-success btn-xs" role="button" target="_blank">Manpower</a>';
+                            $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-success btn-xs" role="button" target="_blank">Manpower Office</a>';
                         }
                     }else{
-                        $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-info btn-xs" role="button" target="_blank">Manpower</a>';
+                        $html .= '<a href="'.asset($query->manpower_status_file).'" class="btn btn-info btn-xs" role="button" target="_blank">Manpower Office</a>';
                     }
+                }
+                if(is_null($query->youtube_link)){
+                    $html .= '<button onclick="give_youtube_link('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#youtube_link_modal" class="btn btn-secondary"><i class="fas fa-video"></i></button>';
+                }else{
+                    $html .= '<a target="_blank" href="'.$query->youtube_link.'" class="btn btn-primary btn-xs" role="button" ><i class="fas fa-video"></i></a>';
                 }
                 return $html . "</div>" ;
             })
@@ -429,5 +434,13 @@ class CandidateController extends Controller
     public function get_age(Request $request)
     {
         return Carbon::createFromFormat('Y/m/d', $request->birth_date)->diff(Carbon::now())->format('%yy%mm%dd');
+    }
+
+    public function get_expiry(Request $request)
+    {
+        $expired_date = Carbon::createFromFormat('Y/m/d', $request->issue_date);
+        $expired_date->add(new DateInterval('P'.$request->validity_year.'Y'));
+
+        return $expired_date->diff(Carbon::now())->format('%yy%mm%dd');
     }
 }

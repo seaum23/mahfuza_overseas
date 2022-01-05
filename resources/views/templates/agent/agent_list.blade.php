@@ -31,7 +31,7 @@ Agents List
 
 @section('modals')
 <!-- Update Agent -->
-<div class="modal fade" id="update_agent_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="update_agent_modal"  role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -59,10 +59,22 @@ Agents List
                             <label for="sel1">Phone:</label>
                             <input class="form-control" type="text" name="agentPhone" id="agentPhone" placeholder="Phone Number" >
                             <div id="agentPhone_invalid" class="invalid-feedback"> </div>
-                        </div>                
+                        </div>
                         <div class="form-group col-md-6">
                             <label for="sel1">Any Remarks:</label>
                             <input class="form-control" type="text" name="comment" id="comment" placeholder="Comment / Note">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sel1">Photo:</label>
+                            <input class="my-pond form-control-file" type="file" name="agentImage" id="agentImage" >
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sel1">Passport Scan Copy:</label>
+                            <input class="my-pond form-control-file" type="file" name="agentPassport" id="agentPassport" >
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sel1">Opening Balance Sheet:</label>
+                            <input class="my-pond form-control-file" type="file" name="balanceSheet" id="balanceSheet" >
                         </div>
                     </div>                
                 </div>
@@ -76,7 +88,7 @@ Agents List
 </div>
 
 {{-- Transaction MODAL --}}
-<div class="modal fade" id="transaction_modal_specific" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="transaction_modal_specific"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -176,6 +188,8 @@ $('#update_agent').on('submit', function(e){
             location.reload();
         },
         error: function (xhr, status, error){
+            $("#update_button_agent").html('Update');
+            $("#update_button_agent").prop('disabled', false);
             $('#update_agent').addClass('needs-validation');
             let errors = $.parseJSON(xhr.responseText);
             for (const [key, value] of Object.entries(errors.errors)) {
@@ -189,5 +203,29 @@ $('#update_agent').on('submit', function(e){
 /**
  * End Sponsor & Sponsor VISA CRUD
  */
+
+
+
+
+document.addEventListener('FilePond:processfilestart', (e) => {
+    $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+    $("#submit").prop('disabled', true);        
+});
+document.addEventListener('FilePond:processfile', (e) => {
+    $("#submit").html('Add');
+    $("#submit").prop('disabled', false);
+});    
+$(function(){
+    FilePond.setOptions({
+        server: {
+            url: "{{ url('/') }}",
+            process: '/upload/agent-photo',
+            revert: '/revert',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+    });
+});
 </script>
 @endsection

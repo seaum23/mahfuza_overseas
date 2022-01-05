@@ -39,7 +39,7 @@ Candidate List
 @section('modals')
 
 <!-- Update Modal -->
-<div class="modal fade" id="sponsor_visa_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="sponsor_visa_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="assign_sponsor_visa">
             <div class="modal-content">
@@ -66,7 +66,7 @@ Candidate List
     </div>
 </div>
 
-<div class="modal fade" id="test_medical_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="test_medical_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="test_medical_form">
             <div class="modal-content">
@@ -90,7 +90,7 @@ Candidate List
         </form>
     </div>
 </div>
-<div class="modal fade" id="final_medical_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="final_medical_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="final_medical_form" >
             <div class="modal-content">
@@ -115,7 +115,7 @@ Candidate List
         </form>
     </div>
 </div>
-<div class="modal fade" id="police_clearance_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="police_clearance_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="police_clearance_form" >
             <div class="modal-content">
@@ -139,7 +139,7 @@ Candidate List
         </form>
     </div>
 </div>
-<div class="modal fade" id="traning_card_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="traning_card_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="training_card_form" >
             <div class="modal-content">
@@ -163,7 +163,7 @@ Candidate List
         </form>
     </div>
 </div>
-<div class="modal fade" id="assign_job_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="assign_job_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="assign_job_form" >
             <div class="modal-content">
@@ -187,7 +187,7 @@ Candidate List
         </form>
     </div>
 </div>
-<div class="modal fade" id="manpower_status_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="manpower_status_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="send_to_manpower_form">
             <div class="modal-content">
@@ -211,9 +211,33 @@ Candidate List
         </form>
     </div>
 </div>
+<div class="modal fade" id="youtube_link_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" id="submit_youtube_link">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Submit Youtube Link</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="youtube_link_update" id="youtube_link_update">
+                    <h4 id="youtube_link_update_name"></h4>
+                    <input type="text" name="youtube_link" name="youtube_link" class="form-control" placeholder="YouTube Link">
+                </div>
+                <div class="modal-footer">
+                    <button id="youtube_link_close_button" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="youtube_link_button" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <!-- Show Document -->
-<div class="modal fade" id="test_medical_file_show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="test_medical_file_show" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <input type="hidden" id="test_medical_update_id">
@@ -237,7 +261,7 @@ Candidate List
         </div>
     </div>
 </div>
-<div class="modal fade" id="final_medical_file_show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="final_medical_file_show" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <input type="hidden" id="final_medical_update_id">
@@ -262,7 +286,7 @@ Candidate List
         </div>
     </div>
 </div>
-<div class="modal fade" id="police_clearance_file_show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="police_clearance_file_show" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <input type="hidden" id="police_clearance_update_id">
@@ -286,7 +310,7 @@ Candidate List
         </div>
     </div>
 </div>
-<div class="modal fade" id="training_card_file_show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="training_card_file_show" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <input type="hidden" id="training_card_update_id">
@@ -311,7 +335,7 @@ Candidate List
     </div>
 </div>
 <button id="change_country_toggle" style="display: none" data-target="#change_country" data-toggle="modal"></button>
-<div class="modal fade" id="change_country" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="change_country" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="assign_country_form" >
             <div class="modal-content">
@@ -345,6 +369,46 @@ Candidate List
 @section('script')
 <script>
 let datatable;
+
+let give_youtube_link = (id, name) => {
+    $('#youtube_link_update_name').html(name);
+    $('#youtube_link_update').val(id);
+}
+
+$('#submit_youtube_link').on('submit', (e) => {
+    e.preventDefault();
+
+    var form = $('#submit_youtube_link')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/candidate/add-youtube-link',
+        data: data,        
+        processData: false,
+        contentType: false,
+		beforeSend:function(){
+            $("#youtube_link_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#youtube_link_button").prop('disabled', true);
+        },
+        success: function (response){
+            $("#youtube_link_button").html('Send');
+            $("#youtube_link_button").prop('disabled', false);
+            $('#youtube_link_close_button').click();
+            $('#submit_youtube_link')[0].reset();
+            datatable.ajax.url( '{{ url('/') }}/candidate.list' ).load();
+        },
+        error: function (xhr, status, error){
+            $("#send_to_manpower_button").html('Send');
+            $("#send_to_manpower_button").prop('disabled', false);
+            let errors = $.parseJSON(xhr.responseText);
+            for (const [key, value] of Object.entries(errors.errors)) {
+                $(`#${key}`).addClass('is-invalid');
+                $(`#${key}_invalid`).html(value);
+            }
+        }
+    });
+});
 
 let sent_to_manpower = (id, name) => {
     $('#send_to_manpower_form').removeClass('needs-validation');
@@ -483,7 +547,8 @@ let get_manpower_office = (id) => {
         //     $("#experience_div").html('<i class="fas fa-spinner fa-pulse"></i>');
         // },
         success: function (response){
-            $("#manpower").html(response);
+            let html = JSON.parse(response);
+            $("#manpower").html(html.manpower);
         }
     });
 }

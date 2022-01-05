@@ -54,7 +54,7 @@ Sponsor VISA List
 @section('modals')
 <!-- Edit Sponsor VISA -->
 <button class="hidden" id="edit_sponsor_modal_button" data-toggle="modal" data-target="#edit_sponsor_modal"></button>
-<div class="modal fade" id="edit_sponsor_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="edit_sponsor_modal" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" method="post" enctype="multipart/form-data" id="edit_sponsor_form">
             @csrf

@@ -57,7 +57,7 @@ Delegate List
 
 <!-- Edit Delete Job -->
 <button style="display: hidden" id="edit_manpower_job_modal_button" data-toggle="modal" data-target="#manpower_job_modal"></button>
-<div class="modal fade" id="manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="manpower_job_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -97,7 +97,7 @@ Delegate List
 
 <!-- Add New Job -->
 <button style="display: hidden" id="manpower_job_modal_button" data-toggle="modal" data-target="#add_manpower_job_modal"></button>
-<div class="modal fade" id="add_manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="add_manpower_job_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="" id="add_manpower_job_form">
@@ -136,7 +136,7 @@ Delegate List
 </div>
 
 <!-- Update Manpower Office -->
-<div class="modal fade" id="update_manpower_office_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="update_manpower_office_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -181,7 +181,7 @@ Delegate List
 </div>
 
 {{-- Transaction MODAL --}}
-<div class="modal fade" id="transaction_modal_specific" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="transaction_modal_specific"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

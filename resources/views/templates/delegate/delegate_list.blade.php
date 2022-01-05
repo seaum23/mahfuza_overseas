@@ -55,7 +55,7 @@ Delegate List
 
 @section('modals')
 <!-- Add Office -->
-<div class="modal fade" id="add_office_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="add_office_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" method="post" enctype="multipart/form-data" id="add_delegate_office_form">
             <div class="modal-content">
@@ -96,7 +96,7 @@ Delegate List
 </div>
 
 <!-- Edit Delete Office -->
-<div class="modal fade" id="changeDelegateOffice" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="changeDelegateOffice"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,7 +128,7 @@ Delegate List
 </div>
 
 <!-- Update Delegate -->
-<div class="modal fade" id="update_delegate_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="update_delegate_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -173,7 +173,7 @@ Delegate List
 </div>
 
 {{-- Transaction MODAL --}}
-<div class="modal fade" id="transaction_modal_specific" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="transaction_modal_specific"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -35,9 +35,10 @@ class FormTemplateController extends Controller
     public function get_manpower_office(Job $job)
     {
         $manpowers = $job->manpower_offices;
-        return view('form_templates.manpower_office_selections', [
-            'manpowers' => $manpowers
-        ]);
+        echo json_encode(array(
+            'manpower' => view('form_templates.manpower_office_selections', [ 'manpowers' => $manpowers ])->render(),
+            'agent_expense' => 'test',
+        ));
     }
 
     public function sponsor_office($idx)
@@ -79,5 +80,22 @@ class FormTemplateController extends Controller
             'accounts' => $accounts,
             'payment_accounts' => $payment_accounts,
         ]);
+    }
+
+    public function sponsor_parent_type(Request $request)
+    {
+        if($request->type == 'Agent'){
+            return view('form_templates.agent_sponsor_parent', [
+                'agents' => Agent::get()
+            ]);
+        }
+
+        if($request->type == 'Delegate'){
+            return view('form_templates.delegate_sponsor_parent', [
+                'delegates' => Delegate::get()
+            ]);
+        }
+
+
     }
 }

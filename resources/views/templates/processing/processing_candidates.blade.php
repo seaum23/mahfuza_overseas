@@ -38,7 +38,7 @@ Processing Candidate List
 
 @section('modals')
 {{-- OKALA MODAL --}}
-<div class="modal fade" id="okala_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="okala_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="okala_update_form" >
             <div class="modal-content">
@@ -65,7 +65,7 @@ Processing Candidate List
 
 
 {{-- MUFA MODAL --}}
-<div class="modal fade" id="mufa_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="mufa_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="mufa_update_form" >
             <div class="modal-content">
@@ -91,7 +91,7 @@ Processing Candidate List
 </div>
 
 {{-- VISA Stamping MODAL --}}
-<div class="modal fade" id="visa_stamping_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="visa_stamping_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="visa_stamping_update_form" >
             <div class="modal-content">
@@ -118,7 +118,7 @@ Processing Candidate List
 </div>
 
 {{-- Training card modal --}}
-<div class="modal fade" id="traning_card_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="traning_card_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="training_card_form" >
             <div class="modal-content">
@@ -144,7 +144,7 @@ Processing Candidate List
 </div>
 
 {{-- Manpower modal --}}
-<div class="modal fade" id="manpower_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="manpower_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" id="manpower_update_form" >
             <div class="modal-content">
@@ -170,7 +170,7 @@ Processing Candidate List
 </div>
 
 {{-- Transaction MODAL --}}
-<div class="modal fade" id="transaction_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="transaction_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -188,6 +188,23 @@ Processing Candidate List
 
 @section('script')
 <script>
+let get_zip = (id) => {
+    $.ajax({
+        type: 'POST',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/processing/generate_zip/' + id,
+		beforeSend:function(){
+            $("#zip_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#zip_button").prop('disabled', true);
+        },
+        success: function (response){
+            $("#zip_button").html('<i class="fas fa-file-archive"></i>');
+            $("#zip_button").prop('disabled', false);
+            window.open(response, '_blank');
+        }
+    });
+}
+
 let generate_pdf = (id) => {
     $.ajax({
         type: 'POST',

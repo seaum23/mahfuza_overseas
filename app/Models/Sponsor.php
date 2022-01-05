@@ -28,4 +28,12 @@ class Sponsor extends Model
     {
         return $this->hasMany(SponsorVisa::class);
     }
+
+    /**
+     * Get the parent commentable model (Agent or Delegate).
+     */
+    public function sponsorable()
+    {
+        return $this->morphTo();
+    }
 }

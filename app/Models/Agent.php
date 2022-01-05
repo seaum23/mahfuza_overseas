@@ -32,4 +32,9 @@ class Agent extends Model
     {
         return $this->morphMany(Transaction::class, 'particular');
     }
+
+    public function sponsor()
+    {
+        return $this->morphMany(Sponsor::class, 'sponsorable');
+    }
 }

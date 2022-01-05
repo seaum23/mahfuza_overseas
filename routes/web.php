@@ -111,6 +111,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/assign.country',[CandidateUpdateController::class, 'assign_country']);
         Route::post('/fit.unfit/{candidate}',[CandidateUpdateController::class, 'fit_unfit']);
         Route::post('/send-to-manpower',[CandidateUpdateController::class, 'send_to_manpower']);
+        Route::post('/add-youtube-link',[CandidateUpdateController::class, 'add_youtube_link']);        
         
     });
 
@@ -129,7 +130,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/flight_update/{processing}', [ProcessingController::class, 'flight_update']);      
         Route::post('/flight_return_update/{processing}', [ProcessingController::class, 'return_update']);          
         Route::post('/manpower_update', [ProcessingController::class, 'manpower_update']);        
-        Route::post('/generate_finger_pdf/{candidate}', [ProcessingController::class, 'generate_finger_pdf']);        
+        Route::post('/generate_finger_pdf/{candidate}', [ProcessingController::class, 'generate_finger_pdf']);   
+        Route::post('/generate_zip/{candidate}', [ProcessingController::class, 'generate_zip']);   
+             
     });
 
     Route::prefix('ticket')->group(function ()
@@ -181,8 +184,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('candidate-experience-status/{status}', [FormTemplateController::class, 'candidate_experience_tempalte']);
     Route::get('get-manpower-office/{job}', [FormTemplateController::class, 'get_manpower_office']);
     Route::get('get-sponsor-visa-form/{idx}', [FormTemplateController::class, 'sponsor_office']);
+    Route::get('get-sponsor-parent-type', [FormTemplateController::class, 'sponsor_parent_type']);
 
     Route::get('get-age', [CandidateController::class, 'get_age']);
+    Route::get('get-expiry-date', [CandidateController::class, 'get_expiry']);    
     
 
 });

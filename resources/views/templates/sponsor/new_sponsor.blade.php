@@ -3,30 +3,23 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6 mt-5">
+    <div class="col-md-6 mt-5 col-10">
         <div class="main-card mt-3 card">
             <div class="card-body"><h5 class="card-title">New Sponsor</h5>
                 <form action="{{ route('sponsor') }}" method="post" class="@if ($errors->any()) needs-validation @endif">
                     @csrf
                     <div class="form-group">
                         <div class="form-row justify-content-between">
-                            <div class="form-group col-md-6" >
-                                <label>Delegate</label>
-                                <select class="form-control select2 @error('delegateId') is-invalid @enderror" name="delegateId" id="delegateId" onchange="selectDelegateOffice(this.value)">
-                                    <option value=""> Select Delegate </option>
-                                    @foreach ($delegates as $delegate)
-                                        <option value="{{ $delegate->id }}" {{ (old("delegateId") == $delegate->id ? "selected":"") }} >{{ $delegate->name }}</option>
-                                    @endforeach
+                            <div class="form-group col-md-4" >
+                                <label>Type</label>
+                                <select class="form-control select2 @error('type') is-invalid @enderror" name="type" id="type" onchange="get_type(this.value)">
+                                    <option value=""> Select Type </option>
+                                    <option>Delegate</option>
+                                    <option>Agent</option>
                                 </select>
-                                <div class="invalid-feedback"> @error('delegateId') {{ $message }} @enderror </div>
+                                <div class="invalid-feedback"> @error('type') {{ $message }} @enderror </div>
                             </div>
-                            <div class="form-group col-md-6" >
-                                <label>Delegate Office</label>
-                                <select data-selected_office="{{ old('delegateOfficeId') }}" class="form-control select2 @error('delegateOfficeId') is-invalid @enderror" name="delegateOfficeId" id="delegateOfficeId" >
-                                    <option value=""> Select Delegate First </option>                    
-                                </select>
-                                <div class="invalid-feedback"> @error('delegateOfficeId') {{ $message }} @enderror </div>
-                            </div>
+                            <div class="col-md-8" id="sponsor_parent_type"></div>
                             <div class="form-group col-md-6" >
                                 <label>Sponsor Name</label>
                                 <input class="form-control @error('sponsorName') is-invalid @enderror" type="text" id="sponsorName" name="sponsorName" placeholder="Enter Name" value="{{ old('sponsorName') }}" >
@@ -62,6 +55,21 @@
 
 @section('script')
 <script>
+    let get_type = (type) => {
+        $.ajax({
+            type: 'get',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/get-sponsor-parent-type',
+            data: {type},
+            success: function (response){
+                $('#sponsor_parent_type').html(response);
+                $('.select2-ajax').select2({
+                    width: '100%'
+                });
+            }
+        });
+    }
+
     function selectDelegateOffice(delegate_id){
         let selected_office = $('#delegateOfficeId').data('selected_office');
         $.ajax({

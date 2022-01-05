@@ -136,5 +136,15 @@ class CandidateUpdateController extends Controller
         $candidate->manpower_status_file = move($request->manpower_status_file, 'candidate', 'manpower_sent_receipt_' . $candidate->id . '_' . time() );
         $candidate->save();
     }
+
+    public function add_youtube_link(Request $request)
+    {
+        // $request->validate([
+        //     'manpower_status_file' => 'required'
+        // ]);
+        $candidate = Candidate::find($request->youtube_link_update);
+        $candidate->youtube_link = $request->youtube_link;
+        $candidate->save();
+    }
     
 }

@@ -8,6 +8,8 @@ use Barryvdh\DomPDF\PDF;
 use App\Models\Candidate;
 use App\Models\Processing;
 use App\Models\Transaction;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\App;
@@ -96,13 +98,22 @@ class ProcessingController extends Controller
                 if($query->visa_stamping == 0){
                     return '<button onclick="update_visa_stamping('.$query->id.', \'' . $query->candidate->fName . ' ' . $query->candidate->lName . '\')" data-toggle="modal" data-target="#visa_stamping_modal" class="btn btn-secondary btn-xs">No</button>';
                 }
-                
-                return '<a href="'.route('visa_stamping', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$query->visa_stamping_date.'</badge></a>';
+                $today = Carbon::now();
+                $stamping_date = new Carbon(new DateTime($query->visa_stamping_date));
+                $stamping_date->addDays(90);
+                if($stamping_date >= $today){
+                    $diff = $stamping_date->diffInDays($today);
+                }else{
+                    $diff = -1 * $stamping_date->diffInDays($today);
+                }
+                $html = '<a href="'.route('visa_stamping', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$query->visa_stamping_date.'</badge></a>';
+                $html .= ($diff < 0 ) ? '<badge class="badge badge-danger">'.$diff.'</badge>' : '<badge class="badge badge-info">'.$diff.'</badge>';
+                return $html;
             })
             ->editColumn('finger', function ($query)
             {
                 $html = '<div class="btn btn-group"><button id="generate_pdf_button" onclick="generate_pdf('.$query->candidate->id.')" class="btn btn-info btn-xs">PDF</button>';
-
+                $html .= '<button id="zip_button" onclick="get_zip('.$query->candidate->id.')" class="btn btn-warning btn-xs"><i class="fas fa-file-archive"></i></button>';
                 if($query->finger == 0){
                     $html .= '<button onclick="finger_update('.$query->id.')" class="btn btn-secondary btn-xs">No</button>';
                 }else{
@@ -152,7 +163,7 @@ class ProcessingController extends Controller
             ->addColumn('action', function ($query) {
                 $html = '<div class="btn-group" role="group" aria-label="Basic example">';
                 $html .= '<button onclick="processing_transaction(\''.$query->id.'\', \''.$query->candidate->fName.' '.$query->candidate->lName.'\')" data-toggle="modal" data-target="#transaction_modal" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
-                if($query->pending == '0'){
+                if($query->pending == '0' AND $query->has_ticket()){
                     $html .= '<button onclick="flight_update(\''.$query->id.'\')" class="btn btn-secondary btn-xs"><i class="fas fa-plane"></i></button>';
                     $html .= '<button onclick="flight_return_update(\''.$query->id.'\')" class="btn btn-danger btn-xs"><i class="fas fa-plane-arrival"></i></button>';
                 }else if($query->pending == '2'){
@@ -326,6 +337,83 @@ class ProcessingController extends Controller
         unlink(storage_path("app/public/candidate/finger/$images[0]"));
         unlink(storage_path("app/public/candidate/finger/$images[1]"));
         return asset("storage/candidate/finger/test_$random.pdf");
+    }
+
+    public function generate_zip($candidate)
+    {
+        $candidate = Candidate::with('processings')->find($candidate);
+        $now = Carbon::now();
+        $zip_file = 'public/storage/zip/candidates_document_'.$now->format('Y_m_d_H_i_s').'.zip'; // Name of our archive to download
+
+        // Initializing PHP class
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        // Adding file: second parameter is what will the path inside of the archive
+        // So it will create another folder called "storage/" inside ZIP, and put the file there.
+        if(!empty($candidate->passport_scanned_copy)){
+            $ext = explode('.', $candidate->passport_scanned_copy);
+            $zip->addFile(public_path($candidate->passport_scanned_copy), 'passport_scanned_copy.'.$ext[1]);
+        }
+        if(!empty($candidate->personal_photo_file)){
+            $ext = explode('.', $candidate->personal_photo_file);
+            $zip->addFile(public_path($candidate->personal_photo_file), 'personal_photo.'.$ext[1]);
+        }
+        if(!empty($candidate->police_clearance_file)){
+            $ext = explode('.', $candidate->police_clearance_file);
+            $zip->addFile(public_path($candidate->police_clearance_file), 'police_clearance.'.$ext[1]);
+        }
+        if(!empty($candidate->passport_scanned_copy)){
+            $ext = explode('.', $candidate->passport_scanned_copy);
+            $zip->addFile(public_path($candidate->passport_scanned_copy), 'passport_scanned_copy.'.$ext[1]);
+        }
+        if(!empty($candidate->training_card_file)){
+            $ext = explode('.', $candidate->training_card_file);
+            $zip->addFile(public_path($candidate->training_card_file), 'training_card.'.$ext[1]);
+        }
+        if(!empty($candidate->passport_photo_file)){
+            $ext = explode('.', $candidate->passport_photo_file);
+            $zip->addFile(public_path($candidate->passport_photo_file), 'passport_photo.'.$ext[1]);
+        }
+        if(!empty($candidate->test_medical_file)){
+            $ext = explode('.', $candidate->test_medical_file);
+            $zip->addFile(public_path($candidate->test_medical_file), 'test_medical.'.$ext[1]);
+        }
+        if(!empty($candidate->final_medical_file)){
+            $ext = explode('.', $candidate->final_medical_file);
+            $zip->addFile(public_path($candidate->final_medical_file), 'final_medical.'.$ext[1]);
+        }
+        if(!empty($candidate->departureSealFile)){
+            $ext = explode('.', $candidate->departureSealFile);
+            $zip->addFile(public_path($candidate->departureSealFile), 'departure_seal.'.$ext[1]);
+        }
+        if(!empty($candidate->arrivalSealFile)){
+            $ext = explode('.', $candidate->arrivalSealFile);
+            $zip->addFile(public_path($candidate->arrivalSealFile), 'arrival_seal.'.$ext[1]);
+        }
+
+        
+        if(!empty($candidate->okala_file)){
+            $ext = explode('.', $candidate->okala_file);
+            $zip->addFile(public_path($candidate->okala_file), 'okala_file.'.$ext[1]);
+        }
+        if(!empty($candidate->mufa_file)){
+            $ext = explode('.', $candidate->mufa_file);
+            $zip->addFile(public_path($candidate->mufa_file), 'mufa_file.'.$ext[1]);
+        }
+        if(!empty($candidate->visa_stamping_file)){
+            $ext = explode('.', $candidate->visa_stamping_file);
+            $zip->addFile(public_path($candidate->visa_stamping_file), 'visa_stamping_file.'.$ext[1]);
+        }
+        if(!empty($candidate->manpower_card_file)){
+            $ext = explode('.', $candidate->manpower_card_file);
+            $zip->addFile(public_path($candidate->manpower_card_file), 'manpower_card_file.'.$ext[1]);
+        }  
+        
+        $zip->close();
+
+        // We return the file immediately after download
+        return $zip_file;
     }
     
 }

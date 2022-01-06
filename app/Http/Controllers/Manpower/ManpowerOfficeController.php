@@ -66,6 +66,11 @@ class ManpowerOfficeController extends Controller
             $manpower_office->save();
         }
 
+        if(!empty($request->office_pad)){
+            $manpower_office->office_pad = move($request->office_pad, 'manpower', 'office_pad_' . $manpower_office->id . '_' . time() );
+            $manpower_office->save();
+        }
+
         foreach($request->jobId as $idx=>$job){
             $manpower_office->manpower_job()->attach(
                 ['job_id' => $job],
@@ -117,6 +122,11 @@ class ManpowerOfficeController extends Controller
         $manpower_office->address = $request->officeAddress;
         $manpower_office->comment = $request->comment;
         $manpower_office->updated_by = auth()->id();
+
+        if(!empty($request->office_pad)){
+            $manpower_office->office_pad = move($request->office_pad, 'manpower', 'office_pad_' . $manpower_office->id . '_' . time() );
+            $manpower_office->save();
+        }
         $manpower_office->save();
 
         alert($request, 'Success!', 'success');

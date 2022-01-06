@@ -422,7 +422,16 @@ class CandidateController extends Controller
                 if(is_null($query->youtube_link)){
                     $html .= '<button onclick="give_youtube_link('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#youtube_link_modal" class="btn btn-secondary"><i class="fas fa-video"></i></button>';
                 }else{
-                    $html .= '<a target="_blank" href="'.$query->youtube_link.'" class="btn btn-primary btn-xs" role="button" ><i class="fas fa-video"></i></a>';
+                    $html .= '
+                    <div class="dropdown">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-video"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" target="_blank" href="'.$query->youtube_link.'" class="btn btn-primary btn-xs" role="button" >Watch</a>
+                            <a onclick="give_youtube_link('.$query->id.', \''.$query->fName . ' ' . $query->lName.'\')" data-toggle="modal" data-target="#youtube_link_modal" class="dropdown-item" href="#">Reupload</a>
+                        </div>
+                    </div>';
                 }
                 return $html . "</div>" ;
             })

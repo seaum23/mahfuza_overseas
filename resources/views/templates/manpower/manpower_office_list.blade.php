@@ -15,6 +15,7 @@ Delegate List
                             <th>License</th>
                             <th>Address</th>
                             <th>Jobs</th>
+                            <th>Pad</th>
                             <th>Comment</th>
                             <th>Alter</th>
                         </thead>
@@ -24,6 +25,9 @@ Delegate List
                                 <td>{{ $office->name; }}</td>
                                 <td>{{ $office->license; }}</td>
                                 <td>{{ $office->address; }}</td>
+                                <td>@if (!empty($office->office_pad))
+                                    <a class="btn btn-info btn-xs" role="button" href="{{ asset($office->office_pad) }}" target="_blank"><i class="fas fa-eye"></i></a>
+                                @endif</td>
                                 <td>
                                     @if ($office->manpower_job->isEmpty())
                                         <p>No Job Assigned!</p>
@@ -168,6 +172,10 @@ Delegate List
                             <label>Comment</label>
                             <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment">
                             <div class="invalid-feedback"> @error('comment') {{ $message }} @enderror </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="office_pad">Office Pad: </label>
+                            <input class="my-pond form-control-file" type="file" name="office_pad" id="office_pad" >
                         </div>
                     </div>                
                 </div>
@@ -396,6 +404,28 @@ $('#add_manpower_job_form').on('submit', function(){
                 location.reload();
             }
         }
+    });
+});
+    
+
+document.addEventListener('FilePond:processfilestart', (e) => {
+    $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+    $("#submit").prop('disabled', true);        
+});
+document.addEventListener('FilePond:processfile', (e) => {
+    $("#submit").html('Add');
+    $("#submit").prop('disabled', false);
+});
+$(function(){
+    FilePond.setOptions({
+        server: {
+            url: "{{ url('/') }}",
+            process: '/upload/manpower',
+            revert: '/revert',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
     });
 });
 

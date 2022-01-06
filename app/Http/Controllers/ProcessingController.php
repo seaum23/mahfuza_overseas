@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Models\Agent;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Candidate;
+use App\Models\ManpowerOffice;
 use App\Models\Processing;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -344,6 +345,7 @@ class ProcessingController extends Controller
         $candidate = Candidate::with('processings')->find($candidate);
         $now = Carbon::now();
         $zip_file = 'public/storage/zip/candidates_document_'.$now->format('Y_m_d_H_i_s').'.zip'; // Name of our archive to download
+        $manpower = ManpowerOffice::select('office_pad')->find($candidate->manpower_office_id);
 
         // Initializing PHP class
         $zip = new \ZipArchive();
@@ -353,62 +355,30 @@ class ProcessingController extends Controller
         // So it will create another folder called "storage/" inside ZIP, and put the file there.
         if(!empty($candidate->passport_scanned_copy)){
             $ext = explode('.', $candidate->passport_scanned_copy);
-            $zip->addFile(public_path($candidate->passport_scanned_copy), 'passport_scanned_copy.'.$ext[1]);
-        }
-        if(!empty($candidate->personal_photo_file)){
-            $ext = explode('.', $candidate->personal_photo_file);
-            $zip->addFile(public_path($candidate->personal_photo_file), 'personal_photo.'.$ext[1]);
-        }
-        if(!empty($candidate->police_clearance_file)){
-            $ext = explode('.', $candidate->police_clearance_file);
-            $zip->addFile(public_path($candidate->police_clearance_file), 'police_clearance.'.$ext[1]);
-        }
-        if(!empty($candidate->passport_scanned_copy)){
-            $ext = explode('.', $candidate->passport_scanned_copy);
-            $zip->addFile(public_path($candidate->passport_scanned_copy), 'passport_scanned_copy.'.$ext[1]);
+            $zip->addFile(public_path($candidate->passport_scanned_copy), 'Passport Copy.'.$ext[1]);
         }
         if(!empty($candidate->training_card_file)){
             $ext = explode('.', $candidate->training_card_file);
-            $zip->addFile(public_path($candidate->training_card_file), 'training_card.'.$ext[1]);
-        }
-        if(!empty($candidate->passport_photo_file)){
-            $ext = explode('.', $candidate->passport_photo_file);
-            $zip->addFile(public_path($candidate->passport_photo_file), 'passport_photo.'.$ext[1]);
-        }
-        if(!empty($candidate->test_medical_file)){
-            $ext = explode('.', $candidate->test_medical_file);
-            $zip->addFile(public_path($candidate->test_medical_file), 'test_medical.'.$ext[1]);
-        }
-        if(!empty($candidate->final_medical_file)){
-            $ext = explode('.', $candidate->final_medical_file);
-            $zip->addFile(public_path($candidate->final_medical_file), 'final_medical.'.$ext[1]);
+            $zip->addFile(public_path($candidate->training_card_file), 'Training Card.'.$ext[1]);
         }
         if(!empty($candidate->departureSealFile)){
             $ext = explode('.', $candidate->departureSealFile);
-            $zip->addFile(public_path($candidate->departureSealFile), 'departure_seal.'.$ext[1]);
+            $zip->addFile(public_path($candidate->departureSealFile), 'Departure Seal.'.$ext[1]);
         }
         if(!empty($candidate->arrivalSealFile)){
             $ext = explode('.', $candidate->arrivalSealFile);
-            $zip->addFile(public_path($candidate->arrivalSealFile), 'arrival_seal.'.$ext[1]);
+            $zip->addFile(public_path($candidate->arrivalSealFile), 'Arrival Seal.'.$ext[1]);
         }
-
         
-        if(!empty($candidate->okala_file)){
-            $ext = explode('.', $candidate->okala_file);
-            $zip->addFile(public_path($candidate->okala_file), 'okala_file.'.$ext[1]);
-        }
-        if(!empty($candidate->mufa_file)){
-            $ext = explode('.', $candidate->mufa_file);
-            $zip->addFile(public_path($candidate->mufa_file), 'mufa_file.'.$ext[1]);
-        }
         if(!empty($candidate->visa_stamping_file)){
             $ext = explode('.', $candidate->visa_stamping_file);
-            $zip->addFile(public_path($candidate->visa_stamping_file), 'visa_stamping_file.'.$ext[1]);
+            $zip->addFile(public_path($candidate->visa_stamping_file), 'VISA File.'.$ext[1]);
         }
-        if(!empty($candidate->manpower_card_file)){
-            $ext = explode('.', $candidate->manpower_card_file);
-            $zip->addFile(public_path($candidate->manpower_card_file), 'manpower_card_file.'.$ext[1]);
-        }  
+        
+        if(!empty($manpower->office_pad)){
+            $ext = explode('.', $manpower->office_pad);
+            $zip->addFile(public_path($manpower->office_pad), 'Office Pad.'.$ext[1]);
+        }
         
         $zip->close();
 

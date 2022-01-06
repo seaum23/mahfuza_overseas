@@ -32,6 +32,10 @@ Manpower Office
                                 <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment" value="{{ old('comment') }}" >
                                 <div class="invalid-feedback"> @error('comment') {{ $message }} @enderror </div>
                             </div>
+                            <div class="col-md-6">
+                                <label for="office_pad">Office Pad: </label>
+                                <input class="my-pond form-control-file" type="file" name="office_pad" id="office_pad" >
+                            </div>
                         </div>
                         <div id="job-body">
                             <div class="row">
@@ -56,8 +60,8 @@ Manpower Office
                                 <div id="officeDiv"></div>                
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <button class="btn btn-sm btn-primary" type="button" id="add_office" ><span class="fa fa-plus" aria-hidden="true"></span></button>
-                                        <button class="btn btn-sm btn-danger" type="button" id="remove_office"><span class="fas fa-minus" aria-hidden="true"></span></button>
+                                        <button class="btn btn-xs btn-primary" type="button" id="add_office" ><span class="fa fa-plus" aria-hidden="true"></span></button>
+                                        <button class="btn btn-xs btn-danger" type="button" id="remove_office"><span class="fas fa-minus" aria-hidden="true"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -110,8 +114,7 @@ Manpower Office
     });
     $('#remove_office').on('click',() => {
         $('.jod-extra-body').last().remove();
-    });    
-
+    });
 
 
     document.addEventListener('FilePond:processfilestart', (e) => {

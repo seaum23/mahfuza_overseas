@@ -195,6 +195,13 @@ class UploadController extends Controller
             $tmp = $this->upload($file);
             return $tmp;
         }
+
+        if($request->hasFile('office_pad')){
+            $file = $request->file('office_pad');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+        
     }
 
     public function delete(Request $request)

@@ -16,13 +16,6 @@ class SponsorController extends Controller
 {
     public function index()
     {
-        $query = Sponsor::with('sponsorable')->select('sponsors.*')->get();
-        foreach($query as $tmp){
-            if($tmp->sponsorable instanceof \App\Models\Agent){
-                dump($tmp->sponsorable);
-            }
-        }
-        exit();
         $delegates = Delegate::get();
         return view('templates.sponsor.new_sponsor', [
             'delegates' => $delegates

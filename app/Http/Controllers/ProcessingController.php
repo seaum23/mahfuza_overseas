@@ -293,30 +293,29 @@ class ProcessingController extends Controller
         $processing->pending = 2;
         $processing->save();
         
-        $transaction = new Transaction();
-        $transaction->quantity = 1;
-        $transaction->currency = 'bdt';
-        $transaction->unit_price = $processing->candidate->agent_comission;
-        $transaction->exchange_rate = 1;
-        $transaction->particular_type = Agent::class;
-        $transaction->particular_id = $processing->candidate->agent_id;
-        $transaction->candidate_id = $processing->candidate->id;
-        $transaction->save();
-        $transaction->transaction_id = str_pad($transaction->id, 10, '0', STR_PAD_LEFT);
-        $transaction->save();
-
-        $transaction->debits()->create([
-            'amount' => $processing->candidate->agent_comission,
-            'account_id' => '10',
-        ]);
-
-        $transaction->credits()->create([
-            'amount' => $processing->candidate->agent_comission,
-            'account_id' => '2',
-        ]);
-
-        $transaction->save();
-
+        if(!empty($processing->candidate->agent_comission)){
+            $transaction = new Transaction();
+            $transaction->quantity = 1;
+            $transaction->currency = 'bdt';
+            $transaction->unit_price = $processing->candidate->agent_comission;
+            $transaction->exchange_rate = 1;
+            $transaction->particular_type = Agent::class;
+            $transaction->particular_id = $processing->candidate->agent_id;
+            $transaction->candidate_id = $processing->candidate->id;
+            $transaction->save();
+            $transaction->transaction_id = str_pad($transaction->id, 10, '0', STR_PAD_LEFT);
+            $transaction->save();
+    
+            $transaction->debits()->create([
+                'amount' => $processing->candidate->agent_comission,
+                'account_id' => '10',
+            ]);
+    
+            $transaction->credits()->create([
+                'amount' => $processing->candidate->agent_comission,
+                'account_id' => '2',
+            ]);
+        }
     }
 
     public function return_update(Processing $processing)
@@ -383,7 +382,7 @@ class ProcessingController extends Controller
         $zip->close();
 
         // We return the file immediately after download
-        return $zip_file;
+        return asset($zip_file);
     }
     
 }

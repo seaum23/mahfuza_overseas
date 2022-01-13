@@ -25,7 +25,7 @@ class CandidateController extends Controller
      */
     public function index()
     {
-        $countries = Delegate::get()->unique('country')->pluck('country');
+        $countries = SponsorVisa::get()->unique('country')->pluck('country');
         return view('templates.candidate.candidate_list', [
             'countries' => $countries
         ]);
@@ -239,13 +239,10 @@ class CandidateController extends Controller
 
     public function sponsor_visa(Candidate $candidate)
     {
-        $visas =  SponsorVisa::whereHas('sponsor.delegate_office.delegate', function ($query) use ($candidate)
-        {
-            $query->where('delegates.country', $candidate->country)->where('delegates.country', $candidate->country);
-        })->with('sponsor.delegate_office.delegate', 'job')->get();
+        $visas =  SponsorVisa::with('sponsor', 'job')->where('country', $candidate->country)->get();
         
         foreach($visas as $visa){
-            echo '<option value="'.$visa->id.'">'.$visa->sponsor->sponsor_name.' - '.$visa->job->name.' - '.$visa->sponsor->delegate_office->delegate->name.'</option>';
+            echo '<option value="'.$visa->id.'">'.$visa->sponsor->sponsor_name.' - '.$visa->job->name.' - '.$visa->job->credit_type.'</option>';
         }
     }
 
@@ -293,7 +290,8 @@ class CandidateController extends Controller
             return Datatables::of($query)
             ->editColumn('fName', function ($query)
             {
-                $html = '<p> <span class="text-secondary">Name: </span>' . $query->fName . ' ' . $query->lName . '</p>';
+                $gender = ($query->gender == 'Male') ? 'M' : 'F';
+                $html = '<p> <span class="text-secondary">Name: </span>' . $query->fName . ' ' . $query->lName . ' ('.$gender.')</p>';
                 $html .= '<p> <span class="text-secondary">Agent: </span>' . $query->agent->full_name . '</p>';
                 return $html;
             })

@@ -47,8 +47,6 @@ class AgentController extends Controller
             'agentPhone' => 'required',
             'password' => 'required',
             'agentImage' => 'required',
-            'agentPassport' => 'required',
-            'balanceSheet' => 'required',
         ]);
 
         $validate_existing_agent = Agent::where('email', $request->agentEmail)
@@ -81,9 +79,13 @@ class AgentController extends Controller
 
         $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id . '_' . time() );
 
-        $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
+        if(!empty($request->agentPassport)){
+            $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
+        }
 
-        $agent->balance_sheet = move($request->balanceSheet, 'agent', 'agent_balance_sheet_' . $agent->id . '_' . time() );
+        if(!empty($request->balance_sheet)){
+            $agent->balance_sheet = move($request->balanceSheet, 'agent', 'agent_balance_sheet_' . $agent->id . '_' . time() );
+        }
 
         $agent->save();
          

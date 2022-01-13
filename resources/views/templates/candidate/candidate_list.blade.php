@@ -179,7 +179,6 @@ Candidate List
                     <x-assign-job-to-candidate/>
                 </div>
                 <div id="payment_information"></div>
-                {{-- <x-transaction-form-specified name="comission_amount"/> --}}
                 <div class="modal-footer">
                     <button id="assign_job_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="assign_job_submit" type="submit" class="btn btn-primary">Submit</button>

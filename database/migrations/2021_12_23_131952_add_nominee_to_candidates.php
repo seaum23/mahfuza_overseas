@@ -14,9 +14,9 @@ class AddNomineeToCandidates extends Migration
     public function up()
     {
         Schema::table('candidates', function (Blueprint $table) {
-            $table->string('nominee');
-            $table->string('nominee_relation');
-            $table->string('contact_name');
+            $table->string('nominee')->nullable();
+            $table->string('nominee_relation')->nullable();
+            $table->string('contact_name')->nullable();
         });
     }
 

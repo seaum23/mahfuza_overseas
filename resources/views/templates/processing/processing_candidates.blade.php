@@ -200,6 +200,7 @@ let get_zip = (id) => {
         success: function (response){
             $("#zip_button").html('<i class="fas fa-file-archive"></i>');
             $("#zip_button").prop('disabled', false);
+            console.log(response);
             window.open(response, '_blank');
         }
     });

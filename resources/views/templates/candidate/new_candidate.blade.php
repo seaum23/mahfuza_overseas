@@ -110,7 +110,23 @@ New Candidate
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Nominee Relation</label>
-                                    <input style="width: inherit" type="text" class="form-control" name="nominee_relation" id="nominee_relation" autocomplete="off" placeholder="Nominee Relation"/>
+                                    <select class="form-control select2" name="nominee_relation" id="nominee_relation" data-placeholder="Select Nominee Relation">
+                                        <option value=""></option>
+                                        <option value="Father">Father</option>
+                                        <option value="Mother">Mother</option>
+                                        <option value="Brother">Brother</option>
+                                        <option value="Sister">Sister</option>
+                                        <option value="Cousin">Cousin</option>
+                                        <option value="Friends">Friends</option>
+                                        <option value="Husband">Husband</option>
+                                        <option value="Wife">Wife</option>
+                                        <option value="Uncle">Uncle</option>
+                                        <option value="Aunti">Aunty</option>
+                                        <option value="Daughter">Daughter</option>
+                                        <option value="Son">Son</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    {{-- <input style="width: inherit" type="text" class="form-control" name="nominee_relation" id="nominee_relation" autocomplete="off" placeholder="Nominee Relation"/> --}}
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Emergency Contact Name</label>

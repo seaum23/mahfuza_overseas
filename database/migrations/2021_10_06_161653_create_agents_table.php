@@ -18,10 +18,10 @@ class CreateAgentsTable extends Migration
             $table->string('email')->unique();
             $table->string('full_name');
             $table->string('phone')->unique();
-            $table->string('photo')->default('');
-            $table->string('passport')->default('');
-            $table->string('police_clearance')->default('');
-            $table->string('comment');
+            $table->string('photo')->nullable();
+            $table->string('passport')->nullable();
+            $table->string('police_clearance')->nullable();
+            $table->string('comment')->nullable();
             $table->bigInteger('updated_by');
             $table->string('password');
             $table->timestamps();

@@ -25,7 +25,7 @@ class CreateTicketsTable extends Migration
             $table->string('airline', 100);
             $table->foreignIdFor(Processing::class);
             $table->string('ticket_file')->nullable();
-            $table->string('comment');
+            $table->string('comment')->nullable();
             $table->bigInteger('updated_by');
             $table->timestamps();
         });

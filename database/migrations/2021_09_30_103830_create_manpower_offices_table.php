@@ -18,7 +18,7 @@ class CreateManpowerOfficesTable extends Migration
             $table->string('name');
             $table->string('license')->unique();
             $table->string('address');
-            $table->string('comment')->default('');
+            $table->string('comment')->nullable();
             $table->bigInteger('updated_by');
             $table->timestamps();
         });

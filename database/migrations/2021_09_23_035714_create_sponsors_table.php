@@ -20,7 +20,7 @@ class CreateSponsorsTable extends Migration
             $table->string('sponsor_name', 100);
             $table->string('sponsor_phone', 50);
             $table->string('comment', 255)->default('')->nullable();
-            $table->foreignIdFor(DelegateOffice::class);
+            $table->foreignIdFor(DelegateOffice::class)->nullable();
             $table->unsignedBigInteger('updated_by');
             $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();

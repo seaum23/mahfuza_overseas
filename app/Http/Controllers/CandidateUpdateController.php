@@ -111,10 +111,35 @@ class CandidateUpdateController extends Controller
 
     public function update_job(Request $request)
     {
-        $candidate = Candidate::find($request->update_job_candidate_id);
+        $candidate = Candidate::with('agent')->find($request->update_job_candidate_id);
         $candidate->job_id = $request->job_type;
         $candidate->manpower_office_id = $request->manpower;
-        $candidate->agent_comission = $request->comission_amount;
+        if($request->payment_type == 'Comission'){
+            $candidate->agent_comission = $request->amount;
+        }else{
+            $transaction = new Transaction();
+            $transaction->quantity = 1;
+            $transaction->currency = 'bdt';
+            $transaction->unit_price = $request->amount;
+            $transaction->exchange_rate = 1;
+            $transaction->particular_type = Agent::class;
+            $transaction->particular_id = $candidate->agent->id;
+            $transaction->candidate_id = $candidate->id;
+            $transaction->purpose = 'VISA Fee';
+            $transaction->save();
+            $transaction->transaction_id = str_pad($transaction->id, 10, '0', STR_PAD_LEFT);
+            $transaction->save();
+
+            $transaction->debits()->create([
+                'amount' => $request->amount,
+                'account_id' => '1',
+            ]);
+
+            $transaction->credits()->create([
+                'amount' => $request->amount,
+                'account_id' => 8,
+            ]);
+        }
         $candidate->save();
     }
 

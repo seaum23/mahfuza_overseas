@@ -37,6 +37,7 @@ class FormTemplateController extends Controller
         $manpowers = $job->manpower_offices;
         echo json_encode(array(
             'manpower' => view('form_templates.manpower_office_selections', [ 'manpowers' => $manpowers ])->render(),
+            'transaction_amount' => view('form_templates.agent_comission_visa_fee', [ 'credit_type' => $job->credit_type ])->render(),
             'agent_expense' => 'test',
         ));
     }

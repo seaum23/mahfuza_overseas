@@ -15,4 +15,9 @@ class Debit extends Model
     {
         return $this->belongsTo(Transaction::class);
     }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
 }

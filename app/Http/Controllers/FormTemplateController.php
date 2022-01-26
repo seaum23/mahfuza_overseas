@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Job;
 use App\Models\Agent;
 use App\Models\Account;
+use App\Models\Candidate;
 use App\Models\Delegate;
 use Illuminate\Http\Request;
 use App\Models\ManpowerOffice;
@@ -51,12 +52,15 @@ class FormTemplateController extends Controller
 
     public function transaction_template(Request $request)
     {
-        $html = '<option value=""></option>';
+        $candidates = NULL;
         switch($request->type){
             case 'agent':
                 $particular = Agent::find($request->id);
                 $type = '<option value="agent" selected>Agent</option>';
                 $particular = '<option value="'.$particular->id.'">'.$particular->full_name.'</option>';
+                $candidates = Candidate::select('id', 'fName', 'lName')->whereHas('processings', function ($query){
+                    $query->whereIn('pending', [0, 1]);
+                })->get();
                 break;
             case 'delegate':
                 $particular = Delegate::find($request->id);
@@ -80,6 +84,7 @@ class FormTemplateController extends Controller
             'particular' => $particular,
             'accounts' => $accounts,
             'payment_accounts' => $payment_accounts,
+            'candidates' => $candidates
         ]);
     }
 

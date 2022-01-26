@@ -2,6 +2,18 @@
     <div class="modal-body">
         <div class="card">
             <div class="card-body"><h5 class="card-title"></h5>
+                @if (!empty($candidates))
+                <div class="form-row mb-3">
+                    <div class="col-md-4">
+                        <select class="form-control ms select2" name="transaction_candidate_id" id="transaction_candidate_id" >
+                            <option value="">No Candidate</option>
+                            @foreach ($candidates as $item)
+                                <option value="{{ $item->id }}">{{ $item->fName . ' ' . $item->lName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                @endif
                 <div class="form-row">
                     <div class="col-md-4">
                         <label for="">Account <i class="fa fa-asterisk fa-xs fa-xxs text-danger" aria-hidden="true"></i></label>

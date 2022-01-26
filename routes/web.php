@@ -66,21 +66,25 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard', [DashboardController::class, 'login']);
 
-    Route::get('/delegate', [DelegateController::class, 'index'])->name('delegate');
-    Route::post('/delegate', [DelegateController::class, 'store']);
-    Route::post('/delegate/{delegate}/update', [DelegateController::class, 'update']);
-    Route::get('/delegate/list', [DelegateController::class, 'list'])->name('delegate-show');
-    Route::post('/delegate/office/add/{delegate}', [DelegateController::class, 'store_new_office'])->name('delegate.office');
-    Route::post('/delegate/office/destroy/{delegate_office}', [DelegateController::class, 'destroy_office']);
-    Route::post('/delegate/office/update/{delegate_office}', [DelegateController::class, 'update_office']);
+    Route::prefix('delegate')->group(function () {
+        Route::get('/', [DelegateController::class, 'index'])->name('delegate');
+        Route::post('/', [DelegateController::class, 'store']);
+        Route::post('/{delegate}/update', [DelegateController::class, 'update']);
+        Route::get('/list', [DelegateController::class, 'list'])->name('delegate-show');
+        Route::post('/office/add/{delegate}', [DelegateController::class, 'store_new_office'])->name('delegate.office');
+        Route::post('/office/destroy/{delegate_office}', [DelegateController::class, 'destroy_office']);
+        Route::post('/office/update/{delegate_office}', [DelegateController::class, 'update_office']);
+    });
 
-    Route::get('/sponsor', [SponsorController::class, 'index'])->name('sponsor');
-    Route::post('/sponsor', [SponsorController::class, 'store']);
-    Route::post('/sponsor/{sponsor}/update', [SponsorController::class, 'update']);
-    Route::post('/sponsor/{delegate}/fetch_delegate_office', [SponsorController::class, 'fetch_delegate_office']);
-    Route::get('/sponsor/list/datatable', [SponsorController::class, 'list'])->name('sponsor-list');
-    Route::get('/sponsor/datatable/ajax', [SponsorController::class, 'table_data']);
-    Route::post('/sponsor/edit.sponsor.data', [SponsorController::class, 'edit_sponsor_data']);
+    Route::prefix('sponsor')->group(function () {
+        Route::get('/', [SponsorController::class, 'index'])->name('sponsor');
+        Route::post('/', [SponsorController::class, 'store']);
+        Route::post('/{sponsor}/update', [SponsorController::class, 'update']);
+        Route::post('/{delegate}/fetch_delegate_office', [SponsorController::class, 'fetch_delegate_office']);
+        Route::get('/list/datatable', [SponsorController::class, 'list'])->name('sponsor-list');
+        Route::get('/datatable/ajax', [SponsorController::class, 'table_data']);
+        Route::post('/edit.sponsor.data', [SponsorController::class, 'edit_sponsor_data']);
+    });
     
     Route::resource('jobs', JobController::class);
 
@@ -93,6 +97,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/agent.list',[AgentController::class, 'datatable']);
     Route::resource('agent', AgentController::class);
+    Route::get('agent/balance-sheet/{agent}', [AgentController::class, 'balanace_sheet']);
 
     Route::resource('candidate', CandidateController::class);
     Route::get('/candidate.list',[CandidateController::class, 'datatable']);

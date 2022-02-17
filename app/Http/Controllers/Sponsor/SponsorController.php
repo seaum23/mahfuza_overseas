@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Sponsor;
 
-use App\Models\Delegate;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Agent;
-use App\Models\DelegateOffice;
 use App\Models\Sponsor;
-use Illuminate\Validation\ValidationException;
+use App\Models\Delegate;
+use App\Models\Processing;
+use Illuminate\Http\Request;
+use App\Models\DelegateOffice;
 use Yajra\Datatables\Datatables;
+use App\Http\Controllers\Controller;
+use App\Models\Candidate;
+use Illuminate\Validation\ValidationException;
 // use Datatables;
 
 class SponsorController extends Controller
@@ -40,9 +42,11 @@ class SponsorController extends Controller
             throw ValidationException::withMessages(['sponsorNid' => 'Sponsor already exists!']);
         }
 
+        $sponsor = NULL;
+
         if($request->type == 'Delegate'){
             $delegate_office = DelegateOffice::find($request->delegateOfficeId);
-            $delegate_office->sponsor()->create([
+            $sponsor = $delegate_office->sponsor()->create([
                 'sponsor_NID' => $request->sponsorNid,
                 'sponsor_name' => $request->sponsorName,
                 'sponsor_phone' => $request->sponsorPhone,
@@ -53,13 +57,38 @@ class SponsorController extends Controller
         
         if($request->type == 'Agent'){
             $agent = Agent::find($request->agent_id);
-            $agent->sponsor()->create([
+            $sponsor = $agent->sponsor()->create([
                 'sponsor_NID' => $request->sponsorNid,
                 'sponsor_name' => $request->sponsorName,
                 'sponsor_phone' => $request->sponsorPhone,
                 'comment' => $request->comment,
                 'updated_by' => auth()->id(),
             ]);
+        }
+
+        if($request->addVisa == 'yes'){
+            $sponsor_visa = $sponsor->visa()->create([
+                'sponsor_visa' => $request->visaNo,
+                'issue_date' => $request->issueDate,
+                'visa_amount' => $request->visaAmount,
+                'visa_gender_type' => $request->gender,
+                'job_id' => $request->job_name,
+                'comment' => $request->comment,
+                'country' => $request->country,
+                'updated_by' => auth()->id(),
+            ]);
+
+            if(!empty($request->assigned_candidate)){
+                Processing::create([
+                    'candidate_id' => $request->assigned_candidate,
+                    'sponsor_visa_id' => $sponsor_visa->id,
+                    'updated_by' => auth()->id(),
+                ]);
+                Candidate::where('id', $request->assigned_candidate)
+                ->update(['in_processing' => 2]);
+                $sponsor_visa->visa_amount -= 1;
+                $sponsor_visa->save();
+            }
         }
 
         $request->session()->flash('alert', 'Yes');

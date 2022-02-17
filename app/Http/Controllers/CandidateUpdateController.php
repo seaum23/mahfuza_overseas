@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Candidate;
+use App\Models\District;
+use App\Models\Division;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -170,6 +172,13 @@ class CandidateUpdateController extends Controller
         $candidate = Candidate::find($request->youtube_link_update);
         $candidate->youtube_link = $request->youtube_link;
         $candidate->save();
+    }
+
+    public function candidate_division($district)
+    {
+        $district = District::with('division')->where('name', $district)->first();
+
+        echo (is_null($district)) ? '' : $district->division->name;
     }
     
 }

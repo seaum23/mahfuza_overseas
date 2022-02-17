@@ -185,11 +185,15 @@ New Candidate
                                 <div class="row w-100">
                                     <div class="form-group col-md-4">
                                         <label>Division</label>
-                                        <input style="width: inherit" type="text" class="form-control" name="division" id="division" autocomplete="off" placeholder="Division"/>
+                                        <input style="width: inherit" type="text" class="form-control" name="division" id="division" autocomplete="off" placeholder="Division" readonly/>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>District</label>
-                                        <select class="form-control select2" name="district" id="district" data-placeholder="Select Zilla">
+                                        <select onchange="get_division(this.value)" class="form-control select2" name="district" id="district" data-placeholder="Select Zilla">
+                                            <option value="">Select District</option>
+                                            @foreach ($districts as $district)
+                                                <option>{{ $district->name }}</option>
+                                            @endforeach
                                             <x-select-zilla/>
                                         </select>
                                     </div>
@@ -280,6 +284,22 @@ New Candidate
 
 @section('script')
 <script>
+    let get_division = (district) => {
+        if(district == ""){
+            $('#division').val('');
+            return;
+        }
+
+        $.ajax({
+            type: 'get',
+            url: '{{ url('/') }}' + '/candidate/get-division/' + district,
+            success: function (response){
+                $('#division').val(response);
+            },
+        });
+    }
+
+
     let get_expiry_date = () => {
         let issue_date = $('#issu_date').val();
         let validity_year = $('input[name="validityYear"]:checked').val();

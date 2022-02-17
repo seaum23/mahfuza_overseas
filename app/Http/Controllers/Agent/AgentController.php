@@ -213,11 +213,19 @@ class AgentController extends Controller
                 $html = '<div class="btn-group" role="group" aria-label="Basic example">';
                 $html .= '<button onclick="transaction_particular_select(\'agent\', '.$query->id.')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
                 $html .= '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';
+                $html .= '<button onclick="balance_sheet(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#ledger_modal" class="btn btn-success btn-sm"><i class="fas fa-file-invoice-dollar"></i> </button>';
                 $html .= '</div>';
                 return $html;
             })
             ->rawColumns(['document', 'photo', 'action'])
             ->make(true);
         }
+    }
+
+    public function balanace_sheet(Agent $agent)
+    {
+        return view('templates.ledger.agent-ledger', [
+            'transactions' => $agent->transactions()->with('credits', 'debits')->latest()->get()
+        ]);
     }
 }

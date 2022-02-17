@@ -40,6 +40,20 @@
                                 <input class="form-control" type="text" id="comment" name="comment" placeholder="Any Remark..." value="{{ old('comment') }}">
                             </div>
                         </div>
+                        <div class="row ">
+                            <div>
+                                <div class="custom-radio custom-control custom-control-inline">
+                                    <input onclick="add_visa_to_sponsor(this.value)" class="custom-control-input" type="radio" name="addVisa" id="addVisaNew" value="yes" >
+                                    <label class="custom-control-label" for="addVisaNew"> Add Visa </label>
+                                </div>
+                                <div class="custom-radio custom-control custom-control-inline">
+                                    <input onclick="add_visa_to_sponsor(this.value)" class="custom-control-input" type="radio" name="addVisa" id="addVisaDefault" value="no" checked>
+                                    <label class="custom-control-label" for="addVisaDefault"> Default </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="visa_to_sponsor"></div>
+                        <div id="candidate_to_visa"></div>
                         <div class="row justify-content-center">                            
                             <div class="col-md-1">
                                 <button class="btn btn-primary">Add</button>
@@ -55,6 +69,56 @@
 
 @section('script')
 <script>
+
+    let add_candidate = (val) => {
+        console.log(val);
+        if(val != 1){
+            $('#candidate_to_visa').html('');
+            return;
+        }
+
+        let job_type = $('#job_name').val();
+        let gender = $('#gender').val();
+
+        if(job_type !== '' && gender !== ''){
+            $.ajax({
+                type: 'get',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/candidate-to-sponsor-visa',
+                data: {job_type, gender},
+                success: function (response){
+                    $('#candidate_to_visa').html(response);
+                    $('.select2-ajax').select2({
+                        width: '100%'
+                    });
+                }
+            });
+        }
+    }
+
+    let add_visa_to_sponsor = (type) => {
+        if(type == 'no'){
+            $('#visa_to_sponsor').html('');
+            return;
+        }
+        $.ajax({
+            type: 'get',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/visa-to-sponsor',
+            // data: {type},
+            success: function (response){
+                $('#visa_to_sponsor').html(response);
+                $('.select2-ajax').select2({
+                    width: '100%'
+                });
+                $(".hijri-date-input").hijriDatePicker({
+                    locale: "en-us",
+                    hijri: true
+                });
+            }
+        });
+    }
+
     let get_type = (type) => {
         $.ajax({
             type: 'get',

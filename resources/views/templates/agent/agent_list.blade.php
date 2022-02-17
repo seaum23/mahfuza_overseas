@@ -101,10 +101,41 @@ Agents List
         </div>
     </div>
 </div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="ledger_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ledger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="ledger_modal_body">
+
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
 <script>
+
+let balance_sheet = (name, email, phone, comment, id) => {
+    $.ajax({
+        type: 'get',
+        // enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/agent/balance-sheet/' + id,
+        data: {name},
+        success: function (response){
+            $('#ledger_modal_body').html(response);
+        }
+    });
+}
+
+
 document.addEventListener('FilePond:processfilestart', (e) => {
     $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
     $(".file-pond-submit").prop('disabled', true);        

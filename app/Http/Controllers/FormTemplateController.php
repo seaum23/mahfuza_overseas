@@ -102,6 +102,23 @@ class FormTemplateController extends Controller
             ]);
         }
 
+    }
 
+    public function visa_to_sponsor()
+    {
+        return view('form_templates.visa-to-sponsor', [
+            'jobs' => Job::get()
+        ])->render();
+    }
+
+    public function candidate_to_sponsor_visa(Request $request)
+    {
+        return view('form_templates.candidate-to-sponsor-visa', [
+            'candidates' => Candidate::where('gender', $request->gender)
+                            ->where('job_id', $request->job_type)
+                            ->where('final_medical_status', 1)
+                            ->where('test_medical_status', 1)
+                            ->get()
+        ])->render();
     }
 }

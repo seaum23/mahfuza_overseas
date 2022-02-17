@@ -9,6 +9,7 @@ use App\Models\Job;
 use App\Models\Agent;
 use App\Models\Delegate;
 use App\Models\Candidate;
+use App\Models\District;
 use App\Models\Processing;
 use App\Models\SponsorVisa;
 use Illuminate\Http\Request;
@@ -50,6 +51,7 @@ class CandidateController extends Controller
             'manpower_offices' => $manpower_offices,
             'jobs' => $jobs,
             'countries' => $countries,
+            'districts' => District::get()
         ]);
     }
 

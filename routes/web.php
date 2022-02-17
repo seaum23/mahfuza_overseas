@@ -117,6 +117,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/fit.unfit/{candidate}',[CandidateUpdateController::class, 'fit_unfit']);
         Route::post('/send-to-manpower',[CandidateUpdateController::class, 'send_to_manpower']);
         Route::post('/add-youtube-link',[CandidateUpdateController::class, 'add_youtube_link']);        
+        Route::get('/get-division/{district}',[CandidateUpdateController::class, 'candidate_division']);        
         
     });
 
@@ -190,6 +191,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-manpower-office/{job}', [FormTemplateController::class, 'get_manpower_office']);
     Route::get('get-sponsor-visa-form/{idx}', [FormTemplateController::class, 'sponsor_office']);
     Route::get('get-sponsor-parent-type', [FormTemplateController::class, 'sponsor_parent_type']);
+    Route::get('visa-to-sponsor', [FormTemplateController::class, 'visa_to_sponsor']);
+    Route::get('candidate-to-sponsor-visa', [FormTemplateController::class, 'candidate_to_sponsor_visa']);
 
     Route::get('get-age', [CandidateController::class, 'get_age']);
     Route::get('get-expiry-date', [CandidateController::class, 'get_expiry']);    

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Artisan;
@@ -159,6 +160,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/specific', [FormTemplateController::class, 'transaction_template'])->name('transaction.specific');
     });
 
+    Route::resource('accounts', AccountController::class);
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 

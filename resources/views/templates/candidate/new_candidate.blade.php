@@ -4,7 +4,7 @@ Delegate
 @endsection
 
 @section('content')
-<div class="row justify-content-center">
+<div class="row justify-content-center mb-5">
     <div class="col-md-12">
         <div class="main-card mt-3 card">
             <div class="card-body"><h5 class="card-title">New Candidate</h5>

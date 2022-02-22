@@ -49,6 +49,16 @@ Delegate
                                 <div class="invalid-feedback"> @error('licenseNumber') {{ $message }} @enderror </div>
                             </div>
                         </div>
+                        <div class="form-row mt-2">
+                            <div class="col-md-6">
+                                <label for="opening_balance">Opening Balance: </label>
+                                <input class="form-control" type="number" name="opening_balance" id="opening_balance" placeholder="Opening Balance">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="opening_balance">Balance Sheet: </label>
+                                <input class="my-pond form-control-file" type="file" name="balanceSheet" id="balanceSheet" >
+                            </div>
+                        </div>
                         <div id="officeDiv">
                         </div>                
                         {{-- <div class="form-row">
@@ -69,4 +79,29 @@ Delegate
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+    <script>      
+        document.addEventListener('FilePond:processfilestart', (e) => {
+            $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#submit").prop('disabled', true);        
+        });
+        document.addEventListener('FilePond:processfile', (e) => {
+            $("#submit").html('Add');
+            $("#submit").prop('disabled', false);
+        });
+        $(function(){
+            FilePond.setOptions({
+                server: {
+                    url: "{{ url('/') }}",
+                    process: '/upload/delegate',
+                    revert: '/revert',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+            });
+        });
+    </script>
 @endsection

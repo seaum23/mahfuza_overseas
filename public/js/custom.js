@@ -1,3 +1,45 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+
+
+function success_alert(title, content){
+    new jBox('Notice', {
+        attributes: {
+            x: 'right',
+            y: 'bottom'
+        },
+        stack: false,
+        animation: {
+            open: 'tada',
+            close: 'zoomIn'
+        },
+        color: 'green',
+        title: title,
+        content: content
+    });
+}
+
+function danger_alert(title, content){
+    new jBox('Notice', {
+        attributes: {
+            x: 'right',
+            y: 'bottom'
+        },
+        stack: false,
+        animation: {
+            open: 'tada',
+            close: 'zoomIn'
+        },
+        color: 'red',
+        title: title,
+        content: content
+    });
+}
+
 let random_password = () => {
     var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     var randomPassword = '';
@@ -129,7 +171,9 @@ function initHijrDatePickerDefault() {
  * Trigger change of selet 2
  */
  $(document).ready(function() {
-    $('.select2').select2();
+    $('.select2').select2({
+        width: '100%',
+    });
  })
  
  $('.select2').trigger('change');
@@ -151,24 +195,23 @@ let trigget_alert = () => {
 
 window.onload = trigget_alert();
 
-/**
- * 
- * Filepond configuration!
- * 
- */
+// Initiate datepicker
 
-// First register any plugins
-$.fn.filepond.registerPlugin(FilePondPluginImagePreview);        
+$('.datepicker').datepicker({
+    format: 'yyyy/mm/dd',
+    todayHighlight:'TRUE',
+    autoclose: true,
+});
+
+$(".timePicker").timepicker();
+
+
     
-// Generic file-pond
-$('.my-pond').filepond({
-    credits: false,
-    'allowMultiple': false
-});
-
-// Generic file-pond multiple
-$('.my-pond-multiple').filepond({
-    credits: false,
-    'allowMultiple': true
-});
-
+// document.addEventListener('FilePond:processfilestart', (e) => {
+//     $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+//     $(".file-pond-submit").prop('disabled', true);        
+// });
+// document.addEventListener('FilePond:processfile', (e) => {
+//     $(".file-pond-submit").html('Add');
+//     $(".file-pond-submit").prop('disabled', false);
+// });

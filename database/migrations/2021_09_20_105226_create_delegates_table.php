@@ -18,7 +18,7 @@ class CreateDelegatesTable extends Migration
             $table->string('name');
             $table->string('country');
             $table->string('state');
-            $table->string('comment')->default('');
+            $table->string('comment')->default('')->nullable();
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
         });

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Sponsor;
 
-use App\Models\Delegate;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\DelegateOffice;
+use App\Models\Agent;
 use App\Models\Sponsor;
-use Illuminate\Validation\ValidationException;
+use App\Models\Delegate;
+use App\Models\Processing;
+use Illuminate\Http\Request;
+use App\Models\DelegateOffice;
 use Yajra\Datatables\Datatables;
+use App\Http\Controllers\Controller;
+use App\Models\Candidate;
+use Illuminate\Validation\ValidationException;
 // use Datatables;
 
 class SponsorController extends Controller
@@ -29,8 +32,7 @@ class SponsorController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'delegateId' => 'required',
-            'delegateOfficeId' => 'required',
+            'type' => 'required',
             'sponsorName' => 'required',
             'sponsorNid' => 'required',
             'sponsorPhone' => 'required',
@@ -40,14 +42,54 @@ class SponsorController extends Controller
             throw ValidationException::withMessages(['sponsorNid' => 'Sponsor already exists!']);
         }
 
-        $delegate_office = DelegateOffice::find($request->delegateOfficeId);
-        $delegate_office->sponsor()->create([
-            'sponsor_NID' => $request->sponsorNid,
-            'sponsor_name' => $request->sponsorName,
-            'sponsor_phone' => $request->sponsorPhone,
-            'comment' => $request->comment,
-            'updated_by' => auth()->id(),
-        ]);
+        $sponsor = NULL;
+
+        if($request->type == 'Delegate'){
+            $delegate_office = DelegateOffice::find($request->delegateOfficeId);
+            $sponsor = $delegate_office->sponsor()->create([
+                'sponsor_NID' => $request->sponsorNid,
+                'sponsor_name' => $request->sponsorName,
+                'sponsor_phone' => $request->sponsorPhone,
+                'comment' => $request->comment,
+                'updated_by' => auth()->id(),
+            ]);
+        }
+        
+        if($request->type == 'Agent'){
+            $agent = Agent::find($request->agent_id);
+            $sponsor = $agent->sponsor()->create([
+                'sponsor_NID' => $request->sponsorNid,
+                'sponsor_name' => $request->sponsorName,
+                'sponsor_phone' => $request->sponsorPhone,
+                'comment' => $request->comment,
+                'updated_by' => auth()->id(),
+            ]);
+        }
+
+        if($request->addVisa == 'yes'){
+            $sponsor_visa = $sponsor->visa()->create([
+                'sponsor_visa' => $request->visaNo,
+                'issue_date' => $request->issueDate,
+                'visa_amount' => $request->visaAmount,
+                'visa_gender_type' => $request->gender,
+                'job_id' => $request->job_name,
+                'comment' => $request->comment,
+                'country' => $request->country,
+                'updated_by' => auth()->id(),
+            ]);
+
+            if(!empty($request->assigned_candidate)){
+                Processing::create([
+                    'candidate_id' => $request->assigned_candidate,
+                    'sponsor_visa_id' => $sponsor_visa->id,
+                    'updated_by' => auth()->id(),
+                ]);
+                Candidate::where('id', $request->assigned_candidate)
+                ->update(['in_processing' => 2]);
+                $sponsor_visa->visa_amount -= 1;
+                $sponsor_visa->save();
+            }
+        }
 
         $request->session()->flash('alert', 'Yes');
         $request->session()->flash('message', 'Task was successful!');
@@ -91,15 +133,24 @@ class SponsorController extends Controller
     public function table_data(Request $request)
     {
         if ($request->ajax()) {
-            $query = Sponsor::with('delegate_office.delegate')->select('sponsors.*');
+            $query = Sponsor::with('sponsorable')->select('sponsors.*');
             
             return Datatables::of($query)            
-            ->editColumn('delegate_office.name', function ($request)
+            ->editColumn('id', function ($request)
             {
-                return $request->delegate_office->delegate->name . ' - ' . $request->delegate_office->name;
+                if(is_null($request->sponsorable)){
+                    return '-';
+                }
+                if($request->sponsorable instanceof \App\Models\Agent){
+                    return 'Agent: ' . $request->sponsorable->full_name;
+                }
+                
+                if($request->sponsorable instanceof \App\Models\DelegateOffice){
+                    return 'Delegate: ' . $request->sponsorable->delegate->name . ' - ' . $request->sponsorable->name;
+                }
             })
             ->addColumn('action', function ($query) {
-                return '<button data-toggle="modal" data-target="#update_sponsor_modal" class="btn btn-sm btn-primary" onclick="edit_sponsor('.$query->id.', '.$query->delegate_office->id.', '.$query->delegate_office->delegate->id.', \''.$query->sponsor_name.'\', \''.$query->sponsor_NID.'\', \''.$query->sponsor_phone.'\', \''.addslashes($query->comment).'\')"><i class="fas fa-edit"></i> Edit</button>';
+                return '<button data-toggle="modal" data-target="#update_sponsor_modal" class="btn btn-sm btn-primary" onclick="edit_sponsor('.$query->id.', 12, 12, \''.$query->sponsor_name.'\', \''.$query->sponsor_NID.'\', \''.$query->sponsor_phone.'\', \''.addslashes($query->comment).'\')"><i class="fas fa-edit"></i> Edit</button>';
             })
             ->make(true);
         }

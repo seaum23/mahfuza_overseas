@@ -15,6 +15,7 @@ Delegate List
                             <th>License</th>
                             <th>Address</th>
                             <th>Jobs</th>
+                            <th>Pad</th>
                             <th>Comment</th>
                             <th>Alter</th>
                         </thead>
@@ -24,19 +25,25 @@ Delegate List
                                 <td>{{ $office->name; }}</td>
                                 <td>{{ $office->license; }}</td>
                                 <td>{{ $office->address; }}</td>
+                                <td>@if (!empty($office->office_pad))
+                                    <a class="btn btn-info btn-xs" role="button" href="{{ asset($office->office_pad) }}" target="_blank"><i class="fas fa-eye"></i></a>
+                                @endif</td>
                                 <td>
                                     @if ($office->manpower_job->isEmpty())
                                         <p>No Job Assigned!</p>
                                     @else
                                         @foreach ($office->manpower_job as $manpower_job)
-                                            <button onclick="edit_manpower_job({{ $manpower_job->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }}: {{$manpower_job->pivot->processing_cost}}</button>
+                                            <button onclick="edit_manpower_job({{ $manpower_job->pivot->id }}, {{ $office->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }}: {{$manpower_job->pivot->processing_cost}}</button>
                                         @endforeach
                                     @endif
                                 </td>
                                 <td>{{ $office->comment; }}</td>
                                 <td>
-                                    <button class="btn btn-info btn-sm" onclick="add_manpower_office({{ $office->id; }})"><i class="fas fa-plus"></i> Add Job</button>
-                                    <button class="btn btn-warning btn-sm" onclick="update_manpower_office({{ $office->id; }})"><i class="fas fa-edit"></i> Edit</button>
+                                    <div class="btn-group">
+                                        <button onclick="transaction_particular_select('manpower', '{{$office->id}}')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button> 
+                                        <button class="btn btn-info btn-sm" onclick="add_manpower_office({{ $office->id; }})"><i class="fas fa-plus"></i> Add Job</button>
+                                        <button data-toggle="modal" data-target="#update_manpower_office_modal" class="btn btn-warning btn-sm" onclick="update_manpower_office({{ $office->id; }})"><i class="fas fa-edit"></i> Edit</button>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -53,11 +60,12 @@ Delegate List
 @section('modals')
 
 <!-- Edit Delete Job -->
-<div class="modal fade" id="manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<button style="display: hidden" id="edit_manpower_job_modal_button" data-toggle="modal" data-target="#manpower_job_modal"></button>
+<div class="modal fade" id="manpower_job_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Office Info</h5>
+                <h5 class="modal-title">Job Info</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -92,7 +100,8 @@ Delegate List
 </div>
 
 <!-- Add New Job -->
-<div class="modal fade" id="add_manpower_job_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<button style="display: hidden" id="manpower_job_modal_button" data-toggle="modal" data-target="#add_manpower_job_modal"></button>
+<div class="modal fade" id="add_manpower_job_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="" id="add_manpower_job_form">
@@ -131,7 +140,7 @@ Delegate List
 </div>
 
 <!-- Update Manpower Office -->
-<div class="modal fade" id="update_manpower_office_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="update_manpower_office_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -164,13 +173,32 @@ Delegate List
                             <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment">
                             <div class="invalid-feedback"> @error('comment') {{ $message }} @enderror </div>
                         </div>
+                        <div class="col-md-12">
+                            <label for="office_pad">Office Pad: </label>
+                            <input class="my-pond form-control-file" type="file" name="office_pad" id="office_pad" >
+                        </div>
                     </div>                
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="update_button_manpower">Update</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="update_manpower_office_modal_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="transaction_modal_specific"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="transaction_form_body"></div>
         </div>
     </div>
 </div>
@@ -195,7 +223,6 @@ let update_manpower_office = (id) => {
             $('#officeAddress').val(info.address);
             $('#comment').val(info.comment);
             $('#manpower_id').val(info.id);            
-            $('#update_manpower_office_modal').modal('toggle');
             $('.loader-container').hide();
         }
     });
@@ -219,16 +246,19 @@ $('#update_manpower_office_form').on('submit', function(){
             $("#update_button_manpower").prop('disabled', true);
         },
         success: function (response){
+            // $('#update_manpower_office_form')[0].reset();
+            // $('#update_manpower_office_modal_close').click();
             location.reload();
         }
     });
 });
 
-let edit_manpower_job= (id) => {
+let edit_manpower_job= (id, office_id) => {
     $.ajax({
         type: 'get',
         enctype: 'multipart/form-data',
-        url: '{{ url('/') }}' +'/manpower-job/' + id + '/edit',        
+        url: '{{ url('/') }}' +'/manpower-job/' + id + '/edit',    
+        data: {office_id},
 		beforeSend:function(){
             $('.loader-container').show();
         },
@@ -237,7 +267,7 @@ let edit_manpower_job= (id) => {
             $('#manpower_office_id').val(id);
             $('#jobId').html(info.jobs_option);
             $('#processingCost').val(info.processing_cost);
-            $('#manpower_job_modal').modal('toggle');
+            $('#edit_manpower_job_modal_button').click();
             $('.loader-container').hide();
         }
     });
@@ -309,12 +339,13 @@ let add_manpower_office = (id) => {
     promise.then((response) => {
         idx_of_jobs_div++;
         let info = JSON.parse(response);
+        console.log(info.html);
         $('#job-body').html(info.html);
         $('.select2').select2({
             width: '100%'
         });
     });
-    $('#add_manpower_job_modal').modal('toggle');
+    $('#manpower_job_modal_button').click();
     $('.jod-extra-body').attr('id', 'form_body_number_' + 0);
     console.log('form_body_number_' + 0);
     $('.loader').show();
@@ -373,6 +404,28 @@ $('#add_manpower_job_form').on('submit', function(){
                 location.reload();
             }
         }
+    });
+});
+    
+
+document.addEventListener('FilePond:processfilestart', (e) => {
+    $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+    $("#submit").prop('disabled', true);        
+});
+document.addEventListener('FilePond:processfile', (e) => {
+    $("#submit").html('Add');
+    $("#submit").prop('disabled', false);
+});
+$(function(){
+    FilePond.setOptions({
+        server: {
+            url: "{{ url('/') }}",
+            process: '/upload/manpower',
+            revert: '/revert',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
     });
 });
 

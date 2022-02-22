@@ -53,6 +53,12 @@
                                         <option>Female</option>
                                     </select>
                                 </div>
+                                <div class="form-group col-md-6" >                    
+                                    <label>Country</label>
+                                    <select class="form-control select2 @error('country.0') is-invalid @enderror" name="country[]" data-placeholder="Select Country" required>
+                                        <x-select-countries/>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div id="additional_form"></div>
@@ -78,11 +84,28 @@
 
 @section('script')
 <script>
-    $('#add_visa').on('click',() => {    
-        $('#additional_form').append('<div class="divider"> </div>' + $('#existing_form').html());
-        $(".hijri-date-input").hijriDatePicker({
-            locale: "en-us",
-            hijri: true
+    $('#add_visa').on('click',() => {
+        let count = $('.form-body').length + 1; 
+        $.ajax({
+            type: 'get',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' +'/get-sponsor-visa-form/' + count,
+            beforeSend:function(){
+                $("#add_visa").html('<i class="fas fa-spinner fa-pulse"></i>');
+                $("#add_visa").prop('disabled', true);
+            },
+            success: function (response){
+                $('#additional_form').append('<div class="divider"> </div>' + response );
+                $("#add_visa").html('<span class="fa fa-plus" aria-hidden="true"></span>');
+                $("#add_visa").prop('disabled', false);
+                $('.select2').select2({
+                    width: '100%'
+                });
+                $(".hijri-date-input").hijriDatePicker({
+                    locale: "en-us",
+                    hijri: true
+                });
+            }
         });
     })
 

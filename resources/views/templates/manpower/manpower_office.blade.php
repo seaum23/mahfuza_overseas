@@ -14,23 +14,27 @@ Manpower Office
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Office Name</label>
-                                <input class="form-control @error('officeName') is-invalid @enderror" autocomplete="off" type="text" name="officeName" placeholder="Enter Name" required>
+                                <input class="form-control @error('officeName') is-invalid @enderror" autocomplete="off" type="text" name="officeName" placeholder="Enter Name" value="{{ old('officeName') }}" required>
                                 <div class="invalid-feedback"> @error('officeName') {{ $message }} @enderror </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>License Number</label>
-                                <input class="form-control @error('licenseNumber') is-invalid @enderror" autocomplete="off" type="text" name="licenseNumber" placeholder="Enter License Number" required>
+                                <input class="form-control @error('licenseNumber') is-invalid @enderror" autocomplete="off" type="text" name="licenseNumber" placeholder="Enter License Number" value="{{ old('licenseNumber') }}" required>
                                 <div class="invalid-feedback"> @error('licenseNumber') {{ $message }} @enderror </div>
                             </div>                
                             <div class="form-group col-md-6">
                                 <label>Office Address</label>
-                                <input class="form-control @error('officeAddress') is-invalid @enderror" autocomplete="off" type="text" name="officeAddress" placeholder="Enter Office Address" required>
+                                <input class="form-control @error('officeAddress') is-invalid @enderror" autocomplete="off" type="text" name="officeAddress" placeholder="Enter Office Address" value="{{ old('officeAddress') }}" required>
                                 <div class="invalid-feedback"> @error('officeAddress') {{ $message }} @enderror </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Comment</label>
-                                <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment">
+                                <input class="form-control @error('comment') is-invalid @enderror" autocomplete="off" type="text" id="comment" name="comment" placeholder="Any comment" value="{{ old('comment') }}" >
                                 <div class="invalid-feedback"> @error('comment') {{ $message }} @enderror </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="office_pad">Office Pad: </label>
+                                <input class="my-pond form-control-file" type="file" name="office_pad" id="office_pad" >
                             </div>
                         </div>
                         <div id="job-body">
@@ -46,7 +50,7 @@ Manpower Office
                                 </div>
                                 <div class="col-sm">
                                     <label>Processing Cost</label>
-                                    <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" required>
+                                    <input class="form-control" autocomplete="off" type="number" name="processingCost[]" placeholder="Cost" value="{{ old('processingCost.0') }}" required>
                                 </div>
                             </div>              
                         </div>
@@ -56,10 +60,20 @@ Manpower Office
                                 <div id="officeDiv"></div>                
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <button class="btn btn-sm btn-primary" type="button" id="add_office" ><span class="fa fa-plus" aria-hidden="true"></span></button>
-                                        <button class="btn btn-sm btn-danger" type="button" id="remove_office"><span class="fas fa-minus" aria-hidden="true"></span></button>
+                                        <button class="btn btn-xs btn-primary" type="button" id="add_office" ><span class="fa fa-plus" aria-hidden="true"></span></button>
+                                        <button class="btn btn-xs btn-danger" type="button" id="remove_office"><span class="fas fa-minus" aria-hidden="true"></span></button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="opening_balance">Opening Balance: </label>
+                                <input class="form-control" type="number" name="opening_balance" id="opening_balance" placeholder="Opening Balance" value="{{ old('opening_balance') }}" >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="opening_balance">Balance Sheet: </label>
+                                <input class="my-pond form-control-file" type="file" name="balanceSheet" id="balanceSheet" >
                             </div>
                         </div>
                     </div>
@@ -100,6 +114,28 @@ Manpower Office
     });
     $('#remove_office').on('click',() => {
         $('.jod-extra-body').last().remove();
-    });    
+    });
+
+
+    document.addEventListener('FilePond:processfilestart', (e) => {
+        $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+        $("#submit").prop('disabled', true);        
+    });
+    document.addEventListener('FilePond:processfile', (e) => {
+        $("#submit").html('Add');
+        $("#submit").prop('disabled', false);
+    });
+    $(function(){
+        FilePond.setOptions({
+            server: {
+                url: "{{ url('/') }}",
+                process: '/upload/manpower',
+                revert: '/revert',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            },
+        });
+    });
 </script>
 @endsection

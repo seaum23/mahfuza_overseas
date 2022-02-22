@@ -17,7 +17,6 @@ Sponsors List
                                 </th>
                                 <th>Sponsor Name</th>
                                 <th>Sponsor NID</th>
-                                <th>VISA No.</th>
                                 <th>Sponsor Phone</th>
                                 <th>Comment</th>
                                 <th>Alter</th>
@@ -33,7 +32,7 @@ Sponsors List
 
 @section('modals')
 <!-- Update Sponsor -->
-<div class="modal fade" id="update_sponsor_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="update_sponsor_modal" role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -121,13 +120,12 @@ $(function() {
         serverSide: true,
         ajax: '{{ url('/') }}' + '/sponsor/datatable/ajax',
         columns: [
-            { data: 'delegate_office.name', name: 'delegate_office.name' },
-            { data: 'sponsor_name', name: 'sponsor_name' },
-            { data: 'sponsor_NID', name: 'sponsor_NID' },
-            { data: 'sponsor_name', name: 'sponsor_name' },
-            { data: 'sponsor_phone', name: 'sponsor_phone' },
-            { data: 'comment', name: 'comment' },
-            { data: 'action', name: 'action' },
+            { data: 'id' },
+            { data: 'sponsor_name' },
+            { data: 'sponsor_NID' },
+            { data: 'sponsor_phone' },
+            { data: 'comment' },
+            { data: 'action'},
         ],
     });
 });

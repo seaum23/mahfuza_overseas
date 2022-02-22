@@ -20,6 +20,7 @@ class SponsorVisa extends Model
         'visa_rate',
         'updated_by',
         'job_id',
+        'country',
     ];
 
     protected $attributes = [
@@ -34,5 +35,10 @@ class SponsorVisa extends Model
     public function sponsor()
     {
         return $this->belongsTo(Sponsor::class);
+    }
+
+    public function delegates()
+    {
+        return $this->hasManyThrough(Delegate::class, Sponsor::class);
     }
 }

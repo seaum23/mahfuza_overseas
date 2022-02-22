@@ -1,11 +1,14 @@
 @extends('layouts.app')
+@section('title')
+    Login
+@endsection
 
 @section('login')
 <div class="wrapper login-wrapper row justify-content-center">
     <div class="company-logo" style="width: 100%;">
         <div class="row">
             <div class="col-md-12 text-center">
-                <img src="{{ asset('images/company-logo.png') }}" alt="" width="200px">
+                <img src="{{ asset('storage/images/company-logo.png') }}" alt="" width="200px">
             </div>
         </div>
     </div>
@@ -15,7 +18,7 @@
                 @if (session('status'))
                     <p class="text-danger font-weight-500">{{ session('status') }}</p>
                 @endif
-                <form action="{{ route('login') }}" method="post" class="form login-form">
+                <form action="{{ route('login') }}" method="post" class="form login-form" novalidate="novalidate">
                     @csrf
                     <?php if(isset($_SESSION['failed_login'])){ ?><p class="text-danger">Incorrect Credentials</p> <?php } ?>
                     <div class="form-group" >
@@ -31,11 +34,19 @@
                         </label>
                     </div>
                     <div class="form-group">
-                        <input class="form-control btn-info" type="submit" value="Login">
+                        <input onclick="test()" class="form-control btn-info" type="submit" value="Login">
                     </div>                    
                 </form>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    let test = () => {
+        console.log('test');
+    }
+</script>
 @endsection

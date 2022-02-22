@@ -47,13 +47,14 @@ class SponsorVisaController extends Controller
         // dd($request->sponsorNid);
         $sponsor = Sponsor::find($request->sponsorNid);
         foreach($request->visaNo as $idx=>$visa_no){
-            $sponsor->visas()->create([
+            $sponsor->visa()->create([
                 'sponsor_visa' => $visa_no,
                 'issue_date' => $request->issueDate[$idx],
                 'visa_amount' => $request->visaAmount[$idx],
                 'visa_gender_type' => $request->gender[$idx],
                 'job_id' => $request->job_name,
                 'comment' => $request->comment,
+                'country' => $request->country[$idx],
                 'updated_by' => auth()->id(),
             ]);
         }
@@ -68,7 +69,7 @@ class SponsorVisaController extends Controller
      */
     public function show()
     {
-        $sponsor_visas = SponsorVisa::with('sponsor.delegate_office.delegate', 'job')->paginate(10);
+        $sponsor_visas = SponsorVisa::with('sponsor', 'job')->paginate(10);
         return view('templates.sponsor.sponsor_visa_list', [
             'sponsor_visas' => $sponsor_visas
         ]);
@@ -101,7 +102,7 @@ class SponsorVisaController extends Controller
                 $jobs_html .= '<option value="'.$job->id.'">' . $job->name . '</option>';
             }
         }
-        return json_encode(array('sponsor_html' => $sponsor_html, 'job_html' => $jobs_html, 'sponsor_visa' => $sponsor_visa));
+        return json_encode(array('sponsor_html' => $sponsor_html, 'job_html' => $jobs_html, 'sponsor_visa' => $sponsor_visa, 'country' => $sponsor_visa->country));
     }
 
     /**
@@ -123,6 +124,7 @@ class SponsorVisaController extends Controller
         $sponsor_visa->job_id = $request->job_name;
         $sponsor_visa->comment = $request->comment;
         $sponsor_visa->updated_by = auth()->id();
+        $sponsor_visa->country = $request->country;
 
         $sponsor_visa->save();
 

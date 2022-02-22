@@ -60,7 +60,7 @@ Employee
 </div>
 @endsection
 @section('modals')
-<div class="modal fade" id="change_password" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="change_password" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -97,7 +97,7 @@ Employee
         </div>
     </div>
 </div>
-<div class="modal fade" id="edit_employee" tabindex="-1" role="dialog" aria-labelledby="edit_employeeLabel" aria-hidden="true">
+<div class="modal fade" id="edit_employee" role="dialog" aria-labelledby="edit_employeeLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

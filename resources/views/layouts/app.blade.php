@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="icon" href="{{ asset('images/favicon.ico') }}">
+    <link rel="icon" href="{{ asset('storage/images/favicon.ico') }}">
     <title>@yield('title') - Mahfuza Overseas</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/template.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
@@ -21,6 +21,7 @@
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
 
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet" />
+
 </head>
 <body {{ Session::has('alert') ? 'data-alert' : '' }} data-alert-type='{{ Session::get('alert_type') }}' data-alert-message='{{ Session::get('message') }}'>
     @auth
@@ -445,13 +446,13 @@
                         <ul class="vertical-nav-menu">
                             <li class="app-sidebar__heading">Dashboards</li>
                             <li>
-                                <a href="index.html" class="">
+                                <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'mm-active' : '' }}">
                                     <i class="metismenu-icon pe-7s-rocket"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="app-sidebar__heading">Local affair</li>
-                            <li {{ request()->is('candidate*') ? 'mm-active' : '' }}>
+                            <li class="{{ request()->is('candidate*') ? 'mm-active' : '' }}" >
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-user"></i>
                                     Candidate
@@ -459,84 +460,41 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="{{ url('/candidate/create') }}" {{ request()->is('/candidate/create') ? 'mm-active' : '' }}>
+                                        <a href="{{ url('/candidate/create') }}" class="{{ request()->is('candidate/create') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>New Candidate
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ url('/candidate') }}" class="{{ request()->is('candidate') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Candidate List
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="elements-icons.html">
-                                            <i class="metismenu-icon"></i>Pending Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-badges-labels.html">
-                                            <i class="metismenu-icon"></i>Completed Candidate List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="elements-cards.html">
-                                            <i class="metismenu-icon"></i>Returned Candidate List
-                                        </a>
-                                    </li>
                                 </ul>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-note2"></i>
-                                    VISA
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </li>                            
+                            <li class="{{ request()->is('processing*') ? 'mm-active' : '' }}">
+                                <a href="{{ route('processing') }}">
+                                    <i class="metismenu-icon pe-7s-credit {{ request()->is('processing') ? 'mm-active' : '' }}"></i>
+                                    VISA List
                                 </a>
-                                <ul>
-                                    <li>
-                                        <a href="components-tabs.html">
-                                            <i class="metismenu-icon"></i>Assign VISA
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-accordions.html">
-                                            <i class="metismenu-icon"></i>VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Pending VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Completed VISA List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Returned VISA List
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
-                            <li>
+                            <li class="{{ request()->is('ticket*') ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-plane"></i>
                                     Ticket
                                     <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
                                 <ul>
-                                    <li>
-                                        <a href="components-tabs.html">
+                                    {{-- <li>
+                                        <a href="#">
                                             <i class="metismenu-icon"></i>New Ticket
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     <li>
-                                        <a href="components-accordions.html">
+                                        <a href="{{ route('ticket-index') }}" class="{{ request()->is('ticket') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Candidate Ticket List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Outside Candidate List
                                         </a>
@@ -545,7 +503,7 @@
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Outside Candidate Ticket List
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('agent*')) ? 'mm-active' : '' }}">
@@ -565,14 +523,14 @@
                                             <i class="metismenu-icon"></i>Agent List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Add Agent Expense
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="tables-regular.html">
                                     <i class="metismenu-icon pe-7s-credit"></i>
                                     Pay Mode
@@ -583,7 +541,7 @@
                                     <i class="metismenu-icon pe-7s-display2"></i>
                                     Report
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="{{ (request()->is('employee*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-users"></i>
@@ -601,7 +559,7 @@
                                             <i class="metismenu-icon"></i>Employee List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Add Sections
                                         </a>
@@ -610,15 +568,15 @@
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Send SMS
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>                            
-                            <li>
+                            {{-- <li>
                                 <a href="tables-regular.html">
                                     <i class="metismenu-icon pe-7s-phone"></i>
                                     CRM
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="app-sidebar__heading">Foreign Affair</li>
                             <li class="{{ (request()->is('delegate*')) ? 'mm-active' : '' }}" >
                                 <a href="#">
@@ -637,11 +595,11 @@
                                             <i class="metismenu-icon"></i>Delegates List
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="components-notifications.html">
                                             <i class="metismenu-icon"></i>Mr. Maheer Bu Arish
                                         </a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('sponsor*')) ? 'mm-active' : '' }}" >
@@ -692,7 +650,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-portfolio"></i>
                                     Office
@@ -710,12 +668,35 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
                                 <a href="{{ url('jobs') }}" class="{{ (request()->is('jobs*')) ? 'mm-active' : '' }}">
                                     <i class="metismenu-icon pe-7s-box1"></i>
                                     Jobs
                                 </a>
+                            </li>
+                            <li class="{{ (request()->is('website')) ? 'mm-active' : '' }}">
+                                <a href="{{ url('website') }}" class="{{ (request()->is('website')) ? 'mm-active' : '' }}">
+                                    <i class="metismenu-icon pe-7s-box1"></i>
+                                    Website Frontpage
+                                </a>
+                            </li>
+                            <?php $all_packages = App\Models\WebsiteContent::get()->unique('section')->skip(3); ?>
+                            <li>
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-portfolio"></i>
+                                    Packages
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    @foreach($all_packages as $row)
+                                        <li>
+                                            <a href="{{ url('package_image_headline',$row->id) }}">
+                                                <i class="metismenu-icon"></i>{{$row->section}}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -740,13 +721,14 @@
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> --}}
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.8/r-2.2.7/datatables.min.js"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> --}}
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> --}}
     <script type="text/javascript" src="{{ asset('js/template.js') }}"></script></body>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
     {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> --}}
     <script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
+    <script src="{{ asset('js/timepicker.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- include FilePond library -->
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
@@ -756,8 +738,227 @@
 
     <!-- include FilePond jQuery adapter -->
     <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+
+    <!-- Sweet Alert -->
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        /**
+         * 
+         * Filepond configuration!
+         * 
+         */
+        
+        // const pond = FilePond.create();
+
+        // First register any plugins
+        $.fn.filepond.registerPlugin(FilePondPluginImagePreview);        
+            
+        // Generic file-pond
+        $('.my-pond').filepond({
+            credits: false,
+            'allowMultiple': false
+        });
+
+
+
+        // Generic file-pond multiple
+        $('.my-pond-multiple').filepond({
+            credits: false,
+            'allowMultiple': true
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        document.addEventListener('FilePond:processfilestart', (e) => {
+            $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $(".file-pond-submit").prop('disabled', true);        
+        });
+        document.addEventListener('FilePond:processfile', (e) => {
+            $(".file-pond-submit").html('Save');
+            $(".file-pond-submit").prop('disabled', false);
+        });
+    </script>
+
+    <script>
+        $('.amount-input').on('keyup', () => {
+            let account = $('#account').val();
+            let left_input = $('#left_input').val();
+            let right_input = $('#right_input').val();
+            if(account == '1' || account == '2'){
+                if(left_input === "" && right_input === ""){
+                    $('#left_input').prop('disabled', false);
+                    $('#right_input').prop('disabled', false);
+                    return;
+                }
+                if(left_input === ""){
+                    $('#left_input').prop('disabled', true);
+                    return;
+                }
+                if(right_input === ""){
+                    $('#right_input').prop('disabled', true);
+                    return;
+                }
+            }
+            $('#left_input').prop('disabled', false);
+            $('#right_input').prop('disabled', false);
+        })
+
+        let amount_input = () => {
+            let account = $('#account').val();
+            let left_input = $('#left_input').val();
+            let right_input = $('#right_input').val();
+            if(account == '1' || account == '2'){
+                if(left_input === "" && right_input === ""){
+                    $('#left_input').prop('disabled', false);
+                    $('#right_input').prop('disabled', false);
+                    return;
+                }
+                if(left_input === ""){
+                    $('#left_input').prop('disabled', true);
+                    return;
+                }
+                if(right_input === ""){
+                    $('#right_input').prop('disabled', true);
+                    return;
+                }
+            }
+            $('#left_input').prop('disabled', false);
+            $('#right_input').prop('disabled', false);
+        }
+
+        let transaction_form_submit_form = () => {
+            var form = $('#transaction_form')[0];
+            var data = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ route("transaction") }}',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend:function(){
+                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    $("#transaction_form_submit").prop('disabled', true);
+                },
+                success: function (response){
+                    $('#transaction_modal_close').click();
+                    $('#transaction_form').trigger('reset');
+                    $('.select2').val(null).trigger('change');
+                    $('.transaction_inputs').hide();
+                    $("#transaction_form_submit").html('Submit');
+                    $("#transaction_form_submit").prop('disabled', true);
+                    location.reload();
+                },
+            });
+        }
+
+        let get_particular = (particular_type) => {
+            $.ajax({
+                type: 'post',
+                enctype: 'multipart/form-data',
+                url: '{{ route("get.particular") }}',
+                data: {particular_type},
+                // beforeSend:function(){
+                //     $("#experience_div").html('<i class="fas fa-spinner fa-pulse"></i>');
+                // },
+                success: function (response){
+                    $("#particular").html(response);
+                }
+            });
+        }
+
+        let get_account_input_field = (e) => {            
+            $('.left_input_div').show();
+            $('.right_input_div').show();
+            if(typeof $(e).find(':selected').data('account_type') != 'undefined'){
+                let account_type = $(e).find(':selected').data('account_type');
+                $('.transaction_inputs').show();
+                // 1 => Accounts receivable / পাবো ; 2 => Accounts payable / পাবে
+                if( e.value == '1' || e.value == '2' ){
+                    console.log('pelam');
+                    // $('.right_input_div').hide();
+                    $('#left_input_label').html('পেলাম');
+                    $('#right_input_label').html('দিলাম');
+                    return;
+                }
+                if( account_type == 'revenue' ){
+                    $('#left_input_label').html('পাব');
+                    $('#right_input_label').html('পেলাম');
+                    return;
+                }
+                if( account_type == 'asset' ){
+                    $('#left_input_label').html('কেনা');
+                    $('#right_input_label').html('দিলাম');
+                    return;
+                }
+                if( account_type == 'expense' ){
+                    $('#left_input_label').html('কেনা');
+                    $('#right_input_label').html('দিলাম');
+                    return;
+                }
+            }
+        }
+
+        let processing_transaction = (id, name) => {
+            $('#transaction_title').val(name);
+            $('#transaction_candidate_id').val(id);
+        }
+
+        let transaction_particular_select = (type, id) => {
+            $.ajax({
+                type: 'GET',
+                enctype: 'multipart/form-data',
+                url: '{{ route("transaction.specific") }}',
+                data: {type, id},
+                beforeSend:function(){
+                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    $("#transaction_form_submit").prop('disabled', true);
+                },
+                success: function (response){
+                    $('#transaction_form_body').html(response);
+                    $('.select2').select2({
+                        width: '100%',
+                    });
+                },
+            });
+        }
+
+        $('#transaction_form').on('submit', (e) => {
+            e.preventDefault();
+            
+            var form = $('#transaction_form')[0];
+            var data = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                url: '{{ route("transaction") }}',
+                data: data,
+                processData: false,
+                contentType: false,
+                beforeSend:function(){
+                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    $("#transaction_form_submit").prop('disabled', true);
+                },
+                success: function (response){
+                    $('#transaction_modal_close').click();
+                    $('#transaction_form').trigger('reset');
+                    $('.select2').val(null).trigger('change');
+                    $('.transaction_inputs').hide();
+                    $("#transaction_form_submit").html('Submit');
+                    $("#transaction_form_submit").prop('disabled', false);
+                },
+            });
+        })
+    </script>
+
+    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
     @yield('script')
-    <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script></body>
     @yield('script-file-pond')
+</body>
+
 </body>
 </html>

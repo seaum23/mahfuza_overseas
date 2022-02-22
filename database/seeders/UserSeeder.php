@@ -25,5 +25,15 @@ class UserSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
+        DB::table('users')->insert([
+            'employee_id' => 'admin',
+            'name' => 'Admin',
+            'phone' => '01700000000',
+            'address' => 'Root',
+            'designation_id' => 1,
+            'password' => Hash::make('1212'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 }

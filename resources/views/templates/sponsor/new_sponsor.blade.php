@@ -3,30 +3,23 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6 mt-5">
+    <div class="col-md-6 mt-5 col-10">
         <div class="main-card mt-3 card">
-            <div class="card-body"><h5 class="card-title">New Delegate</h5>
+            <div class="card-body"><h5 class="card-title">New Sponsor</h5>
                 <form action="{{ route('sponsor') }}" method="post" class="@if ($errors->any()) needs-validation @endif">
                     @csrf
                     <div class="form-group">
                         <div class="form-row justify-content-between">
-                            <div class="form-group col-md-6" >
-                                <label>Delegate</label>
-                                <select class="form-control select2 @error('delegateId') is-invalid @enderror" name="delegateId" id="delegateId" onchange="selectDelegateOffice(this.value)">
-                                    <option value=""> Select Delegate </option>
-                                    @foreach ($delegates as $delegate)
-                                        <option value="{{ $delegate->id }}" {{ (old("delegateId") == $delegate->id ? "selected":"") }} >{{ $delegate->name }}</option>
-                                    @endforeach
+                            <div class="form-group col-md-4" >
+                                <label>Type</label>
+                                <select class="form-control select2 @error('type') is-invalid @enderror" name="type" id="type" onchange="get_type(this.value)">
+                                    <option value=""> Select Type </option>
+                                    <option>Delegate</option>
+                                    <option>Agent</option>
                                 </select>
-                                <div class="invalid-feedback"> @error('delegateId') {{ $message }} @enderror </div>
+                                <div class="invalid-feedback"> @error('type') {{ $message }} @enderror </div>
                             </div>
-                            <div class="form-group col-md-6" >
-                                <label>Delegate Office</label>
-                                <select data-selected_office="{{ old('delegateOfficeId') }}" class="form-control select2 @error('delegateOfficeId') is-invalid @enderror" name="delegateOfficeId" id="delegateOfficeId" >
-                                    <option value=""> Select Delegate First </option>                    
-                                </select>
-                                <div class="invalid-feedback"> @error('delegateOfficeId') {{ $message }} @enderror </div>
-                            </div>
+                            <div class="col-md-8" id="sponsor_parent_type"></div>
                             <div class="form-group col-md-6" >
                                 <label>Sponsor Name</label>
                                 <input class="form-control @error('sponsorName') is-invalid @enderror" type="text" id="sponsorName" name="sponsorName" placeholder="Enter Name" value="{{ old('sponsorName') }}" >
@@ -47,6 +40,20 @@
                                 <input class="form-control" type="text" id="comment" name="comment" placeholder="Any Remark..." value="{{ old('comment') }}">
                             </div>
                         </div>
+                        <div class="row ">
+                            <div>
+                                <div class="custom-radio custom-control custom-control-inline">
+                                    <input onclick="add_visa_to_sponsor(this.value)" class="custom-control-input" type="radio" name="addVisa" id="addVisaNew" value="yes" >
+                                    <label class="custom-control-label" for="addVisaNew"> Add Visa </label>
+                                </div>
+                                <div class="custom-radio custom-control custom-control-inline">
+                                    <input onclick="add_visa_to_sponsor(this.value)" class="custom-control-input" type="radio" name="addVisa" id="addVisaDefault" value="no" checked>
+                                    <label class="custom-control-label" for="addVisaDefault"> Default </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="visa_to_sponsor"></div>
+                        <div id="candidate_to_visa"></div>
                         <div class="row justify-content-center">                            
                             <div class="col-md-1">
                                 <button class="btn btn-primary">Add</button>
@@ -62,6 +69,71 @@
 
 @section('script')
 <script>
+
+    let add_candidate = (val) => {
+        console.log(val);
+        if(val != 1){
+            $('#candidate_to_visa').html('');
+            return;
+        }
+
+        let job_type = $('#job_name').val();
+        let gender = $('#gender').val();
+
+        if(job_type !== '' && gender !== ''){
+            $.ajax({
+                type: 'get',
+                enctype: 'multipart/form-data',
+                url: '{{ url('/') }}' + '/candidate-to-sponsor-visa',
+                data: {job_type, gender},
+                success: function (response){
+                    $('#candidate_to_visa').html(response);
+                    $('.select2-ajax').select2({
+                        width: '100%'
+                    });
+                }
+            });
+        }
+    }
+
+    let add_visa_to_sponsor = (type) => {
+        if(type == 'no'){
+            $('#visa_to_sponsor').html('');
+            return;
+        }
+        $.ajax({
+            type: 'get',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/visa-to-sponsor',
+            // data: {type},
+            success: function (response){
+                $('#visa_to_sponsor').html(response);
+                $('.select2-ajax').select2({
+                    width: '100%'
+                });
+                $(".hijri-date-input").hijriDatePicker({
+                    locale: "en-us",
+                    hijri: true
+                });
+            }
+        });
+    }
+
+    let get_type = (type) => {
+        $.ajax({
+            type: 'get',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/get-sponsor-parent-type',
+            data: {type},
+            success: function (response){
+                $('#sponsor_parent_type').html(response);
+                $('.select2-ajax').select2({
+                    width: '100%'
+                });
+            }
+        });
+    }
+
     function selectDelegateOffice(delegate_id){
         let selected_office = $('#delegateOfficeId').data('selected_office');
         $.ajax({

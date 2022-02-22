@@ -28,16 +28,18 @@ Delegate List
                                 <td>
                                     @foreach ($delegate->delegate_offices as $office)
                                         <button class="btn btn-sm btn-info" onclick="change_delegate_office({{ $office->id }}, '{{ $office->name }}', '{{ $office->license_number }}')" data-target="#changeDelegateOffice" data-toggle="modal">
-                                            <p class="m-0 p-0">{{ $office->name }}: <span class="m-0 p-0">{{ $office->license_number }}</span></p>
-                                            
+                                            <p class="m-0 p-0">{{ $office->name }}: <span class="m-0 p-0">{{ $office->license_number }}</span></p>                                            
                                         </button>
                                     @endforeach
                                 </td>
-                                <td>{{ $delegate->comment; }}</td>                            
-                                <td>  --  </td>                            
-                                <td> 
-                                    <button class="btn btn-primary btn-sm" data-target="#add_office_modal" data-toggle="modal" onclick="add_office_delegatge({{ $delegate->id }})">Add Office</button>
-                                    <button class="btn btn-warning btn-sm" data-target="#update_delegate_modal" data-toggle="modal" onclick="update_delegate({{ $delegate->id }}, '{{ $delegate->name }}', '{{ $delegate->country }}', '{{ $delegate->state }}', '{{ $delegate->comment }}')">Update</button>
+                                <td>{{ $delegate->comment; }}</td>
+                                <td>  --  </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button onclick="transaction_particular_select('delegate', '{{$delegate->id}}')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button> 
+                                        <button class="btn btn-primary btn-sm" data-target="#add_office_modal" data-toggle="modal" onclick="add_office_delegatge({{ $delegate->id }})">Add Office</button>
+                                        <button class="btn btn-warning btn-sm" data-target="#update_delegate_modal" data-toggle="modal" onclick="update_delegate({{ $delegate->id }}, '{{ $delegate->name }}', '{{ $delegate->country }}', '{{ $delegate->state }}', '{{ $delegate->comment }}')">Update</button>
+                                    </div>
                                 </td>                            
                             </tr>
                             @endforeach
@@ -53,7 +55,7 @@ Delegate List
 
 @section('modals')
 <!-- Add Office -->
-<div class="modal fade" id="add_office_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="add_office_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="" method="post" enctype="multipart/form-data" id="add_delegate_office_form">
             <div class="modal-content">
@@ -94,7 +96,7 @@ Delegate List
 </div>
 
 <!-- Edit Delete Office -->
-<div class="modal fade" id="changeDelegateOffice" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="changeDelegateOffice"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -126,7 +128,7 @@ Delegate List
 </div>
 
 <!-- Update Delegate -->
-<div class="modal fade" id="update_delegate_modal" tabindex="-1" role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
+<div class="modal fade" id="update_delegate_modal"  role="dialog" aria-labelledby="change_passwordLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -166,6 +168,21 @@ Delegate List
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="transaction_modal_specific"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="transaction_form_body"></div>
         </div>
     </div>
 </div>

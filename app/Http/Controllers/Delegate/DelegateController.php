@@ -39,7 +39,14 @@ class DelegateController extends Controller
         $delegate->state = $request->delegateState;
         $delegate->comment = $request->comment;
         $delegate->updated_by = auth()->id();
+        $delegate->opening_balance = (empty($request->opening_balance)) ? 0 : $request->opening_balance;
 
+        $delegate->save();
+
+        if(!empty($request->balanceSheet)){
+            $delegate->balance_sheet = move($request->balanceSheet, 'delegate', 'delegate_balance_sheet_' . $delegate->id . '_' . time() );
+        }
+        
         $delegate->save();
 
         foreach($offices as $idx=>$office){

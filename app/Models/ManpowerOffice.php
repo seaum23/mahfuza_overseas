@@ -17,10 +17,11 @@ class ManpowerOffice extends Model
         'address',
         'comment',
         'updated_by',
+        'opening_balance'
     ];
 
     public function manpower_job()
     {
-        return $this->belongsToMany(Job::class)->withPivot('processing_cost');
+        return $this->belongsToMany(Job::class)->withPivot('processing_cost', 'id');
     }
 }

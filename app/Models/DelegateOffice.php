@@ -19,7 +19,7 @@ class DelegateOffice extends Model
 
     public function sponsor()
     {
-        return $this->hasMany(Sponsor::class);
+        return $this->morphMany(Sponsor::class, 'sponsorable');
     }
 
     public function delegate()

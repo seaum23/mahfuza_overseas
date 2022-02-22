@@ -43,18 +43,40 @@ class ManpowerOfficeController extends Controller
      */
     public function store(Request $request)
     {
+        $check = ManpowerOffice::where('license', $request->licenseNumber)->count();
+
+        if($check > 0){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'licenseNumber' => ['Same License Exists!'],
+            ]);
+            throw $error;
+        }
+
         $manpower_office = ManpowerOffice::create([
             'name' => $request->officeName,
             'license' => $request->licenseNumber,
             'address' => $request->officeAddress,
             'comment' => $request->comment,
+            'opening_balance' => (empty($request->opening_balance)) ? 0 : $request->opening_balance,
             'updated_by' => auth()->id(),
         ]);
+
+        if(!empty($request->balanceSheet)){
+            $manpower_office->balance_sheet = move($request->balanceSheet, 'manpower', 'manpower_balance_sheet_' . $manpower_office->id . '_' . time() );
+            $manpower_office->save();
+        }
+
+        if(!empty($request->office_pad)){
+            $manpower_office->office_pad = move($request->office_pad, 'manpower', 'office_pad_' . $manpower_office->id . '_' . time() );
+            $manpower_office->save();
+        }
+
         foreach($request->jobId as $idx=>$job){
-            $manpower_office->manpower_job()->updateOrCreate(
+            $manpower_office->manpower_job()->attach(
                 ['job_id' => $job],
-                ['processing_cost' => $request->processingCost[$idx]
-            ]);
+                ['processing_cost' => $request->processingCost[$idx]],
+                ['updated_at' => date('Y-m-d H:i:s')]
+            );
         }
         $request->session()->flash('alert', 'Yes');
         $request->session()->flash('message', 'Task was successful!');
@@ -100,6 +122,11 @@ class ManpowerOfficeController extends Controller
         $manpower_office->address = $request->officeAddress;
         $manpower_office->comment = $request->comment;
         $manpower_office->updated_by = auth()->id();
+
+        if(!empty($request->office_pad)){
+            $manpower_office->office_pad = move($request->office_pad, 'manpower', 'office_pad_' . $manpower_office->id . '_' . time() );
+            $manpower_office->save();
+        }
         $manpower_office->save();
 
         alert($request, 'Success!', 'success');

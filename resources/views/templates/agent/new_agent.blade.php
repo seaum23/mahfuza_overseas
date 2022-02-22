@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-Delegate
+New Agent
 @endsection
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6 mt-5">
         <div class="main-card mt-3 card">
-            <div class="card-body"><h5 class="card-title">New Delegate</h5>
+            <div class="card-body"><h5 class="card-title">New Agent</h5>
                 <form id="agent_form" action="" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <div class="form-row">
@@ -31,22 +31,28 @@ Delegate
                                 <input class="form-control" type="text" name="comment" id="comment" placeholder="Comment / Note">
                             </div>
                             <div class="form-group col-md-6">
+                                <label for="sel1">Opening Balance:</label>
+                                <input class="form-control" type="number" name="opening_balance" id="opening_balance" placeholder="Opening Balance" >
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label for="sel1">Password:</label>
                                 <input class="form-control" type="text" name="password" id="password" placeholder="Password" >
                                 <div id="password_invalid" class="invalid-feedback"> </div>
                             </div>
-                            <div class="form-group col-md-6"></div>
                             <div class="form-group col-md-4">
                                 <label for="sel1">Photo:</label>
                                 <input class="my-pond form-control-file" type="file" name="agentImage" id="agentImage" >
+                                <div id="agentImage_invalid" class="invalid-feedback"> </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="sel1">Passport Scan Copy:</label>
                                 <input class="my-pond form-control-file" type="file" name="agentPassport" id="agentPassport" >
+                                <div id="agentPassport_invalid" class="invalid-feedback"> </div>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="sel1">Police Clearance:</label>
-                                <input class="my-pond form-control-file" type="file" name="agentPolice" id="agentPolice" >
+                                <label for="sel1">Opening Balance Sheet:</label>
+                                <input class="my-pond form-control-file" type="file" name="balanceSheet" id="balanceSheet" >
+                                <div id="balanceSheet_invalid" class="invalid-feedback"> </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +69,7 @@ Delegate
 @endsection
 
 @section('script-file-pond')
-<script>
+<script> 
     $('#agent_form').on('submit', (e) => {
         $('#agent_form').removeClass('needs-validation');
         $('.form-control').removeClass('is-invalid');
@@ -78,22 +84,24 @@ Delegate
             processData: false,
             contentType: false,
             beforeSend:function(){
-                $("#add_office").html('<i class="fas fa-spinner fa-pulse"></i>');
-                $("#add_office").prop('disabled', true);
+                $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                $("#submit").prop('disabled', true);
             },
             success: function (response){
-                $("#add_office").html('Add');
-                $("#add_office").prop('disabled', false);
-                let info = JSON.parse(response);
-                $('#extra-job-body').append( info.html );                
-                $('.select2').select2({
-                    width: '100%'
-                });
+                // $("#add_office").html('Add');
+                // $("#add_office").prop('disabled', false);
+                // let info = JSON.parse(response);
+                // $('#extra-job-body').append( info.html );                
+                // $('.select2').select2({
+                //     width: '100%'
+                // });
+                location.reload();
             },
             error: function (xhr, status, error){
+                $("#submit").html('Add');
+                $("#submit").prop('disabled', false);
                 $('#agent_form').addClass('needs-validation');
                 let errors = $.parseJSON(xhr.responseText);
-                console.log(errors);
                 for (const [key, value] of Object.entries(errors.errors)) {
                     $(`#${key}`).addClass('is-invalid');
                     $(`#${key}_invalid`).html(value);
@@ -101,27 +109,16 @@ Delegate
             }
         });
     });   
-    
+
+    document.addEventListener('FilePond:processfilestart', (e) => {
+        $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+        $("#submit").prop('disabled', true);        
+    });
+    document.addEventListener('FilePond:processfile', (e) => {
+        $("#submit").html('Add');
+        $("#submit").prop('disabled', false);
+    });    
     $(function(){
-
-        // FilePond.registerPlugin(
-        //     FilePondPluginImagePreview,
-        // );
-        
-        // FilePond.setOptions({
-        //     server: {
-        //         url: "{{ url('/') }}",
-        //         process: '/upload/agent-photo',
-        //         revert: '/revert',
-        //         headers: {
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //         }
-        //     },
-        // });
-        // const inputElement = document.querySelector('input[type="file"]');
-        
-        // const pond = FilePond.create( inputElement );
-
         FilePond.setOptions({
             server: {
                 url: "{{ url('/') }}",
@@ -132,12 +129,6 @@ Delegate
                 }
             },
         });
-    
-        // Listen for addfile event
-        // $('.my-pond').on('FilePond:addfile', function(e) {
-        //     console.log('file added event', e);
-        // });
-    
     });
 </script>
 @endsection

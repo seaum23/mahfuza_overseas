@@ -46,32 +46,14 @@ class AgentController extends Controller
             'agentEmail' => 'required',
             'agentPhone' => 'required',
             'password' => 'required',
+            'agentImage' => 'required',
         ]);
 
         $validate_existing_agent = Agent::where('email', $request->agentEmail)
             ->orWhere('phone', $request->agentPhone)
             ->get();
         
-        if($validate_existing_agent->isEmpty()){
-            $agent = Agent::create([
-                'full_name' => $request->agentName,
-                'email' => $request->agentEmail,
-                'phone' => $request->agentPhone,
-                'comment' => $request->comment,
-                'updated_by' => auth()->id(),
-                'password' => $request->password,
-            ]);    
-    
-            $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id );
-    
-            $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id );
-    
-            $agent->police_clearance = move($request->agentPolice, 'agent', 'agent_police_verification_' . $agent->id );
-    
-            $agent->save();
-
-            return redirect(url('agent'));
-        }else{
+        if(!$validate_existing_agent->isEmpty()){
             if($request->agentEmail == $validate_existing_agent[0]->email){
                 $error = \Illuminate\Validation\ValidationException::withMessages([
                     'agentEmail' => ['Email already exists!'],
@@ -82,7 +64,30 @@ class AgentController extends Controller
                 ]);
             }            
             throw $error;
+            return;            
         }
+
+        $agent = Agent::create([
+            'full_name' => $request->agentName,
+            'opening_balance' => (!empty($request->opening_balance)) ? $request->opening_balance : 0,
+            'email' => $request->agentEmail,
+            'phone' => $request->agentPhone,
+            'comment' => $request->comment,
+            'updated_by' => auth()->id(),
+            'password' => $request->password,
+        ]);    
+
+        $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id . '_' . time() );
+
+        if(!empty($request->agentPassport)){
+            $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
+        }
+
+        if(!empty($request->balance_sheet)){
+            $agent->balance_sheet = move($request->balanceSheet, 'agent', 'agent_balance_sheet_' . $agent->id . '_' . time() );
+        }
+
+        $agent->save();
          
     }
 
@@ -126,6 +131,18 @@ class AgentController extends Controller
             $agent->full_name = $request->agentName;
             $agent->comment = $request->comment;
 
+            if(!empty($request->agentImage)){
+                $agent->photo = move($request->agentImage, 'agent', 'agent_photo_' . $agent->id . '_' . time() );
+            }
+
+            if(!empty($request->agentPassport)){
+                $agent->passport = move($request->agentPassport, 'agent', 'agent_passport_' . $agent->id . '_' . time() );
+            }
+
+            if(!empty($request->balance_sheet)){
+                $agent->balance_sheet = move($request->balanceSheet, 'agent', 'agent_balance_sheet_' . $agent->id . '_' . time() );
+            }
+
             $agent->save();
 
             alert($request);
@@ -161,23 +178,54 @@ class AgentController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function datatable(Request $request)
-    {
+    {        
         if ($request->ajax()) {
             $query = Agent::get();
             
             return Datatables::of($query)
             ->editColumn('photo', function ($query)
             {
-                return '<img class="table-photo" src="'.asset('storage/' . $query->photo).'">';
+                return '<img class="table-photo" src="'.asset($query->photo).'">';
             })
             ->addColumn('document', function ($query) {
-                return '<a href="'.asset('storage/' . $query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset('storage/' . $query->police_clearance).'"> <button class="btn btn-warning btn-sm"> Clearance </button> </a>';
-            })            
+                return '<a href="'.asset($query->passport).'"><button class="btn btn-info btn-sm"> Passport </button></a> <a href="'.asset($query->balance_sheet).'"> <button class="btn btn-warning btn-sm"> Balance Sheet </button> </a>';
+            })                  
+            ->addColumn('balance', function ($query) {
+                $credit = $query->transactions()
+                            ->join('credits', 'transactions.id', '=', 'credits.transaction_id')
+                            ->where(function ($query)
+                            {
+                                $query->where('credits.account_id', '1')
+                                    ->orWhere('credits.account_id', '2');
+                            })
+                            ->sum('credits.amount');
+                $debit = $query->transactions()
+                            ->join('debits', 'transactions.id', '=', 'debits.transaction_id')
+                            ->where(function ($query)
+                            {
+                                $query->where('debits.account_id', '1')
+                                    ->orWhere('debits.account_id', '2');
+                            })
+                            ->sum('debits.amount');
+                return $query->opening_balance + $credit - $debit;
+            })      
             ->addColumn('action', function ($query) {
-                return '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';
+                $html = '<div class="btn-group" role="group" aria-label="Basic example">';
+                $html .= '<button onclick="transaction_particular_select(\'agent\', '.$query->id.')" data-toggle="modal" data-target="#transaction_modal_specific" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
+                $html .= '<button onclick="edit_agent(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#update_agent_modal" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit </button>';
+                $html .= '<button onclick="balance_sheet(\''.$query->full_name.'\', \''.$query->email.'\', \''.$query->phone.'\', \''.$query->comment.'\', '.$query->id.' )" data-toggle="modal" data-target="#ledger_modal" class="btn btn-success btn-sm"><i class="fas fa-file-invoice-dollar"></i> </button>';
+                $html .= '</div>';
+                return $html;
             })
             ->rawColumns(['document', 'photo', 'action'])
             ->make(true);
         }
+    }
+
+    public function balanace_sheet(Agent $agent)
+    {
+        return view('templates.ledger.agent-ledger', [
+            'transactions' => $agent->transactions()->with('credits', 'debits')->latest()->get()
+        ]);
     }
 }

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('title')
-Sponsors List
+Agents List
 @endsection
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-12 mt-1">
         <div class="main-card mt-3 card">
-            <div class="card-body"><h5 class="card-title">All Sponsors</h5>
-                <div class="table-responsive">
+            <div class="card-body"><h5 class="card-title">All Agents</h5>
+                <div class="table-responsive w-100">
                     <table class="mb-0 table table-hover" id="agent_list_datatable">
                         <thead>
                             <tr>
@@ -17,7 +17,7 @@ Sponsors List
                                 <th>Agent Name</th>
                                 <th>Agent Phone</th>
                                 <th>Document</th>
-                                <th>Expense</th>
+                                <th>Balance</th>
                                 <th>Alter</th>
                             </tr>
                         </thead>
@@ -31,7 +31,7 @@ Sponsors List
 
 @section('modals')
 <!-- Update Agent -->
-<div class="modal fade" id="update_agent_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="update_agent_modal"  role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -59,10 +59,22 @@ Sponsors List
                             <label for="sel1">Phone:</label>
                             <input class="form-control" type="text" name="agentPhone" id="agentPhone" placeholder="Phone Number" >
                             <div id="agentPhone_invalid" class="invalid-feedback"> </div>
-                        </div>                
+                        </div>
                         <div class="form-group col-md-6">
                             <label for="sel1">Any Remarks:</label>
                             <input class="form-control" type="text" name="comment" id="comment" placeholder="Comment / Note">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sel1">Photo:</label>
+                            <input class="my-pond form-control-file" type="file" name="agentImage" id="agentImage" >
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sel1">Passport Scan Copy:</label>
+                            <input class="my-pond form-control-file" type="file" name="agentPassport" id="agentPassport" >
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="sel1">Opening Balance Sheet:</label>
+                            <input class="my-pond form-control-file" type="file" name="balanceSheet" id="balanceSheet" >
                         </div>
                     </div>                
                 </div>
@@ -74,10 +86,65 @@ Sponsors List
         </div>
     </div>
 </div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="transaction_modal_specific"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="transaction_form_body"></div>
+        </div>
+    </div>
+</div>
+
+{{-- Transaction MODAL --}}
+<div class="modal fade" id="ledger_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ledger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="ledger_modal_body">
+
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')
 <script>
+
+let balance_sheet = (name, email, phone, comment, id) => {
+    $.ajax({
+        type: 'get',
+        // enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/agent/balance-sheet/' + id,
+        data: {name},
+        success: function (response){
+            $('#ledger_modal_body').html(response);
+        }
+    });
+}
+
+
+document.addEventListener('FilePond:processfilestart', (e) => {
+    $(".file-pond-submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+    $(".file-pond-submit").prop('disabled', true);        
+});
+document.addEventListener('FilePond:processfile', (e) => {
+    $(".file-pond-submit").html('Add');
+    $(".file-pond-submit").prop('disabled', false);
+});
+
 /**
  * Start Sponsor & Sponsor VISA CRUD
  */
@@ -115,7 +182,7 @@ $(function() {
             { data: 'full_name', name: 'full_name' },
             { data: 'phone', name: 'phone' },
             { data: 'document', name: 'document' },
-            { data: 'id', name: 'id' },
+            { data: 'balance', name: 'balance' },
             { data: 'action', name: 'action' },
         ],
     });
@@ -152,6 +219,8 @@ $('#update_agent').on('submit', function(e){
             location.reload();
         },
         error: function (xhr, status, error){
+            $("#update_button_agent").html('Update');
+            $("#update_button_agent").prop('disabled', false);
             $('#update_agent').addClass('needs-validation');
             let errors = $.parseJSON(xhr.responseText);
             for (const [key, value] of Object.entries(errors.errors)) {
@@ -165,5 +234,29 @@ $('#update_agent').on('submit', function(e){
 /**
  * End Sponsor & Sponsor VISA CRUD
  */
+
+
+
+
+document.addEventListener('FilePond:processfilestart', (e) => {
+    $("#submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+    $("#submit").prop('disabled', true);        
+});
+document.addEventListener('FilePond:processfile', (e) => {
+    $("#submit").html('Add');
+    $("#submit").prop('disabled', false);
+});    
+$(function(){
+    FilePond.setOptions({
+        server: {
+            url: "{{ url('/') }}",
+            process: '/upload/agent-photo',
+            revert: '/revert',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+    });
+});
 </script>
 @endsection

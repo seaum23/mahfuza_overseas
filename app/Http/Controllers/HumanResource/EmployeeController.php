@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\HumanResource;
 
-use App\Http\Controllers\Controller;
-use App\Models\Designation;
-use App\Models\User;
 use Validator;
+use App\Models\User;
+use App\Models\Designation;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
@@ -14,7 +15,7 @@ class EmployeeController extends Controller
     
     public function index()
     {
-        $designations = Designation::get();
+        $designations = Role::get();
         return view('templates.new_employee', [
             'designations' => $designations
         ]);

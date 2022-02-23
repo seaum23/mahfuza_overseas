@@ -72,7 +72,7 @@ Dashboard
         <div class="card mb-3 widget-content bg-midnight-bloom">
             <div class="widget-content-wrapper text-white">
                 <div class="widget-content-left">
-                    <div class="widget-heading">Total Orders</div>
+                    <div class="widget-heading">Total Candidate Fligh Today</div>
                     <div class="widget-subheading">Last year expenses</div>
                 </div>
                 <div class="widget-content-right">

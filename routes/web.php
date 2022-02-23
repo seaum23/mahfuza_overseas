@@ -22,7 +22,9 @@ use App\Http\Controllers\Manpower\ManpowerOfficeController;
 use App\Http\Controllers\WebController;
 
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProcessingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
@@ -159,6 +161,41 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', [TransactionController::class, 'make_transaction'])->name('transaction');
         Route::get('/specific', [FormTemplateController::class, 'transaction_template'])->name('transaction.specific');
     });
+
+    Route::prefix('accounts')->group(function ()
+    {
+        // Route::get('/list', [AccountController::class, 'datatable']);
+        Route::get('create/{processing}', [AccountController::class, 'create'])->name('ticket');
+        // Route::post('/{account_type}', [AccountController::class, 'store']);
+        Route::get('/', [AccountController::class, 'index'])->name('ticket-index');
+        // Route::get('/{ticket}/edit', [AccountController::class, 'edit'])->name('ticket.edit');
+        // Route::put('/{ticket}', [AccountController::class, 'update'])->name('ticket.update');
+    });
+
+
+
+    Route::prefix('permission')->group(function ()
+    {
+        // Route::get('/list', [PermissionController::class, 'datatable']);
+        // Route::get('create/{processing}', [PermissionController::class, 'create'])->name('ticket');
+        // Route::post('/{account_type}', [PermissionController::class, 'store']);
+        Route::get('/', [PermissionController::class, 'index'])->name('permission');
+        // Route::get('/{ticket}/edit', [PermissionController::class, 'edit'])->name('ticket.edit');
+        // Route::put('/{ticket}', [PermissionController::class, 'update'])->name('ticket.update');
+    });
+
+    Route::prefix('role')->group(function ()
+    {
+        // Route::get('/list', [RoleController::class, 'datatable']);
+        // Route::get('create/{processing}', [RoleController::class, 'create'])->name('ticket');
+        Route::post('/', [RoleController::class, 'store'])->name('role.store');
+        Route::get('/', [RoleController::class, 'index'])->name('role');
+        Route::get('/permission-of-role/{role}', [RoleController::class, 'permission_of_role'])->name('permission-of-role');
+        Route::get('/permission-to-role/{role}/{permission}', [RoleController::class, 'permission_to_role']);
+        // Route::get('/{ticket}/edit', [RoleController::class, 'edit'])->name('ticket.edit');
+        // Route::put('/{ticket}', [RoleController::class, 'update'])->name('ticket.update');
+    });
+
 
     Route::resource('accounts', AccountController::class);
 

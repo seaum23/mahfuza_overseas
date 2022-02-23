@@ -678,21 +678,26 @@
                                     </li> --}}
                                 </ul>
                             </li>
-                            <li class="{{ (request()->is('accounts*')) ? 'mm-active' : '' }}">
+                            <li class="{{ (request()->is('permission*')) ? 'mm-active' : '' }} {{ (request()->is('role*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-users"></i>
-                                    Accounts
+                                    Role/Permission
                                     <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="{{ route('accounts.index') }}" class="{{ (request()->is('accounts')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Add New Account
+                                        <a href="{{ route('role') }}" class="{{ (request()->is('role')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Roles
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('accounts.index') }}" class="{{ (request()->is('accounts.index')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Accounts List
+                                        {{-- <a href="{{ route('permission-to-role') }}" class="{{ (request()->is('permission-to-role')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Assign Permission to Roles
+                                        </a> --}}
+                                    </li>
+                                    <li>
+                                        <a href="employee-show" class="{{ (request()->is('permission.show')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Employee List
                                         </a>
                                     </li>
                                     {{-- <li>
@@ -705,6 +710,20 @@
                                             <i class="metismenu-icon"></i>Send SMS
                                         </a>
                                     </li> --}}
+                                </ul>
+                            </li>
+                            <li class="{{ (request()->is('accounts*')) ? 'mm-active' : '' }}">
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-users"></i>
+                                    Accounts
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('accounts.index') }}" class="{{ (request()->is('accounts')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Accounts List
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('website')) ? 'mm-active' : '' }}">

@@ -30,6 +30,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         Role::create(['name' => $request->role_name]);
+        return back();  
     }
 
     public function permission_of_role($role)

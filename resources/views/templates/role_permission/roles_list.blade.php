@@ -98,7 +98,7 @@
             type: 'get',
             url: '{{ url('/') }}' + '/role/permission-to-role/' + role + '/' + permission,
             success: function (response){
-                
+                location.reload();
             },
         });
     }

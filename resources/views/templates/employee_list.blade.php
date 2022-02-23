@@ -17,7 +17,7 @@ Employee
                             <th>Employee ID</th>
                             <th>Mobile Number</th>
                             <th>Address</th>
-                            <th>Designation</th> 
+                            <th>Role</th> 
                             <th>Edit</th>
                         </tr>
                         </thead>
@@ -27,7 +27,11 @@ Employee
                             <td>{{ $employee->employee_id }}</td>
                             <td>{{ $employee->phone }}</td>
                             <td>{{ $employee->address }}</td>
-                            <td>{{ $employee->designation->designation }}</td>
+                            <td>
+                            @foreach ($employee->roles as $item)
+                                {{ $item->name }}
+                            @endforeach
+                            </td>
                             <!-- Edit Section -->
                             <td>
                                 <div class="row">
@@ -35,7 +39,7 @@ Employee
                                         <button type="button" onclick="change_pass_modal({{ $employee->id }})" data-target="#change_password" data-toggle="modal" class="btn btn-info">Change Password</button>
                                     </div>
                                     <div class="col-md-2"> 
-                                        <button data-target="#edit_employee" data-toggle="modal" onclick="edit_employee({{ $employee->id }})" type="button" class="btn btn-primary btn-sm">Edit</button>
+                                        <button data-target="#edit_employee" data-toggle="modal" onclick="edit_employee_new({{ $employee->id }})" type="button" class="btn btn-primary btn-sm">Edit</button>
                                         {{-- <form action="" method="post">
                                             @csrf
                                             <input type="hidden" value="{{ $employee->employee_id }}" name="id">
@@ -115,8 +119,8 @@ Employee
                             <input class="form-control" type="text" name="name" id="name" placeholder="Enter Employee Name" value="{{ old('name') }}" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name">Employee Office ID</label>
-                            <input class="form-control" type="text" name="officeId" id="officeId" placeholder="Enter Employee Office ID" value="{{ old('officeId') }}" required>
+                            <label for="name">Employee ID</label>
+                            <input class="form-control" type="text" name="updateEmployeeId" id="updateEmployeeId" placeholder="Employee Employee ID" value="{{ old('updateEmployeeId') }}" required>
                         </div>
                         
                         <div class="form-group col-md-6">
@@ -129,8 +133,8 @@ Employee
                             <input class="form-control" type="text" name="address" id="address" placeholder="Enter Employee Address" value="{{ old('address') }}" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name">Employee Designation</label>
-                            <select class="form-control select2" name="designation" id="designation" value="{{ old('designation') }}" required>
+                            <label for="name">Employee Role</label>
+                            <select class="form-control select2" name="role" id="role" value="{{ old('role') }}" required>
                             </select>
                         </div>
                     </div>
@@ -143,4 +147,25 @@ Employee
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    let edit_employee_new = (id) => {
+        $.ajax({
+            type: 'get',
+            url: '{{ url('/') }}' + '/employee-update-fetch/' + id,
+            success: function (response){
+                let info = JSON.parse(response);
+                $('#name').val(info.name);
+                $('#updateEmployeeId').val(info.employee_id);
+                $('#phoneNumber').val(info.phone);
+                $('#address').val(info.address);
+                $('#role').html(info.designation);
+                $('#toggle_permission_modal').click();
+                $('#permissions_body').html(response);
+            },
+        });
+    }
+</script>
 @endsection

@@ -58,9 +58,10 @@ Route::group(['middleware' => 'auth'], function () {
     // ]);
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee');
     Route::post('/employee', [EmployeeController::class, 'store']);
-    Route::post('/employee-update-fetch/{user}', [EmployeeController::class, 'update_fetch']);
+    Route::get('/employee-update-fetch/{user}', [EmployeeController::class, 'update_fetch']);
     Route::post('/employee-update/{user}', [EmployeeController::class, 'update']);
     
     Route::get('/employee-show', [EmployeeController::class, 'show'])->name('employee-show');

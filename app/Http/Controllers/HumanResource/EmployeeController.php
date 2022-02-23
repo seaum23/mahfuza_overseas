@@ -39,9 +39,10 @@ class EmployeeController extends Controller
 
     public function show()
     {
-        $employees = User::get();
+        $employees = User::with('roles')->get();
         return view('templates.employee_list', [
-            'employees' => $employees
+            'employees' => $employees,
+            'roles' => Role::get(),
         ]);
     }
 
@@ -72,14 +73,14 @@ class EmployeeController extends Controller
     }
     public function update_fetch(User $user)
     {
-        $json = json_decode($user->toJson());
-        $designations = Designation::get();
+        $json = $user;
+        $designations = Role::get();
         $designation_option = '';
         foreach($designations as $designation){
-            if($designation->id == $user->designation_id){
-                $designation_option .= '<option '.$designation->id.' selected>' . $designation->designation . '</option>';
+            if($user->can($designation->name)){
+                $designation_option .= '<option '.$designation->id.' selected>' . $designation->name . '</option>';
             }else{
-                $designation_option .= '<option '.$designation->id.' >' . $designation->designation . '</option>';
+                $designation_option .= '<option '.$designation->id.' >' . $designation->name . '</option>';
             }
         }
         $json->designation = $designation_option;

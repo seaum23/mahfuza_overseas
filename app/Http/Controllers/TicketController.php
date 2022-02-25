@@ -42,12 +42,8 @@ class TicketController extends Controller
     public function store(Request $request, Processing $processing)
     {
         $this->validate($request, [
-            'airline' => 'required',
-            'flightNo' => 'required',
             'flightDate' => 'required',
             'flightTime' => 'required',
-            'fromPlace' => 'required',
-            'toPlace' => 'required',
             'amount' => 'required',
         ]);
 

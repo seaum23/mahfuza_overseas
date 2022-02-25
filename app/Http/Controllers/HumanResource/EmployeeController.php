@@ -27,7 +27,7 @@ class EmployeeController extends Controller
             'phoneNumber' => 'max:11|min:11'
         ]);
         
-        User::create([
+        $user = User::create([
             'employee_id' => $request->officeId,
             'name' => $request->name,
             'designation_id' => $request->designation,
@@ -35,6 +35,9 @@ class EmployeeController extends Controller
             'address' => $request->address,
             'password' => Hash::make($request->password_text),
         ]);
+        $user->syncRoles([$request->designation]);
+
+        return back();
     }
 
     public function show()
@@ -75,9 +78,9 @@ class EmployeeController extends Controller
     {
         $json = $user;
         $designations = Role::get();
-        $designation_option = '';
+        $designation_option = '<option>Select Role</option>';
         foreach($designations as $designation){
-            if($user->can($designation->name)){
+            if($user->hasRole($designation->name)){
                 $designation_option .= '<option '.$designation->id.' selected>' . $designation->name . '</option>';
             }else{
                 $designation_option .= '<option '.$designation->id.' >' . $designation->name . '</option>';
@@ -90,13 +93,23 @@ class EmployeeController extends Controller
     public function update(User $user, Request $request)
     {
         $user->name = $request->name;
-        $user->employee_id = $request->officeId;
+        $user->employee_id = $request->updateEmployeeId;
         $user->phone = $request->phoneNumber;
         $user->address = $request->address;
         $user->save();
+        if(!empty($request->role)){
+            $user->syncRoles([$request->role]);
+        }
         $employees = User::get();
         return view('templates.employee_list', [
             'employees' => $employees
         ]);
+    }
+
+    public function delete(User $user)
+    {
+        $user->delete();
+
+        return back();
     }
 }

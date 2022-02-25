@@ -63,6 +63,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/employee', [EmployeeController::class, 'store']);
     Route::get('/employee-update-fetch/{user}', [EmployeeController::class, 'update_fetch']);
     Route::post('/employee-update/{user}', [EmployeeController::class, 'update']);
+    Route::post('/employee-delete/{user}', [EmployeeController::class, 'delete'])->name('employee.delete');
     
     Route::get('/employee-show', [EmployeeController::class, 'show'])->name('employee-show');
     Route::post('/change-password', [EmployeeController::class, 'change_password'])->name('change-password');
@@ -138,6 +139,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/visa_stamping/{id}', [ProcessingController::class, 'visa_stamping'])->name('visa_stamping');
         Route::post('/finger_update/{processing}', [ProcessingController::class, 'finger_update']);
         Route::post('/flight_update/{processing}', [ProcessingController::class, 'flight_update']);      
+        Route::post('/flight_update_wo_ticket/{processing}', [ProcessingController::class, 'flight_update_wo_ticket']);      
+        Route::get('/flight_update/{processing}', [ProcessingController::class, 'get_flight_update']);      
         Route::post('/flight_return_update/{processing}', [ProcessingController::class, 'return_update']);          
         Route::post('/manpower_update', [ProcessingController::class, 'manpower_update']);        
         Route::post('/generate_finger_pdf/{candidate}', [ProcessingController::class, 'generate_finger_pdf']);   
@@ -166,9 +169,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('accounts')->group(function ()
     {
         // Route::get('/list', [AccountController::class, 'datatable']);
-        Route::get('create/{processing}', [AccountController::class, 'create'])->name('ticket');
+        Route::get('create/{processing}', [AccountController::class, 'create']);
         // Route::post('/{account_type}', [AccountController::class, 'store']);
-        Route::get('/', [AccountController::class, 'index'])->name('ticket-index');
+        Route::get('/', [AccountController::class, 'index']);
         // Route::get('/{ticket}/edit', [AccountController::class, 'edit'])->name('ticket.edit');
         // Route::put('/{ticket}', [AccountController::class, 'update'])->name('ticket.update');
     });

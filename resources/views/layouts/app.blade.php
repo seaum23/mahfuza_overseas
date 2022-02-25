@@ -94,10 +94,10 @@
                                 <div class="widget-content-wrapper">
                                     <div class="widget-content-left">
                                         <div class="btn-group">
-                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+                                            {{-- <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                                 <img width="42" class="rounded-circle" src="{{ asset('images/avatars/1.jpg')}}" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                            </a>
+                                            </a> --}}
                                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                                 <button type="button" tabindex="0" class="dropdown-item">User Account</button>
                                                 <button type="button" tabindex="0" class="dropdown-item">Settings</button>
@@ -648,6 +648,7 @@
                                 </a>
                             </li>
 
+                            @hasanyrole('Super Admin|developer')
                             <li class="app-sidebar__heading">Admin</li>
                             <li class="{{ (request()->is('employee*')) ? 'mm-active' : '' }}">
                                 <a href="#">
@@ -690,26 +691,6 @@
                                             <i class="metismenu-icon"></i>Roles
                                         </a>
                                     </li>
-                                    <li>
-                                        {{-- <a href="{{ route('permission-to-role') }}" class="{{ (request()->is('permission-to-role')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Assign Permission to Roles
-                                        </a> --}}
-                                    </li>
-                                    <li>
-                                        <a href="employee-show" class="{{ (request()->is('permission.show')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Employee List
-                                        </a>
-                                    </li>
-                                    {{-- <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Add Sections
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Send SMS
-                                        </a>
-                                    </li> --}}
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('accounts*')) ? 'mm-active' : '' }}">
@@ -749,6 +730,7 @@
                                     @endforeach
                                 </ul>
                             </li>
+                            @endhasanyrole
                         </ul>
                     </div>
                 </div>
@@ -892,8 +874,8 @@
                 processData: false,
                 contentType: false,
                 beforeSend:function(){
-                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
-                    $("#transaction_form_submit").prop('disabled', true);
+                    // $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    // $("#transaction_form_submit").prop('disabled', true);
                 },
                 success: function (response){
                     $('#transaction_modal_close').click();
@@ -902,7 +884,7 @@
                     $('.transaction_inputs').hide();
                     $("#transaction_form_submit").html('Submit');
                     $("#transaction_form_submit").prop('disabled', true);
-                    location.reload();
+                    // location.reload();
                 },
             });
         }
@@ -930,25 +912,40 @@
                 $('.transaction_inputs').show();
                 // 1 => Accounts receivable / পাবো ; 2 => Accounts payable / পাবে
                 if( e.value == '1' || e.value == '2' ){
-                    console.log('pelam');
                     // $('.right_input_div').hide();
-                    $('#left_input_label').html('পেলাম');
-                    $('#right_input_label').html('দিলাম');
+                    // $('#left_input_label').html('পেলাম');
+                    $('#left_input_label').html('Received Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
                     return;
                 }
                 if( account_type == 'revenue' ){
-                    $('#left_input_label').html('পাব');
-                    $('#right_input_label').html('পেলাম');
+                    // $('#left_input_label').html('পাব');
+                    $('#left_input_label').html('Due Amount');
+                    // $('#right_input_label').html('পেলাম');
+                    $('#right_input_label').html('Received Amount');
                     return;
                 }
                 if( account_type == 'asset' ){
-                    $('#left_input_label').html('কেনা');
-                    $('#right_input_label').html('দিলাম');
+                    // $('#left_input_label').html('কেনা');
+                    $('#left_input_label').html('Purchased Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
                     return;
                 }
                 if( account_type == 'expense' ){
-                    $('#left_input_label').html('কেনা');
-                    $('#right_input_label').html('দিলাম');
+                    // $('#left_input_label').html('কেনা');
+                    $('#left_input_label').html('Purchased Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
+                    return;
+                }
+                if( account_type == 'liability' ){
+                    // $('.right_input_div').hide();
+                    // $('#left_input_label').html('পেলাম');
+                    $('#left_input_label').html('Received Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
                     return;
                 }
             }

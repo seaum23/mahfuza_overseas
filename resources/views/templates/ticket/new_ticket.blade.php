@@ -5,25 +5,32 @@ Ticket Assign
 
 @section('content')
 <div class="app-page-title">
-    <div class="page-title-wrapper">
-        <div class="page-title-heading">
-            <div class="page-title-icon">
-                <i class="pe-7s-wallet icon-gradient bg-plum-plate">
-                </i>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="pe-7s-wallet icon-gradient bg-plum-plate"></i>
+                        </div>
+                        <div>
+                            {{ $candidate->fName . ' ' . $candidate->lName }}
+                            <div class="page-title-subheading">Ticket. </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>{{ $candidate->fName . ' ' . $candidate->lName }}
-                <div class="page-title-subheading">Ticket. </div>
+            <div class="col-md-4 align-self-center align-self-end">
+                <button onclick="finish_without_ticket({{ $processing_id }})" class="btn btn-warning btn-sm">Finish without ticket!</button>
             </div>
         </div>
     </div>
-</div>
 <div class="row clearfix justify-content-center">
     <div class="col-lg-8">
         <div class="card mt-3 card">
             <div class="card-body"><h5 class="card-title">Ticket Information</h5>
                 <form id="ticket_form" action="" method="post" enctype="multipart/form-data">
                     <div class="form-row">                            
-                        <div class="form-group col-md-6 col-12">
+                        {{-- <div class="form-group col-md-6 col-12">
                             <label for="sel1">Select Airplane:</label>
                             <input class="form-control" type="text" name="airline" id="airline" placeholder="Enter Airplane Name" value="{{ (isset($edit)) ? $edit->airline : '' }}">
                             <div id="airline_invalid" class="invalid-feedback"> </div>
@@ -32,13 +39,13 @@ Ticket Assign
                             <label for="sel1">Flight No:</label>
                             <input class="form-control" type="text" name="flightNo" id="flightNo" placeholder="Enter Flight No" value="{{ (isset($edit)) ? $edit->flight_number : '' }}">
                             <div id="flightNo_invalid" class="invalid-feedback"> </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6 col-12">
                             <label for="sel1">Flight Date:</label>
                             <input class="form-control datepicker" type="text" autocomplete="off" name="flightDate" id="flightDate" placeholder="Flight Date" value="{{ (isset($edit)) ? $edit->flight_number : '' }}">
                             <div id="flightDate_invalid" class="invalid-feedback"> </div>
                         </div>
-                        <div class="form-group col-md-3 col-3" style="text-align: center;">
+                        {{-- <div class="form-group col-md-3 col-3" style="text-align: center;">
                             <label>Transit</label>
                             <div class="form-group">
                                 <label class="parking_label">Yes
@@ -54,13 +61,13 @@ Ticket Assign
                         <div class="form-group col-md-3 col-3" id="transitHourDiv" style="display: none;">
                             <label for="sel1">Transit:</label>
                             <input class="form-control col-md-12" type="number" name="transitHour" id="transitHour" placeholder="Transit Hours" step="any">
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6 col-12">
                             <label for="sel1">Flight Time:</label>
                             <input class="form-control timePicker" type="text" autocomplete="off" name="flightTime" id="flightTime" placeholder="Flight Time">
                             <div id="flightTime_invalid" class="invalid-feedback"> </div>
                         </div>
-                        <div class="form-group col-md-6 col-12">
+                        {{-- <div class="form-group col-md-6 col-12">
                             <div class="row">
                                 <div class="col-sm">
                                     <label for="sel1">From:</label>
@@ -77,7 +84,7 @@ Ticket Assign
                                     <div id="toPlace_invalid" class="invalid-feedback"> </div>
                                 </div>
                             </div>                        
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6 col-12">
                             <label for="sel1">Amount:</label>
                             <input class="form-control" type="number" name="amount" id="amount" placeholder="BDT" value="{{ (isset($edit)) ? $edit->ticket_price : '' }}">
@@ -125,6 +132,17 @@ $('input[type=radio][name=transit]').change(function() {
         $('#transitHour').prop('required', false);
     }
 });
+
+let finish_without_ticket = (id) => {
+    $.ajax({
+        type: 'post',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/processing/flight_update_wo_ticket/' + '{{ $processing_id }}',
+        success: function (response){
+            location.href = "{{ url('processing') }}";
+        }
+    });
+}
 
 $('#ticket_form').on('submit', (e) => {
     $('#ticket_form').removeClass('needs-validation');

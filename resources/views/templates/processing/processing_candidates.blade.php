@@ -184,6 +184,29 @@ Processing Candidate List
     </div>
 </div>
 
+{{-- Flight Update --}}
+<div class="modal fade" id="flight_update_modal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="" id="flight_update_form">
+            <input type="hidden" name="flight_update_id" id="flight_update_id">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Flight Update</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="flight_update_body">
+                </div>
+                <div class="modal-footer">
+                    <button id="flight_modal_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="update_flight_button" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
@@ -335,28 +358,73 @@ let finger_update = (id) => {
     });
 }
 
-let flight_update = (id) => {
-    Swal.fire({
-        title: "Confirm flight complete?",
-        icon: "success",
-        buttons: true,
-        dangerMode: true,
-    })
-    .then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                type: 'POST',
-                enctype: 'multipart/form-data',
-                url: '{{ url('/') }}' + '/processing/flight_update/' + id,
-                success: function (response){
-                    Swal.fire("Done!", {
-                        icon: "success",
-                    });
-                    datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
-                }
-            });           
+$('#flight_update_form').on('submit', () => {
+    event.preventDefault();
+    let id = $('#flight_update_id').val();
+    
+    var form = $('#flight_update_form')[0];
+    var data = new FormData(form);
+    $.ajax({
+        type: 'post',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/processing/flight_update/' + id,
+        data: data,
+        processData: false,
+        contentType: false,
+        beforeSend:function(){
+            $("#update_flight_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+            $("#update_flight_button").prop('disabled', true);
+        },
+        success: function (response){
+            $('#flight_modal_close').click();
+            $("#update_flight_button").html('Submit');
+            $("#update_flight_button").prop('disabled', false);
+            Swal.fire("Done!", {
+                icon: "success",
+            });
+            datatable.ajax.url( '{{ url('/') }}/processing.list' ).load();
         }
     });
+});
+
+let flight_update = (id) => {
+
+    $.ajax({
+        type: 'GET',
+        enctype: 'multipart/form-data',
+        url: '{{ url('/') }}' + '/processing/flight_update/' + id,
+        success: function (response){
+            $('#flight_update_id').val(id);
+            $('#flight_update_body').html(response);
+        }
+    });  
+    // Swal.fire({
+    //     title: 'Select Payment Method',
+    //     input: 'select',
+    //     inputOptions: {
+    //         'Fruits': {
+    //         apples: 'Apples',
+    //         bananas: 'Bananas',
+    //         grapes: 'Grapes',
+    //         oranges: 'Oranges'
+    //         },
+    //         'Vegetables': {
+    //         potato: 'Potato',
+    //         broccoli: 'Broccoli',
+    //         carrot: 'Carrot'
+    //         },
+    //         'icecream': 'Ice cream'
+    //     },
+    //     inputPlaceholder: 'Select a fruit',
+    //     icon: "success",
+    //     buttons: true,
+    //     dangerMode: true,   
+    // })
+    // .then((result) => {
+    //     if (result.isConfirmed) {
+                      
+    //     }
+    // });
 }
 
 let flight_return_update = (id) => {

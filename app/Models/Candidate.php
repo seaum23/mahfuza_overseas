@@ -73,6 +73,11 @@ class Candidate extends Model
         return $this->hasMany(Processing::class);
     }
 
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
+    }
+
     /**
      * Accessor for Age.
      */

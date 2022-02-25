@@ -1,3 +1,5 @@
+{{-- This form is submiited usign AJAX form app.blade.php page using transaction_form_submit_form function --}}
+
 <form action="#" id="transaction_form">
     <div class="modal-body">
         <div class="card">

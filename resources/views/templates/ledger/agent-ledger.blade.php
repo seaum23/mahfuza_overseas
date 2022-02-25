@@ -4,7 +4,7 @@
             <th>Date</th>
             <th>Debit</th>
             <th>Credit</th>
-            <th>Balance</th>
+            <th>Amount</th>
         </tr>
     </thead>
     <tbody>

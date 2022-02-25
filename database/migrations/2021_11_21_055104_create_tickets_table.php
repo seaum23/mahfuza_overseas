@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->dateTime('flight_time');
-            $table->double('transit', 3, 1);
+            $table->double('transit', 3, 1)->nullable();
             $table->double('ticket_price', 10, 2);
             $table->string('flight_number', 100);
             $table->string('flight_from', 100);

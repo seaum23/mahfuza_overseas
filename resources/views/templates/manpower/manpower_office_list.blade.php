@@ -14,8 +14,8 @@ Delegate List
                             <th>Office Name</th>
                             <th>License</th>
                             <th>Address</th>
+                            <th>Office Pad</th>
                             <th>Jobs</th>
-                            <th>Pad</th>
                             <th>Comment</th>
                             <th>Alter</th>
                         </thead>
@@ -33,7 +33,7 @@ Delegate List
                                         <p>No Job Assigned!</p>
                                     @else
                                         @foreach ($office->manpower_job as $manpower_job)
-                                            <button onclick="edit_manpower_job({{ $manpower_job->pivot->id }}, {{ $office->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }}: {{$manpower_job->pivot->processing_cost}}</button>
+                                            <button onclick="edit_manpower_job({{ $manpower_job->pivot->id }}, {{ $office->id }})" class="btn btn-info btn-sm">{{ $manpower_job->name }} {{ $manpower_job->credit_type }}: {{$manpower_job->pivot->processing_cost}}</button>
                                         @endforeach
                                     @endif
                                 </td>

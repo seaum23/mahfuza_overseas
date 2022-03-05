@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Response;
 class ProcessingController extends Controller
 {
     public function index()
-    {
+    {        
         return view('templates.processing.processing_candidates'); 
     }
 
@@ -207,7 +207,7 @@ class ProcessingController extends Controller
         $processing->okala_file = move($request->okala_file, 'candidate', 'okala_file_' . $processing->id . '_' . time() );
         
         if($request->okala_amount > 0){
-            transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account);
+            transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account, 'Okala');
         }
 
         $processing->save();
@@ -221,7 +221,11 @@ class ProcessingController extends Controller
         $processing->mufa_file = move($request->mufa_file, 'candidate', 'mufa_file_' . $processing->id . '_' . time() );
         
         if($request->mufa_amount > 0){
-            transaction($request->mufa_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->mufa_amount_payment_account);
+            if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+                maheerTransaction($request->mufa_amount, $processing->candidate->id);
+            }else{
+                transaction($request->mufa_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->mufa_amount_payment_account, 'Mufa');
+            }
         }
 
         $processing->save();
@@ -288,7 +292,7 @@ class ProcessingController extends Controller
         $processing->manpower_card_file = move($request->manpower_card_file, 'candidate', 'manpower_file_' . $processing->id . '_' . time() );
 
         if($request->manpower_amount > 0){
-            transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account);
+            transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account, 'Manpower Card');
         }        
 
         $processing->save();

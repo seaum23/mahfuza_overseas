@@ -193,18 +193,20 @@ class AgentController extends Controller
             ->addColumn('balance', function ($query) {
                 $credit = $query->transactions()
                             ->join('credits', 'transactions.id', '=', 'credits.transaction_id')
+                            ->join('accounts', 'credits.account_id', '=', 'accounts.id')
                             ->where(function ($query)
                             {
                                 $query->where('credits.account_id', '1')
-                                    ->orWhere('credits.account_id', '2');
+                                ->orWhere('accounts.account_type', 'liability');
                             })
                             ->sum('credits.amount');
                 $debit = $query->transactions()
                             ->join('debits', 'transactions.id', '=', 'debits.transaction_id')
+                            ->join('accounts', 'debits.account_id', '=', 'accounts.id')
                             ->where(function ($query)
                             {
                                 $query->where('debits.account_id', '1')
-                                    ->orWhere('debits.account_id', '2');
+                                ->orWhere('accounts.account_type', 'liability');
                             })
                             ->sum('debits.amount');
                 return $query->opening_balance + $credit - $debit;
@@ -225,7 +227,7 @@ class AgentController extends Controller
     public function balanace_sheet(Agent $agent)
     {
         return view('templates.ledger.agent-ledger', [
-            'transactions' => $agent->transactions()->with('credits', 'debits')->latest()->get()
+            'transactions' => $agent->transactions()->with('credits', 'debits', 'candidate')->latest()->get()
         ]);
     }
 }

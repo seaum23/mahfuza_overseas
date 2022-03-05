@@ -5,6 +5,8 @@
             <th>Debit</th>
             <th>Credit</th>
             <th>Amount</th>
+            <th>Purpose</th>
+            <th>Candidate</th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +24,8 @@
                     @endforeach
                 </th>
                 <th> {{ $transaction->unit_price }} </th>
+                <th> {{ $transaction->purpose }} </th>
+                <th> {{ (!empty($transaction->candidate)) ? $transaction->candidate->fName . ' ' . $transaction->candidate->lName : '' }} </th>
             </tr>
         @endforeach
     </tbody>

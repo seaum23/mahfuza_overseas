@@ -22,11 +22,14 @@ use App\Http\Controllers\Manpower\ManpowerOfficeController;
 use App\Http\Controllers\WebController;
 
 use App\Http\Controllers\Datatable\SponsorDatatableContorller;
+use App\Http\Controllers\MaheerController;
+use App\Http\Controllers\OutsideOfficeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProcessingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
+use App\Models\OutsideOffice;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 /*
@@ -103,6 +106,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/agent.list',[AgentController::class, 'datatable']);
     Route::resource('agent', AgentController::class);
     Route::get('agent/balance-sheet/{agent}', [AgentController::class, 'balanace_sheet']);
+
+    Route::prefix('maheer')->group(function () {
+        Route::get('/list',[MaheerController::class, 'datatable'])->name('maheer.datatable');
+        Route::get('/', [MaheerController::class, 'index'])->name('maheer.index');
+        Route::post('/', [MaheerController::class, 'store'])->name('maheer.store');
+        Route::get('/maheer-expense-account-type/{type}', [MaheerController::class, 'account_types'])->name('maheer.accounts');
+        Route::post('/expense', [MaheerController::class, 'store_expense'])->name('maheer.expense');
+    });
+
+    Route::prefix('outside-office')->group(function ()
+    {
+        Route::get('/', [OutsideOfficeController::class, 'index'])->name('outside-office.create');
+        Route::post('/', [OutsideOfficeController::class, 'store'])->name('outside-office.store');
+        Route::put('/{id}', [OutsideOfficeController::class, 'update'])->name('outside-office.update');
+    });
 
     Route::resource('candidate', CandidateController::class);
     Route::get('/candidate.list',[CandidateController::class, 'datatable']);
@@ -215,6 +233,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/upload/processing-photo', [UploadController::class, 'processing_photo']);
     Route::post('/upload/delegate', [UploadController::class, 'delegate_files']);    
     Route::post('/upload/manpower', [UploadController::class, 'manpower_files']);    
+    Route::post('/upload/maheer', [UploadController::class, 'maheer_files']);    
     Route::delete('/revert', [UploadController::class, 'delete']);
 
     /**

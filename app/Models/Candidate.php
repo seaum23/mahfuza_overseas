@@ -7,6 +7,7 @@ use App\Models\Agent;
 use App\Models\Processing;
 use Illuminate\Support\Str;
 use App\Models\ExperiencedFile;
+use App\Models\MaheerTransaction;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CandidateTraveledCountry;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -122,5 +123,9 @@ class Candidate extends Model
         return implode(', ', $difference);
     }
 
+    public function maheerTransactions()
+    {
+        return $this->morphMany(MaheerTransaction::class, 'particular');
+    }
 
 }

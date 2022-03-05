@@ -30,11 +30,11 @@ Employee
                             <input class="form-control" type="text" name="address" placeholder="Enter Employee Address" value="{{ old('address') }}" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name">Employee Designation</label>
+                            <label for="name">Employee Roles</label>
                             <select class="form-control select2" name="designation" id="designation" value="{{ old('designation') }}" required>
-                                <option value="">Select Designation</option>
+                                <option value="">Select Roles</option>
                                 @foreach ($designations as $designation)
-                                    <option value="{{ $designation->id }}">{{ $designation->designation }}</option>
+                                    <option value="{{ $designation->id }}">{{ $designation->name }}</option>
                                 @endforeach
                             </select>
                         </div>

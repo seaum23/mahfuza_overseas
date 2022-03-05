@@ -17,7 +17,7 @@ Employee
                             <th>Employee ID</th>
                             <th>Mobile Number</th>
                             <th>Address</th>
-                            <th>Designation</th> 
+                            <th>Role</th> 
                             <th>Edit</th>
                         </tr>
                         </thead>
@@ -27,7 +27,11 @@ Employee
                             <td>{{ $employee->employee_id }}</td>
                             <td>{{ $employee->phone }}</td>
                             <td>{{ $employee->address }}</td>
-                            <td>{{ $employee->designation->designation }}</td>
+                            <td>
+                            @foreach ($employee->roles as $item)
+                                {{ $item->name }}
+                            @endforeach
+                            </td>
                             <!-- Edit Section -->
                             <td>
                                 <div class="row">
@@ -35,19 +39,20 @@ Employee
                                         <button type="button" onclick="change_pass_modal({{ $employee->id }})" data-target="#change_password" data-toggle="modal" class="btn btn-info">Change Password</button>
                                     </div>
                                     <div class="col-md-2"> 
-                                        <button data-target="#edit_employee" data-toggle="modal" onclick="edit_employee({{ $employee->id }})" type="button" class="btn btn-primary btn-sm">Edit</button>
+                                        <button data-target="#edit_employee" data-toggle="modal" onclick="edit_employee_new({{ $employee->id }})" type="button" class="btn btn-primary btn-sm">Edit</button>
                                         {{-- <form action="" method="post">
                                             @csrf
                                             <input type="hidden" value="{{ $employee->employee_id }}" name="id">
                                         </form>                                        --}}
                                     </div>
+                                    @hasanyrole('Super Admin|developer')
                                     <div class="col-md-2">
-                                        <form action="template/newEmployeeQry.php" method="post">
-                                            <input type="hidden" name="alter" value="delete">
-                                            <input type="hidden" value="{{ $employee->employee_id }}" name="employeeId">
+                                        <form action="{{ route('employee.delete', $employee->id) }}" method="post">
+                                            @csrf
                                             <button type="submit" class="btn btn-danger btn-sm" name="sectionDate">Delete</></button>
                                         </form>
                                     </div>
+                                    @endhasanyrole
                                 </div>
                             </td>
                         </tr>
@@ -107,6 +112,7 @@ Employee
                 </button>
             </div>
             <form action="" id="edit_employee_form" method="post">
+                <input type="hidden" id="update_id" name="update_id">
                 @csrf
                 <div class="modal-body">
                     <div class="form-row">
@@ -115,8 +121,8 @@ Employee
                             <input class="form-control" type="text" name="name" id="name" placeholder="Enter Employee Name" value="{{ old('name') }}" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name">Employee Office ID</label>
-                            <input class="form-control" type="text" name="officeId" id="officeId" placeholder="Enter Employee Office ID" value="{{ old('officeId') }}" required>
+                            <label for="name">Employee ID</label>
+                            <input class="form-control" type="text" name="updateEmployeeId" id="updateEmployeeId" placeholder="Employee Employee ID" value="{{ old('updateEmployeeId') }}" required>
                         </div>
                         
                         <div class="form-group col-md-6">
@@ -129,18 +135,65 @@ Employee
                             <input class="form-control" type="text" name="address" id="address" placeholder="Enter Employee Address" value="{{ old('address') }}" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name">Employee Designation</label>
-                            <select class="form-control select2" name="designation" id="designation" value="{{ old('designation') }}" required>
+                            <label for="name">Employee Role</label>
+                            <select class="form-control select2" name="role" id="role" value="{{ old('role') }}" required>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="edit_employee_modal_close">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button id="update_employee_button" type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+    let edit_employee_new = (id) => {
+        $.ajax({
+            type: 'get',
+            url: '{{ url('/') }}' + '/employee-update-fetch/' + id,
+            success: function (response){
+                let info = JSON.parse(response);                
+                $('#update_id').val(info.id);
+                $('#name').val(info.name);
+                $('#updateEmployeeId').val(info.employee_id);
+                $('#phoneNumber').val(info.phone);
+                $('#address').val(info.address);
+                $('#role').html(info.designation);
+                $('#toggle_permission_modal').click();
+                $('#permissions_body').html(response);
+            },
+        });
+    }
+
+    $('#edit_employee_form').on('submit', (e) => {
+        e.preventDefault();
+        let id =  $('#update_id').val();
+       
+        var form = $('#edit_employee_form')[0];
+        var data = new FormData(form);
+        $.ajax({
+            type: 'post',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/employee-update/' + id,
+            data: data,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("#update_employee_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+                $("#update_employee_button").prop('disabled', true);
+            },
+            success: function (response){       
+                location.reload();         
+                $('#edit_employee_modal_close').click();
+                $('#edit_employee_form').reset();
+            }
+        });
+    })
+</script>
 @endsection

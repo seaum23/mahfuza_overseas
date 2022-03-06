@@ -207,7 +207,11 @@ class ProcessingController extends Controller
         $processing->okala_file = move($request->okala_file, 'candidate', 'okala_file_' . $processing->id . '_' . time() );
         
         if($request->okala_amount > 0){
-            transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account, 'Okala');
+            if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+                maheerTransaction($request->okala_amount, $processing->candidate->id, 'Okala');
+            }else{
+                transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account, 'Okala');
+            }
         }
 
         $processing->save();
@@ -222,7 +226,7 @@ class ProcessingController extends Controller
         
         if($request->mufa_amount > 0){
             if($processing->candidate->agent->id == 1){ // Maheer Agent Account
-                maheerTransaction($request->mufa_amount, $processing->candidate->id);
+                maheerTransaction($request->mufa_amount, $processing->candidate->id, 'MUFA');
             }else{
                 transaction($request->mufa_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->mufa_amount_payment_account, 'Mufa');
             }
@@ -286,13 +290,17 @@ class ProcessingController extends Controller
 
     public function manpower_update(Request $request)
     {
-        $processing = Processing::find($request->update_manpower_id);
+        $processing = Processing::with('candidate.agent')->find($request->update_manpower_id);
 
         $processing->manpower = 1;
         $processing->manpower_card_file = move($request->manpower_card_file, 'candidate', 'manpower_file_' . $processing->id . '_' . time() );
 
         if($request->manpower_amount > 0){
-            transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account, 'Manpower Card');
+            if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+                maheerTransaction($request->mufa_amount, $processing->candidate->id, 'Manpower Office');
+            }else{
+                transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account, 'Manpower Card');
+            }
         }        
 
         $processing->save();
@@ -322,30 +330,10 @@ class ProcessingController extends Controller
         $processing->pending = 2;
         $processing->save();
 
-        $transaction = new Transaction();
-        $transaction->quantity = 1;
-        $transaction->currency = 'bdt';
-        $transaction->unit_price = $processing->tickets[0]->ticket_price;
-        $transaction->exchange_rate = 1;
-        // $transaction->particular_type = Agent::class;
-        // $transaction->particular_id = $processing->candidate->agent_id;
-        $transaction->candidate_id = $processing->candidate->id;
-        $transaction->save();
-        $transaction->transaction_id = str_pad($transaction->id, 10, '0', STR_PAD_LEFT);
-        $transaction->save();
-
-        $transaction->debits()->create([
-            'amount' => $processing->tickets[0]->ticket_price,
-            'account_id' => '8', // Ticket Expense
-        ]);
-
-        $transaction->credits()->create([
-            'amount' => $processing->tickets[0]->ticket_price,
-            'account_id' => $request->flight_accounts,
-        ]);
-
-        if(!empty($processing->candidate->agent_comission)){
-            $this->agent_comission_transaction($processing);
+        if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+            maheerTransaction($request->tickets[0]->ticket_price, $processing->candidate->id, 'Ticket Expense');
+        }else{
+            transaction($processing->tickets[0]->ticket_price, null, $processing->candidate->id, $request->flight_accounts, '', '8');
         }
     }
 

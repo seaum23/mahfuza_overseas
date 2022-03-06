@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use Illuminate\Http\Request;
 use App\Models\MaheerTransaction;
 use App\Models\ManpowerOffice;
@@ -176,6 +177,10 @@ class MaheerController extends Controller
 
                 if($particular instanceof OutsideOffice){
                     return $particular->name;
+                }
+
+                if($particular instanceof Candidate){
+                    return $particular->fName . ' ' . $particular->lName;
                 }
                 
                 return '';

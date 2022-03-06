@@ -80,6 +80,7 @@ Maheer Account
                                         <tr>
                                             <th>Date</th>
                                             <th>Particular</th>
+                                            <th>Purpose</th>
                                             <th>Debit</th>
                                             <th>Credit</th>
                                             <th>Adjust Money</th>
@@ -257,6 +258,7 @@ Maheer Account
             columns: [
                 { data: 'input_date' },
                 { data: 'particular' },
+                { data: 'purpose' },
                 { data: 'debit' },
                 { data: 'credit' },
                 { data: 'adjusted_value' },

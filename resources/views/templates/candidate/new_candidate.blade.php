@@ -4,7 +4,7 @@ New Candidate
 @endsection
 
 @section('content')
-<div class="row justify-content-center">
+<div class="row justify-content-center mb-5">
     <div class="col-md-12">
         <div class="card mt-3">
             <div class="card-header"><h5>New Candidate</h5></div>

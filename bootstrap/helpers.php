@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Agent;
+use App\Models\Candidate;
 use App\Models\Transaction;
 use App\Models\TemporaryFile;
+use App\Models\MaheerTransaction;
 
 function alert($request, $message = 'Successfull!', $type = 'success')
 {
@@ -38,24 +40,26 @@ function move(String $folder_name, String $storing_file_path, String $file_name)
  * @return String Transaction ID
  * 
  */ 
-function transaction($amount, $agent_id, $candidate_id, $payment_account)
+function transaction($amount, $agent_id, $candidate_id, $payment_account, $purpose, $debit_account = '2')
 {
     $transaction = new Transaction();
     $transaction->quantity = 1;
     $transaction->currency = 'bdt';
     $transaction->unit_price = $amount;
     $transaction->exchange_rate = 1;
-    $transaction->particular_type = Agent::class;
-    $transaction->particular_id = $agent_id;
+    if(!is_null($agent_id)){
+        $transaction->particular_type = Agent::class;
+        $transaction->particular_id = $agent_id;
+    }
     $transaction->candidate_id = $candidate_id;
-    $transaction->purpose = 'Test Medical';
+    $transaction->purpose = $purpose;
     $transaction->save();
     $transaction->transaction_id = str_pad($transaction->id, 10, '0', STR_PAD_LEFT);
     $transaction->save();
 
     $transaction->debits()->create([
         'amount' => $amount,
-        'account_id' => '2',
+        'account_id' => $debit_account,
     ]);
 
     $transaction->credits()->create([
@@ -64,6 +68,28 @@ function transaction($amount, $agent_id, $candidate_id, $payment_account)
     ]);
 
     return $transaction->transaction_id;
+}
+
+function maheerTransaction($amount, $candidate, $purpose = null)
+{
+    $transaction = new MaheerTransaction();
+    $transaction->currency = 'bdt';
+    $transaction->credit = $amount;
+    $transaction->exchange_rate = 1;
+    $transaction->input_date = date('Y-m-d');
+    $transaction->transaction_type = 1;  
+    $transaction->particular_type = Candidate::class;
+    $transaction->particular_id = $candidate;
+    if(!is_null($purpose)){
+        $transaction->purpose = $purpose;
+    }
+    $transaction->save();
+
+    $debit_sum = MaheerTransaction::sum('debit');
+    $credit_sum = MaheerTransaction::sum('credit');
+    
+    $transaction->adjusted_value = ($debit_sum - $credit_sum);
+    $transaction->save();
 }
 
 function finger_image($candidate)

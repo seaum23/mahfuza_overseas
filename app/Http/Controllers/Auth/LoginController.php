@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,6 +22,9 @@ class LoginController extends Controller
             return back()->with('status', 'Invalid login information!');
         }
 
-        return redirect()->route('dashboard');
+        $today = now();
+        return redirect()->route('dashboard', [
+            'flight_count' => Ticket::whereDate('flight_time', '=', $today->format('Y-m-d'))
+        ]);
     }
 }

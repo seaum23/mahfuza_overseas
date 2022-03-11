@@ -61,6 +61,13 @@ $(function() {
             // { data: 'training_card_file' },            
             // { data: 'action' },            
         ],
+        columnDefs: [
+            {
+                "targets": [ 1,2,4,5,6 ],
+                "visible": false,
+                "searchable": false
+            },
+        ]
     });
 });
 </script>

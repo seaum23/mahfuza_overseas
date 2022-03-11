@@ -42,12 +42,8 @@ class TicketController extends Controller
     public function store(Request $request, Processing $processing)
     {
         $this->validate($request, [
-            'airline' => 'required',
-            'flightNo' => 'required',
             'flightDate' => 'required',
             'flightTime' => 'required',
-            'fromPlace' => 'required',
-            'toPlace' => 'required',
             'amount' => 'required',
         ]);
 
@@ -63,7 +59,9 @@ class TicketController extends Controller
             'updated_by' => auth()->id(),
         ]);
 
-        $ticket->ticket_file = move($request->ticketCopy, 'candidate', 'ticket_file_' . $ticket->id . '_' . time() );
+        if(!empty($request->ticketCopy)){
+            $ticket->ticket_file = move($request->ticketCopy, 'candidate', 'ticket_file_' . $ticket->id . '_' . time() );
+        }
         $ticket->save();
     }
 

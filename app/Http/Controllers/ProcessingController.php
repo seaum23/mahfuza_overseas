@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use DateTime;
+use Carbon\Carbon;
 use App\Models\File;
 use App\Models\Agent;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Candidate;
-use App\Models\ManpowerOffice;
 use App\Models\Processing;
 use App\Models\Transaction;
-use Carbon\Carbon;
-use DateTime;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ManpowerOffice;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Response;
 class ProcessingController extends Controller
 {
     public function index()
-    {
+    {        
         return view('templates.processing.processing_candidates'); 
     }
 
@@ -108,7 +110,7 @@ class ProcessingController extends Controller
                     $diff = -1 * $stamping_date->diffInDays($today);
                 }
                 $html = '<a href="'.route('visa_stamping', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$query->visa_stamping_date.'</badge></a>';
-                $html .= ($diff < 0 ) ? '<badge class="badge badge-danger">'.$diff.'</badge>' : '<badge class="badge badge-info">'.$diff.'</badge>';
+                $html .= ($diff < 0 ) ? '<badge class="badge badge-danger">'.$diff. ' ' . Str::plural('day', $diff) . '</badge>' : '<badge class="badge badge-info">'.$diff. ' ' . Str::plural('day', $diff) . '</badge>';
                 return $html;
             })
             ->editColumn('finger', function ($query)
@@ -152,20 +154,24 @@ class ProcessingController extends Controller
             })
             ->editColumn('ticket', function ($query)
             {
-                if(!$query->has_ticket()){
+                if(!$query->has_ticket() AND $query->pending != 2){
                     return '<a href="'.route('ticket', $query->id).'"><button class="btn btn-secondary btn-xs">No</button></a>';
                 }
 
                 $latest_ticket = $query->tickets()->latest()->first();
 
-                return '<a href="'.route('ticket.edit', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$latest_ticket->flight_time.'</badge></a>';
+                if(!is_null($latest_ticket)){
+                    return '<a href="'.route('ticket.edit', [$query->id]).'"><badge style="cursor: pointer;" class="badge badge-primary">'.$latest_ticket->flight_time.'</badge></a>';
+                }
+
+                return '<badge class="badge badge-secondary">No Ticket Assigned!</badge>';
                 
             })
             ->addColumn('action', function ($query) {
                 $html = '<div class="btn-group" role="group" aria-label="Basic example">';
                 $html .= '<button onclick="processing_transaction(\''.$query->id.'\', \''.$query->candidate->fName.' '.$query->candidate->lName.'\')" data-toggle="modal" data-target="#transaction_modal" class="btn btn-warning btn-xs"><i class="fas fa-dollar-sign"></i></button>';
                 if($query->pending == '0' AND $query->has_ticket()){
-                    $html .= '<button onclick="flight_update(\''.$query->id.'\')" class="btn btn-secondary btn-xs"><i class="fas fa-plane"></i></button>';
+                    $html .= '<button data-target="#flight_update_modal" data-toggle="modal" onclick="flight_update(\''.$query->id.'\', )" class="btn btn-secondary btn-xs"><i class="fas fa-plane"></i></button>';
                     $html .= '<button onclick="flight_return_update(\''.$query->id.'\')" class="btn btn-danger btn-xs"><i class="fas fa-plane-arrival"></i></button>';
                 }else if($query->pending == '2'){
                     $html .= '<button class="btn btn-success btn-xs"><i class="fas fa-plane"></i></button>';
@@ -201,7 +207,11 @@ class ProcessingController extends Controller
         $processing->okala_file = move($request->okala_file, 'candidate', 'okala_file_' . $processing->id . '_' . time() );
         
         if($request->okala_amount > 0){
-            transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account);
+            if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+                maheerTransaction($request->okala_amount, $processing->candidate->id, 'Okala');
+            }else{
+                transaction($request->okala_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->okala_amount_payment_account, 'Okala');
+            }
         }
 
         $processing->save();
@@ -215,7 +225,11 @@ class ProcessingController extends Controller
         $processing->mufa_file = move($request->mufa_file, 'candidate', 'mufa_file_' . $processing->id . '_' . time() );
         
         if($request->mufa_amount > 0){
-            transaction($request->mufa_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->mufa_amount_payment_account);
+            if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+                maheerTransaction($request->mufa_amount, $processing->candidate->id, 'MUFA');
+            }else{
+                transaction($request->mufa_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->mufa_amount_payment_account, 'Mufa');
+            }
         }
 
         $processing->save();
@@ -276,24 +290,55 @@ class ProcessingController extends Controller
 
     public function manpower_update(Request $request)
     {
-        $processing = Processing::find($request->update_manpower_id);
+        $processing = Processing::with('candidate.agent')->find($request->update_manpower_id);
 
         $processing->manpower = 1;
         $processing->manpower_card_file = move($request->manpower_card_file, 'candidate', 'manpower_file_' . $processing->id . '_' . time() );
 
         if($request->manpower_amount > 0){
-            transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account);
+            if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+                maheerTransaction($request->mufa_amount, $processing->candidate->id, 'Manpower Office');
+            }else{
+                transaction($request->manpower_amount, $processing->candidate->agent->id, $processing->candidate->id, $request->manpower_amount_payment_account, 'Manpower Card');
+            }
         }        
 
         $processing->save();
     }
 
-    public function flight_update(Processing $processing)
+    public function get_flight_update($processing)
+    {
+        $accounts = Account::where('payment_account', 1)->get();
+        return view('form_templates.flight-update-form', [
+            'accounts' => $accounts
+        ])->render();
+    }
+
+    public function flight_update_wo_ticket(Processing $processing)
     {
         $processing->pending = 2;
         $processing->save();
-        
+
         if(!empty($processing->candidate->agent_comission)){
+            $this->agent_comission_transaction($processing);
+        }
+    }
+
+    public function flight_update($processing, Request $request)
+    {
+        $processing = Processing::with('candidate.job', 'tickets')->find($processing);
+        $processing->pending = 2;
+        $processing->save();
+
+        if($processing->candidate->agent->id == 1){ // Maheer Agent Account
+            maheerTransaction($request->tickets[0]->ticket_price, $processing->candidate->id, 'Ticket Expense');
+        }else{
+            transaction($processing->tickets[0]->ticket_price, null, $processing->candidate->id, $request->flight_accounts, '', '8');
+        }
+    }
+
+    public function agent_comission_transaction($processing)
+    {
             $transaction = new Transaction();
             $transaction->quantity = 1;
             $transaction->currency = 'bdt';
@@ -308,14 +353,13 @@ class ProcessingController extends Controller
     
             $transaction->debits()->create([
                 'amount' => $processing->candidate->agent_comission,
-                'account_id' => '10',
+                'account_id' => '7',
             ]);
     
             $transaction->credits()->create([
                 'amount' => $processing->candidate->agent_comission,
                 'account_id' => '2',
             ]);
-        }
     }
 
     public function return_update(Processing $processing)

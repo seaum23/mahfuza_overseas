@@ -45,13 +45,14 @@ Employee
                                             <input type="hidden" value="{{ $employee->employee_id }}" name="id">
                                         </form>                                        --}}
                                     </div>
+                                    @hasanyrole('Super Admin|developer')
                                     <div class="col-md-2">
-                                        <form action="template/newEmployeeQry.php" method="post">
-                                            <input type="hidden" name="alter" value="delete">
-                                            <input type="hidden" value="{{ $employee->employee_id }}" name="employeeId">
+                                        <form action="{{ route('employee.delete', $employee->id) }}" method="post">
+                                            @csrf
                                             <button type="submit" class="btn btn-danger btn-sm" name="sectionDate">Delete</></button>
                                         </form>
                                     </div>
+                                    @endhasanyrole
                                 </div>
                             </td>
                         </tr>
@@ -111,6 +112,7 @@ Employee
                 </button>
             </div>
             <form action="" id="edit_employee_form" method="post">
+                <input type="hidden" id="update_id" name="update_id">
                 @csrf
                 <div class="modal-body">
                     <div class="form-row">
@@ -141,7 +143,7 @@ Employee
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="edit_employee_modal_close">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button id="update_employee_button" type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
@@ -156,7 +158,8 @@ Employee
             type: 'get',
             url: '{{ url('/') }}' + '/employee-update-fetch/' + id,
             success: function (response){
-                let info = JSON.parse(response);
+                let info = JSON.parse(response);                
+                $('#update_id').val(info.id);
                 $('#name').val(info.name);
                 $('#updateEmployeeId').val(info.employee_id);
                 $('#phoneNumber').val(info.phone);
@@ -167,5 +170,30 @@ Employee
             },
         });
     }
+
+    $('#edit_employee_form').on('submit', (e) => {
+        e.preventDefault();
+        let id =  $('#update_id').val();
+       
+        var form = $('#edit_employee_form')[0];
+        var data = new FormData(form);
+        $.ajax({
+            type: 'post',
+            enctype: 'multipart/form-data',
+            url: '{{ url('/') }}' + '/employee-update/' + id,
+            data: data,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("#update_employee_button").html('<i class="fas fa-spinner fa-pulse"></i>');
+                $("#update_employee_button").prop('disabled', true);
+            },
+            success: function (response){       
+                location.reload();         
+                $('#edit_employee_modal_close').click();
+                $('#edit_employee_form').reset();
+            }
+        });
+    })
 </script>
 @endsection

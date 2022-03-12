@@ -204,6 +204,22 @@ class UploadController extends Controller
         
     }
 
+    public function maheer_files(Request $request)
+    {
+        if($request->hasFile('maheer_account_file')){
+            $file = $request->file('maheer_account_file');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+
+        if($request->hasFile('expense_receipt')){
+            $file = $request->file('expense_receipt');
+            $tmp = $this->upload($file);
+            return $tmp;
+        }
+        
+    }
+
     public function delete(Request $request)
     {
         $fileId = substr(request()->getContent(), 0, 27);

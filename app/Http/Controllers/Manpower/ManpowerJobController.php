@@ -88,9 +88,9 @@ class ManpowerJobController extends Controller
         $jobs = Job::get();
         foreach($jobs as $job){
             if($job->id == $manpower_job->job_id){
-                $html .= "<option value=\"{$job->id}\" selected> {$job->name} </option>";
+                $html .= "<option value=\"{$job->id}\" selected> {$job->name} {$job->credit_type} </option>";
             }else{                
-                $html .= "<option value=\"{$job->id}\"> {$job->name} </option>";
+                $html .= "<option value=\"{$job->id}\"> {$job->name} {$job->credit_type} </option>";
             }
         }
         echo json_encode(array('jobs_option' => $html, 'processing_cost' => $manpower_job->processing_cost));

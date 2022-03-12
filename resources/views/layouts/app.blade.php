@@ -9,8 +9,6 @@
     <title>@yield('title') - Mahfuza Overseas</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/template.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> --}}
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.css" rel="stylesheet">
@@ -94,10 +92,10 @@
                                 <div class="widget-content-wrapper">
                                     <div class="widget-content-left">
                                         <div class="btn-group">
-                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+                                            {{-- <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                                 <img width="42" class="rounded-circle" src="{{ asset('images/avatars/1.jpg')}}" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                            </a>
+                                            </a> --}}
                                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                                 <button type="button" tabindex="0" class="dropdown-item">User Account</button>
                                                 <button type="button" tabindex="0" class="dropdown-item">Settings</button>
@@ -603,6 +601,20 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="{{ (request()->is('outside-office*')) ? 'mm-active' : '' }}">
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-portfolio"></i>
+                                    Outside Office
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="{{ url('outside-office') }}" class="{{ (request()->is('outside-office')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Office List
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="{{ (request()->is('manpower-office*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-portfolio"></i>
@@ -648,6 +660,7 @@
                                 </a>
                             </li>
 
+                            @hasanyrole('Super Admin|developer')
                             <li class="app-sidebar__heading">Admin</li>
                             <li class="{{ (request()->is('employee*')) ? 'mm-active' : '' }}">
                                 <a href="#">
@@ -678,6 +691,34 @@
                                     </li> --}}
                                 </ul>
                             </li>
+                            <li class="{{ (request()->is('permission*')) ? 'mm-active' : '' }} {{ (request()->is('role*')) ? 'mm-active' : '' }}">
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-users"></i>
+                                    Role/Permission
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('role') }}" class="{{ (request()->is('role')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Roles
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="{{ (request()->is('maheer*')) ? 'mm-active' : '' }} {{ (request()->is('maheer*')) ? 'mm-active' : '' }}">
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-users"></i>
+                                    Mr. Maheer Bu Arish
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('maheer.index') }}" class="{{ (request()->is('maheer')) ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Account
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="{{ (request()->is('accounts*')) ? 'mm-active' : '' }}">
                                 <a href="#">
                                     <i class="metismenu-icon pe-7s-users"></i>
@@ -687,24 +728,9 @@
                                 <ul>
                                     <li>
                                         <a href="{{ route('accounts.index') }}" class="{{ (request()->is('accounts')) ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon"></i>Add New Account
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('accounts.index') }}" class="{{ (request()->is('accounts.index')) ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Accounts List
                                         </a>
                                     </li>
-                                    {{-- <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Add Sections
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components-notifications.html">
-                                            <i class="metismenu-icon"></i>Send SMS
-                                        </a>
-                                    </li> --}}
                                 </ul>
                             </li>
                             <li class="{{ (request()->is('website')) ? 'mm-active' : '' }}">
@@ -730,6 +756,8 @@
                                     @endforeach
                                 </ul>
                             </li>
+                            @endhasanyrole
+                            <li style="margin-bottom: 150px"></li>
                         </ul>
                     </div>
                 </div>
@@ -747,21 +775,18 @@
     @endguest
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
-    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js" integrity="sha512-i8ERcP8p05PTFQr/s0AZJEtUwLBl18SKlTOZTH0yK5jVU0qL8AIQYbbG5LU+68bdmEqJ6ltBRtCxnmybTbIYpw==" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.2/dist/jBox.all.min.js"></script>
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> --}}
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.23/fh-3.1.8/r-2.2.7/datatables.min.js"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> --}}
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> --}}
     <script type="text/javascript" src="{{ asset('js/template.js') }}"></script></body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
-    {{-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> --}}
     <script src="{{ asset('js/hijri/bootstrap-hijri-datetimepicker.js?v2') }}"></script>
     <script src="{{ asset('js/timepicker.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- include FilePond library -->
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
 
@@ -873,8 +898,8 @@
                 processData: false,
                 contentType: false,
                 beforeSend:function(){
-                    $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
-                    $("#transaction_form_submit").prop('disabled', true);
+                    // $("#transaction_form_submit").html('<i class="fas fa-spinner fa-pulse"></i>');
+                    // $("#transaction_form_submit").prop('disabled', true);
                 },
                 success: function (response){
                     $('#transaction_modal_close').click();
@@ -883,7 +908,7 @@
                     $('.transaction_inputs').hide();
                     $("#transaction_form_submit").html('Submit');
                     $("#transaction_form_submit").prop('disabled', true);
-                    location.reload();
+                    // location.reload();
                 },
             });
         }
@@ -911,25 +936,40 @@
                 $('.transaction_inputs').show();
                 // 1 => Accounts receivable / পাবো ; 2 => Accounts payable / পাবে
                 if( e.value == '1' || e.value == '2' ){
-                    console.log('pelam');
                     // $('.right_input_div').hide();
-                    $('#left_input_label').html('পেলাম');
-                    $('#right_input_label').html('দিলাম');
+                    // $('#left_input_label').html('পেলাম');
+                    $('#left_input_label').html('Received Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
                     return;
                 }
                 if( account_type == 'revenue' ){
-                    $('#left_input_label').html('পাব');
-                    $('#right_input_label').html('পেলাম');
+                    // $('#left_input_label').html('পাব');
+                    $('#left_input_label').html('Due Amount');
+                    // $('#right_input_label').html('পেলাম');
+                    $('#right_input_label').html('Received Amount');
                     return;
                 }
                 if( account_type == 'asset' ){
-                    $('#left_input_label').html('কেনা');
-                    $('#right_input_label').html('দিলাম');
+                    // $('#left_input_label').html('কেনা');
+                    $('#left_input_label').html('Purchased Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
                     return;
                 }
                 if( account_type == 'expense' ){
-                    $('#left_input_label').html('কেনা');
-                    $('#right_input_label').html('দিলাম');
+                    // $('#left_input_label').html('কেনা');
+                    $('#left_input_label').html('Purchased Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
+                    return;
+                }
+                if( account_type == 'liability' ){
+                    // $('.right_input_div').hide();
+                    // $('#left_input_label').html('পেলাম');
+                    $('#left_input_label').html('Received Amount');
+                    // $('#right_input_label').html('দিলাম');
+                    $('#right_input_label').html('Paid Amount');
                     return;
                 }
             }

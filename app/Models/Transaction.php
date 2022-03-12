@@ -9,6 +9,8 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['quantity','currency','unit_price','exchange_rate','particular_type','particular_id','purpose', 'account_of'];
+
     public function credits()
     {
         return $this->hasMany(Credit::class);
@@ -17,5 +19,10 @@ class Transaction extends Model
     public function debits()
     {
         return $this->hasMany(Debit::class);
+    }
+
+    public function candidate()
+    {
+        return $this->belongsTo(Candidate::class);
     }
 }

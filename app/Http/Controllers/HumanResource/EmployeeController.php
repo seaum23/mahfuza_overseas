@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\HumanResource;
 
-use App\Http\Controllers\Controller;
-use App\Models\Designation;
-use App\Models\User;
 use Validator;
+use App\Models\User;
+use App\Models\Designation;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
@@ -14,7 +15,7 @@ class EmployeeController extends Controller
     
     public function index()
     {
-        $designations = Designation::get();
+        $designations = Role::get();
         return view('templates.new_employee', [
             'designations' => $designations
         ]);
@@ -26,7 +27,7 @@ class EmployeeController extends Controller
             'phoneNumber' => 'max:11|min:11'
         ]);
         
-        User::create([
+        $user = User::create([
             'employee_id' => $request->officeId,
             'name' => $request->name,
             'designation_id' => $request->designation,
@@ -34,13 +35,17 @@ class EmployeeController extends Controller
             'address' => $request->address,
             'password' => Hash::make($request->password_text),
         ]);
+        $user->syncRoles([$request->designation]);
+
+        return back();
     }
 
     public function show()
     {
-        $employees = User::get();
+        $employees = User::with('roles')->get();
         return view('templates.employee_list', [
-            'employees' => $employees
+            'employees' => $employees,
+            'roles' => Role::get(),
         ]);
     }
 
@@ -71,14 +76,14 @@ class EmployeeController extends Controller
     }
     public function update_fetch(User $user)
     {
-        $json = json_decode($user->toJson());
-        $designations = Designation::get();
-        $designation_option = '';
+        $json = $user;
+        $designations = Role::get();
+        $designation_option = '<option>Select Role</option>';
         foreach($designations as $designation){
-            if($designation->id == $user->designation_id){
-                $designation_option .= '<option '.$designation->id.' selected>' . $designation->designation . '</option>';
+            if($user->hasRole($designation->name)){
+                $designation_option .= '<option '.$designation->id.' selected>' . $designation->name . '</option>';
             }else{
-                $designation_option .= '<option '.$designation->id.' >' . $designation->designation . '</option>';
+                $designation_option .= '<option '.$designation->id.' >' . $designation->name . '</option>';
             }
         }
         $json->designation = $designation_option;
@@ -88,13 +93,23 @@ class EmployeeController extends Controller
     public function update(User $user, Request $request)
     {
         $user->name = $request->name;
-        $user->employee_id = $request->officeId;
+        $user->employee_id = $request->updateEmployeeId;
         $user->phone = $request->phoneNumber;
         $user->address = $request->address;
         $user->save();
+        if(!empty($request->role)){
+            $user->syncRoles([$request->role]);
+        }
         $employees = User::get();
         return view('templates.employee_list', [
             'employees' => $employees
         ]);
+    }
+
+    public function delete(User $user)
+    {
+        $user->delete();
+
+        return back();
     }
 }

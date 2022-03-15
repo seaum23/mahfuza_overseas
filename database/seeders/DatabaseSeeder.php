@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\DesignationSeeder;
+use Database\Seeders\AccountSeeder;
+use Database\Seeders\AgentSeeder;
 
 class DatabaseSeeder extends Seeder
 {

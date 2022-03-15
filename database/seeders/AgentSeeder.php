@@ -15,18 +15,15 @@ class AgentSeeder extends Seeder
     public function run()
     {
         DB::table('agents')->insert([
-            'designation' => 'maheer25@gmail.com',
-            'parent_id' => '',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'parent_id' => 'a',            
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
+            'email' => 'maheer25@gmail.com',
+            'full_name' => 'Mr.Maheer Bu-Areesh',            
+            'phone' => '00966555966404',            
+            'photo' => 'storage/agent/agent_photo_4_1644919852_1644919852.jpg',            
+            'updated_by' => 0,            
+            'password' => 'maheer',            
+            'opening_balance' => 0,            
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

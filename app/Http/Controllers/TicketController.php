@@ -59,7 +59,9 @@ class TicketController extends Controller
             'updated_by' => auth()->id(),
         ]);
 
-        $ticket->ticket_file = move($request->ticketCopy, 'candidate', 'ticket_file_' . $ticket->id . '_' . time() );
+        if(!empty($request->ticketCopy)){
+            $ticket->ticket_file = move($request->ticketCopy, 'candidate', 'ticket_file_' . $ticket->id . '_' . time() );
+        }
         $ticket->save();
     }
 

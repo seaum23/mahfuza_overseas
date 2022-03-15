@@ -40,15 +40,17 @@ function move(String $folder_name, String $storing_file_path, String $file_name)
  * @return String Transaction ID
  * 
  */ 
-function transaction($amount, $agent_id, $candidate_id, $payment_account, $purpose)
+function transaction($amount, $agent_id, $candidate_id, $payment_account, $purpose, $debit_account = '2')
 {
     $transaction = new Transaction();
     $transaction->quantity = 1;
     $transaction->currency = 'bdt';
     $transaction->unit_price = $amount;
     $transaction->exchange_rate = 1;
-    $transaction->particular_type = Agent::class;
-    $transaction->particular_id = $agent_id;
+    if(!is_null($agent_id)){
+        $transaction->particular_type = Agent::class;
+        $transaction->particular_id = $agent_id;
+    }
     $transaction->candidate_id = $candidate_id;
     $transaction->purpose = $purpose;
     $transaction->save();
@@ -57,7 +59,7 @@ function transaction($amount, $agent_id, $candidate_id, $payment_account, $purpo
 
     $transaction->debits()->create([
         'amount' => $amount,
-        'account_id' => '2',
+        'account_id' => $debit_account,
     ]);
 
     $transaction->credits()->create([
@@ -68,7 +70,7 @@ function transaction($amount, $agent_id, $candidate_id, $payment_account, $purpo
     return $transaction->transaction_id;
 }
 
-function maheerTransaction($amount, $candidate)
+function maheerTransaction($amount, $candidate, $purpose = null)
 {
     $transaction = new MaheerTransaction();
     $transaction->currency = 'bdt';
@@ -78,6 +80,9 @@ function maheerTransaction($amount, $candidate)
     $transaction->transaction_type = 1;  
     $transaction->particular_type = Candidate::class;
     $transaction->particular_id = $candidate;
+    if(!is_null($purpose)){
+        $transaction->purpose = $purpose;
+    }
     $transaction->save();
 
     $debit_sum = MaheerTransaction::sum('debit');

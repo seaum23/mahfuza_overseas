@@ -37,7 +37,7 @@
         </div>
         <div class="form-group col-md-6" >
             <label>VISA Amount</label>
-            <input onchange="add_candidate(this.value)" class="form-control @error('visaAmount.0') is-invalid @enderror" type="number" name="visaAmount" id="visaAmount" placeholder="Enter Amount" required>
+            <input onkeyup="add_candidate(this.value)" class="form-control @error('visaAmount.0') is-invalid @enderror" type="number" name="visaAmount" id="visaAmount" placeholder="Enter Amount" required>
         </div>
     </div>
     <div class="form-group">

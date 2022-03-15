@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DesignationSeeder::class,
             AccountSeeder::class,
-            PermissionSeeder::class,
+            // PermissionSeeder::class,
             AgentSeeder::class
         ]);
     }
